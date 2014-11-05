@@ -1,0 +1,172 @@
+
+"够快科技" = "GoKuai Technology";
+
+"够快云库" = "YunKu";
+"编辑" = "Edit";
+"窗口" = "Window";
+"帮助" = "Help";
+
+"关于" = "About";
+"网络设置" = "Network Setting";
+"在线管理" = "Manage";
+"退出用户" = "Sign Out";
+"隐藏 够快" = "Hide Window";
+"隐藏 其他" = "Hide Others";
+"退出够快" = "Exit";
+
+"剪切" = "Cut";
+"复制" = "Copy";
+"粘贴" = "Paste";
+"全选" = "Select All";
+
+"关闭" = "Close";
+"最小化" = "Minimize";
+
+"软件升级" = "Upgrade";
+"新功能介绍" = "New Features";
+"在线帮助" = "Help Center";
+"官方博客" = "Official Blog";
+
+"温馨提示" = "Notice";
+"确定" = "Ok";
+"取消" = "Cancel";
+"保留" = "Keep";
+"删除" = "Delete";
+"是" = "Yes";
+"否" = "No";
+"我知道了" = "Got it.";
+
+
+"还有%ld个文件正在处理，是否退出?" = "%ld files are still syncing, are you sure to Exit?";
+"是否确定退出?" = "Are you sure to exit?";
+"初始化设置信息失败！" = "Fail to initialize preferences.";
+"用户信息获取失败" = "Fail to get account information.";
+"刚刚" = "just now";
+"%d分前" = "%d mins ago";
+"%d小时%d分前" = "%d hrs and %d mins ago";
+"注销帐号时,是否保留用户所有记录的文件(包括：同步文件夹信息，同步缓存文件和传输信息)?" = "Do you want to keep the account's status, sync preferences and cache?";
+"软件下载完成是否立即关闭客户端，进行安装新的客户端?" = "Do you want to exit and install new client right after completing download?";
+"当前软件已经升级到%@版本，是否确定升级?" = "Current version is %@, do you want to upgrade?";
+
+
+/*AboutWindowController*/
+"版本号：%@" = "Version: %@";
+
+/*GKWebViewDelegate*/
+"Mac同步客户端，不支持此功能！" = "Not for Mac so far.";
+"移动目录失败，请重试！" = "Move failed, please try again.";
+"你确定清除所有缓存吗？" = "Are you sure to clear all the cache?";
+
+/*LoginWebWindowController.xib*/
+"登录" = "Sign in";
+
+/*BrowserWebWindowController.xib*/
+"请稍候，加载中..." = "Loading";
+
+/*util*/
+"请求无效" = "Invalid request.";
+"当前客户端版本已不能使用，请升级到最新版本" = "This version of Gokuai client has expired, please update to the latest version.";
+"您输入帐号或密码错误，请重新输入" = "Invalid email or password.";
+"合作帐号授权失败，请确定授权是否完成？" = "Authorize failed.Please check.";
+"当前设备已经被禁用" = "This device is disabled.";
+"团队管理员已限制您使用同步客户端" = "Admin has restricted your access to client.";
+"请求失败,确定是否连接网络后，再重试" = "Invalid request. Please check the network and try again.";
+
+/*MyTask*/
+"当前软件已经是最新版本!" = "This is the latest version.";
+"下载最新版本失败，请重试!" = "Fail to download the latest version. Please try again.";
+"当前软件已经升级到 %@ 版本" = "There new version %@ is released, please restart to upgrade";
+
+/*MyTimer*/
+"网络已连接！" = "Connected to the Internet.";
+"网络已断开连接，请检查网络！" = "Unable to connect to the Internet. Please check.";
+
+
+"您共享文件夹[%@]的权限是查看者，不能新增或修改文件夹"="You are the Viewer of folder [%@], and you do not have the permission to add or edit.";
+"您共享文件夹[%@]的权限是查看者，不能新增或修改文件"="You are the Viewer of folder [%@], and you do not have the permission to add or edit.";
+
+"选择应用程序"="Choose Application";
+"选择一个应用程序以打开文稿\"%@\"。"="Choose an application to open the document \"%@\".";
+"选择文件"="Choose File";
+"选择路径"="Choose Directory";
+"打开"="open";
+"选择"="Choose";
+
+"上级目录［%@］已绑定"="Cannot set up new sync. The target directory [%@] has been synced with another folder.";
+"下级目录［%@］已绑定"="Cannot set up new sync. The target directory [%@] has been synced with another folder.";
+"本地［%@］文件夹不为空，同名文件将会覆盖，请选择？"="Do you want to replace existing files of folder [%@]?";
+"云端覆盖本地"="Cloud cover of local";
+"本地覆盖云端"="Local cover of cloud";
+"重新选择"="Choose again";
+
+"文件已存在"="File aleady exists.";
+"网络未连接"="Unable to connect to the Internet.";
+"不能移动到子目录下"="Can not move to sub-directory.";
+"同步不存在"="Sync does not exist";
+"设置同步失败"="Fail to set up sync";
+"参数格式不正确"="Incorrect parameter.";
+"还没有获取到服务器地址"="Haven't obtain server address.";
+"不支持Emoji表情字符作为文件名"="Filename that contains emoji is not supported.";
+
+"选择图片"="Choose Picture";
+"是否确定退出?"="Are you sure to Exit?";
+"您确定要添加［%@］文件夹吗？"="Are you sure to add folder [%@]?";
+"您确定要添加［%lu］个项目吗？"="Are you sure to add [%lu] items?";
+
+"打开中"="Opening";
+"取消下载"="Cancel";
+"正在下载"="Downloading";
+
+"移动中"="Moving";
+"取消移动"="Stop moving";
+
+"复制中"="Coping";
+"取消复制"="Stop Coping";
+"正在拷贝［%@］"="Coping [%@]";
+"正在拷贝%ld个项目"="Coping %ld items";
+
+"打开文件"="Open";
+"后台处理"="Keep downloading in the background.";
+
+"开始下载［%@］"="Start downloading [%@]";
+"［%@］下载失败"="Fail to download file [%@].";
+"［%@］已下载完成"="[%@] has been downloaded.";
+
+"准备下载中"="Prepare downloading";
+"已下载%d%%，速度为%@"="%d%% downloaded, at speed of %@";
+"下载完成"="Finished downloading.";
+
+"全部应用"="Apply to all";
+"替换"="Replace";
+"不替换"="Don't Replace";
+"保留两者"="Keep Both";
+"停止"="Stop";
+
+"该位置已经存在名称为［%@］的项目，您要使用正在移动的项目替换它吗？"="An item named [%@] aleady exists in this location. Do you want to replace it with the one you're moving?";
+"进入后台下载［%@］"="Downloading [%@] in the background.";
+"进入后台下载［%@］，下载完成后自动打开"="[%@] is being downloaded, and will be automatically opened after that.";
+
+"您没有访问权限"="You do not have permission to access the file.";
+"文件不存在"="File does not exist.";
+
+"项目名称［%@］存在非法字符，无法上传。" = "Invalid character occurs in item name [%@], and that's not supported.";
+"非法字符" = "Filename may not include following charactoers (< > ! ? : \\ \" * and Emoji), please rename it.";
+"开始下载[%@]，请等待文件下载完成后再次操作"="File [%@] is downloading, please try again later.";
+"目前仅支持拖放文件夹到Finder。"="Drag and drop support for folders is limited to finder.";
+
+"[声音]"="[Audio]";
+"[视频]"="[Video]";
+"[图片]"="[Image]";
+"[文件]"="[File]";
+"[屏幕截图]"="[Screensnap]";
+"文件不存在"="File not exists";
+"json格式不对"="Invalid json";
+"其他..."="Other...";
+"天"="days";
+"小时"="hours";
+"分钟"="minutes";
+"最近%@内有%ld个文件更新"="%ld files have updated in %@";
+"保存"="Save";
+"不保存"="Don't save";
+"是否保存对\"%@\"所做的更改"="Save all modification on \"%@\"?";
+"有够快Note文件未保存，是否确定退出?"="There is a note has not been saved, are you sure to exit?";

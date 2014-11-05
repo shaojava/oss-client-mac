@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>软件设置</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="./common/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="./common/css/settings.css"/>
+    <script type="text/javascript" src="./common/js/util.js"></script>
+    <script type="text/javascript" src="./common/js/config.js"></script>
+    <script type="text/javascript" src="./common/js/jquery.js"></script>
+    <script type="text/javascript" src="./common/js/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="./common/js/interface.js"></script>
+    <script type="text/javascript" src="./common/js/setting.js"></script>
+    <script type="text/javascript">
+        $(function () {
+          $("#header li").click(function(){
+                 $(this).addClass("selected_bg").siblings("li").removeClass("selected_bg");
+                 $(this).find("i").addClass("no").parents("li").siblings("li").find("i").removeClass("no");
+                  var currentDiv =  $(".tab_content_wrapper").children("div").filter(":not(.person_message)").filter(":not(.advance_qx)").filter(":not(.file_index)").eq($(this).index());
+        if(currentDiv.attr("class").indexOf("basic") > 0){
+                     $(".person_message").show();
+                      $(".advance_qx").hide();
+                      $(".file_index").hide();
+                  }else if(currentDiv.attr("class").indexOf("advance") > 0){
+     
+                    $(".person_message").hide();
+                     $(".advance_qx").show();
+                     $(".file_index").show();
+    
+                  }else if(currentDiv.attr("class").indexOf("about") > 0){
+                      $(".person_message").hide();
+                      $(".advance_qx").hide();
+                      $(".file_index").hide();
+                       
+                  }
+                  currentDiv.show().siblings("div").filter(":not(.person_message)").filter(":not(.advance_qx)").filter(":not(.file_index)").hide();
+                })
+            gkClientSetting.init();
+        })
+    </script>
+</head>
+<body id="setting">
+<div id="wrapper">
+    <div id="header" class="clearfix">
+        <ul class="tab_list">
+            <li class="basic selected_bg" data-target="basic">
+                <i class="ibasic"></i>
+                <span>基本</span>
+            </li>
+            <li class="advance" data-target="advance">
+                <i class="iadvance"></i>
+                <span>高级</span>
+            </li>
+            <li class="about" data-target="about">
+                <i class="iabout"></i>
+                <span>关于</span>
+            </li>
+        </ul>
+    </div>
+    <!--计算机信息-->
+    <script type="text/x-jquery-tmpl" id="layout_member_info">
+      <div class="userImg clearfix">
+                    <div class="f_l"><img src="${photourl}" class="img_info" /></div>
+                    <div class="img_mes_info">
+                        <div><span>计算机名：</span>${computer_name}</div>
+                        <div><span>登录账号：</span>${username}<button class="btn edit_btn">退出登录</button></div>
+                    </div>
+                </div>
+    </script>
+    <!--个人信息-->
+        <script type="text/x-jquery-tmpl" id="gjconfig">
+                                     <ul>
+                         {{each(k,v) gjconfig}}
+                          <li data-config="${k}" class="opt">
+                      
+                          <i class="${v.checked}"></i>
+                         
+                           ${v.name}
+                           </li>
+                         {{/each}}
+                                       </ul>
+
+                         </script>
+    <div id="main">
+        <div class="tab_content_wrapper">
+            <div class="person_message">
+                
+            </div>
+            <div class="tab_content basic" style="height:219px">
+               
+                    <script type="text/x-jquery-tmpl" id="baseconfig">
+                         <ul>
+                         {{each(k,v) baseconfig}}
+                          <li data-config="${v.k}" class="opt">
+                          
+                           <i class="${v.checked}"></i>
+                         
+                           ${v.name}
+                           </li>
+                         {{/each}}
+                                                 </ul>
+
+                    </script>
+            </div>
+            <div class="advance_qx" style="display:none;height:73px;padding-top:40px">
+            </div>
+            <div class="file_index" style="display:none">
+                <span>配置文件位置</span>
+                <input type="text" disabled="disabled" /><button class="btn move">移动</button>
+                <span id="sx">软件重启生效</span>
+            </div>
+            <div class="tab_content advance" style="display:none;height:93px;padding-bottom: 15px;padding-top:20px">
+                
+  
+                <div id="settingsMes">
+                   
+                        <div>
+                            <button class="clearCache btn f_l">清除缓存</button>
+                            <div class="textMes">删除缓存可以换取您的硬盘空间，但可能会导致您的同步效率下降</div>
+                        </div>
+                         <div style="margin-top:10px">
+                            <button class="settingDl btn f_l">设置代理</button>
+                            <div class="textMes">软件下次启动生效</div>
+                        </div>
+            
+                </div>
+             
+            </div>
+            <div class="tab_content about" style="display:none;height:367px">
+                 <img src="./common/images/about_logo.png" />
+                 <h2>够快桌面客户端</h2>
+                 <span class="version">fdsf</span>
+                         <div class="mess">
+                               <h3>够快科技</h3>
+                               www.gokuai.com
+                         </div>
+                         
+            </div>
+        </div>
+        <div id="footer">
+        <button class="btn blue_btn confirm purple_btn">确定</button>
+        <button class="btn cancel">取消</button>
+    </div>
+    </div>
+    
+</div>
+<!--<script type="text/x-jquery-tmpl" id="layout_member_info">-->
+    <div class="shadow account_info">
+        <div class="f_l"><img src="${photourl}" alt="" /></div>
+        <div class="f_l">
+            <div>
+                <span class="t_title">当前计算机名：</span>
+                <span class="t_content">${computer_name}</span>
+            </div>
+            <div>
+                <span class="t_title">当前登录帐号：</span>
+                <span class="t_content">${username}</span>
+                <button class="btn" class="logout">退出登录</button>
+            </div>
+        </div>
+    </div>
+<!--</script>-->
+
+<!--<script type="text/x-jquery-tmpl" id="layout_feature_setting">-->
+<div class="shadow feature_setting">
+    <ul class="feature_setting_list">
+        {{each(k,n) featureSetting}}
+        <li>
+            <span class="chk {{if n.checked}}checked{{/if}}">
+                <a href="javascript:void(0)"></a>
+            </span>
+            <span>
+                ${n.name}
+            </span>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+<!--</script>-->
+<!--<script type="text/x-jquery-tmpl" id="layout_advance_setting">-->
+<div class="shadow advance_setting">
+   <div class="setting_file">
+        <div><span class="t_title">配置文件位置</span></div>
+   </div>
+    <ul class="advance_feature_setting">
+        {{each(k,n) advanceFeatureSetting}}
+        <li>
+            <span class="chk {{if n.checked}}checked{{/if}}">
+                <a href="javascript:void(0)"></a>
+            </span>
+            <span>
+                ${n.name}
+            </span>
+        </li>
+        {{/each}}
+    </ul>
+    <div class="advance_opt_wrapper">
+        <div>
+            <button class="btn clear_cache">清除缓存</button>
+            <span>删除缓存可以换取你的硬盘空间，但可能会导致你的同步效率下载</span>
+        </div>
+        <div>
+            <button class="btn set_proxy">设置代理</button>
+            <span>软件下次启动时生效</span>
+        </div>
+    </div>
+</div>
+<!--</script>-->
+</body>
+</html>

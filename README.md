@@ -1,2 +1,2 @@
-oss-client-mac
-==============
+client-mac
+==========

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "+[HTTPEngine login:password:info:device:]:HTTPEngine.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "ret">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NotificationCenter growlNotificationTimedOut:]:NotificationCenter.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "notifications.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AppDelegate msgOpenUrl:]:AppDelegate.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "browserWebWindowController">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
