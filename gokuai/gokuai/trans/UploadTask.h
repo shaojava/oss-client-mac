@@ -22,6 +22,8 @@
 -(NSInteger)GetUploadIndex:(ULONGLONG *)pos size:(ULONGLONG *)size;
 -(NSInteger)CheckIndex:(ULONGLONG)pos;
 -(void)TaskError:(NSInteger)error msg:(NSString*)msg;
+-(void)ResetUploadId;
 
+-(void)CheckPeer;
 
 @end

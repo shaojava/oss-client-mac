@@ -6,6 +6,7 @@
 #import "UploadPeer.h"
 #import "OSSApi.h"
 #import "NSDataExpand.h"
+#import "Network.h"
 
 @implementation UploadTask
 
@@ -39,7 +40,7 @@
     [[TransPortDB shareTransPortDB] Update_UploadStatus:self.pItem.strPathhash status:TRANSTASK_FINISH];
     [self DeleteMultipartFile];
     self.pItem.nStatus=TRANSTASK_FINISH;
-    //zheng callback
+    [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
 }
 
 -(void)FinishIndex:(NSInteger)index pos:(ULONGLONG)pos size:(ULONGLONG)size etag:(NSString*)etag;
@@ -47,6 +48,7 @@
     if (self.bStop) {
         return;
     }
+    NSLog(@"FinishIndex:%ld,%llu,%llu,%@",index,pos,size,etag);
     OSSUploadPart* item=[[[OSSUploadPart alloc]init]autorelease];
     item.nIndex=index;
     item.ullPos=pos;
@@ -173,6 +175,7 @@
         DataPair * item=[self.pUnFinish.arrayData objectAtIndex:0];
         *pos=item.ullFirstMark;
         *size=item.ullLastMark-item.ullFirstMark+1;
+        return 0;
     }
     else {
         DataPair * item=[self.pUnFinish.arrayData objectAtIndex:0];
@@ -221,7 +224,7 @@
     NSLog(@"%@",errormsg);
     [[TransPortDB shareTransPortDB] Update_UploadError:self.pItem.strPathhash error:error msg:msg];
     self.pItem.nStatus=TRANSTASK_ERROR;
-    //zheng callback
+    [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
 }
 
 -(void)main
@@ -260,7 +263,10 @@
         self.ullRuntime=self.ullStarttime;
         while (YES) {
             if (self.bStop)
+            {
+                NSLog(@"1");
                 return;
+            }
             if ([self CheckFinish]) {
                 if (self.pItem.strUploadId.length>0) {
                     OSSRet * ret=[[[OSSRet alloc] init] autorelease];
@@ -270,18 +276,21 @@
                     }
                 }
                 [self Finish];
+                NSLog(@"2");
                 return;
             }
             NSInteger num=[self GetPeerNum];
+            NSLog(@"%ld,%ld",num,self.nMax);
             if (num>=self.nMax) {
-                [NSThread sleepForTimeInterval:0.01];
+                [NSThread sleepForTimeInterval:0.1];
                 continue;
             }
             ULONGLONG pos;
             ULONGLONG size;
             NSInteger index=[self GetUploadIndex:&pos size:&size];
+            NSLog(@"%ld,%llu,%llu",index,pos,size);
             if (index<0) {
-                [NSThread sleepForTimeInterval:0.01];
+                [NSThread sleepForTimeInterval:1];
                 continue;
             }
             [self.pLocksc lock];
@@ -302,11 +311,13 @@
                 else {
                     if (self.pItem.strUploadId.length==0) {
                         [self TaskError:TRANSERROR_OPENFILE msg:@"文件打开失败"];
+                        NSLog(@"3");
                         return;
                     }
                 }
             }
-            BOOL bhave=NO;
+            [self CheckPeer];
+     /*       BOOL bhave=NO;
             [self.pLocksc lock];
             for(UploadPeer* peer in self.listPeer) {
                 if ([peer IsIdle]) {
@@ -319,18 +330,41 @@
                 }
             }
             [self.pLocksc unlock];
-            if (!bhave) {
-                [NSThread sleepForTimeInterval:0.01];
+            if (!bhave) */
+            {
+                [NSThread sleepForTimeInterval:1];
             }
         }
     }
     @catch (NSException *exception) {
-        
+        NSLog(@"%@",exception);
+        NSLog(@"4");
     }
     @finally {
         [pool release];
         self.pItem.nStatus=TRANSTASK_REMOVE;
     }
+}
+
+-(void)ResetUploadId
+{
+    self.pItem.strUploadId=@"";
+    [[TransPortDB shareTransPortDB] Update_UploadUploadId:self.pItem.strPathhash uploadid:@""];
+}
+
+-(void)CheckPeer
+{
+    [self.pLocksc lock];
+    for (int i=0;i<self.listPeer.count;i++) {
+        UploadPeer*item = [self.listPeer objectAtIndex:i];
+        if ([item IsIdle]) {
+            [self.listPeer removeObjectAtIndex:i];
+        }
+        else {
+            i++;
+        }
+    }
+    [self.pLocksc unlock];
 }
 
 @end

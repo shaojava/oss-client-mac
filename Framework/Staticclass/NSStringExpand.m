@@ -12,7 +12,7 @@
     NSMutableString *hash = [NSMutableString string];
     for (int i = 0; i < 16; i++)
         [hash appendFormat:@"%02X", result[i]];
-    return [hash lowercaseString];
+    return hash;
 }
 
 -(NSString*)sha1HexDigest

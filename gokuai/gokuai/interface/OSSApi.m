@@ -98,21 +98,29 @@
     NSString* date=[Util getGMTDate];
     NSString* method=@"GET";
     NSMutableString *resource = [[[NSMutableString alloc] init] autorelease];
+    NSMutableString *resource1 = [[[NSMutableString alloc] init] autorelease];
     [resource appendString:@"/"];
+    [resource1 appendString:@"/"];
     BOOL bHave=NO;
     if (prefix.length) {
         [resource appendString:@"?prefix="];
         [resource appendString:prefix];
+        [resource1 appendString:@"?prefix="];
+        [resource1 appendString:[prefix urlEncoded]];
         bHave=YES;
     }
     if (marker.length) {
         if (bHave) {
             [resource appendString:@"&marker="];
             [resource appendString:marker];
+            [resource1 appendString:@"&marker="];
+            [resource1 appendString:[marker urlEncoded]];
         }
         else {
             [resource appendString:@"?marker="];
             [resource appendString:marker];
+            [resource1 appendString:@"?marker="];
+            [resource1 appendString:[marker urlEncoded]];
             bHave=YES;
         }
     }
@@ -120,10 +128,14 @@
         if (bHave) {
             [resource appendString:@"&delimiter="];
             [resource appendString:delimiter];
+            [resource1 appendString:@"&delimiter="];
+            [resource1 appendString:[delimiter urlEncoded]];
         }
         else {
             [resource appendString:@"?delimiter="];
             [resource appendString:delimiter];
+            [resource1 appendString:@"?delimiter="];
+            [resource1 appendString:[delimiter urlEncoded]];
             bHave=YES;
         }
     }
@@ -131,10 +143,14 @@
         if (bHave) {
             [resource appendString:@"&max-keys="];
             [resource appendString:maxkeys];
+            [resource1 appendString:@"&max-keys="];
+            [resource1 appendString:[maxkeys urlEncoded]];
         }
         else {
             [resource appendString:@"?max-keys="];
             [resource appendString:maxkeys];
+            [resource1 appendString:@"?max-keys="];
+            [resource1 appendString:[maxkeys urlEncoded]];
             bHave=YES;
         }
     }
@@ -151,7 +167,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@%@",bucketname,host,resource]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@%@",bucketname,host,resource1]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -191,7 +207,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",dstbucketname,host,dstobjectname]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",dstbucketname,host,[dstobjectname urlEncoded]]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -226,7 +242,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",bucketname,host,objectname]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",bucketname,host,[objectname urlEncoded]]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -317,7 +333,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",bucketname,host,objectname]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",bucketname,host,[objectname urlEncoded]]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -363,7 +379,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?uploads",bucketname,host,objectname]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?uploads",bucketname,host,[objectname urlEncoded]]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -404,7 +420,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?partNumber=%ld&uploadId=%@",bucketname,host,objectname,partnumber,uploadid]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?partNumber=%ld&uploadId=%@",bucketname,host,[objectname urlEncoded],partnumber,uploadid]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -466,7 +482,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?partNumber=%ld&uploadId=%@",dstbucketname,host,dstobjectname,partnumber,uploadid]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?partNumber=%ld&uploadId=%@",dstbucketname,host,[dstobjectname urlEncoded],partnumber,uploadid]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -490,9 +506,11 @@
     OSSCompleteMultipartUploadBody *ossbody=[[OSSCompleteMultipartUploadBody alloc] init];
     [ossbody setParts:parts];
     NSString* body=[ossbody GetBody];
-    NSString* md5=[body md5HexDigest];
+    NSData *bodydata=[body dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* md5=[bodydata md5base64Encode];
+    NSLog(@"bodydata length:%ld",bodydata.length);
     NSString* method=@"POST";
-    NSString* resource=[NSString stringWithFormat:@"/%@/?uploadId=%@",bucketname,uploadid];
+    NSString* resource=[NSString stringWithFormat:@"/%@/%@?uploadId=%@",bucketname,objectname,uploadid];
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
     NSString* contenttype=@"application/xml";
     NSString* retsign=[self Authorization:method contentmd5:md5 contenttype:contenttype date:date keys:array resource:resource];
@@ -516,11 +534,11 @@
     item.value=contenttype;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/?uploadId=%@",bucketname,host,uploadid]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?uploadId=%@",bucketname,host,[objectname urlEncoded],uploadid]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
-                                                        bodyData:[body dataUsingEncoding:NSUTF8StringEncoding]] autorelease];
+                                                        bodyData:bodydata] autorelease];
     NSHTTPURLResponse* response;
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];

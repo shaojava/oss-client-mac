@@ -46,26 +46,26 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "gokuai/OperationManager.m"
-         timestampString = "436797418.242104"
+         filePath = "gokuai/trans/UploadTask.m"
+         timestampString = "436944739.005454"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "190"
-         endingLineNumber = "190"
-         landmarkName = "+addFile:"
+         startingLineNumber = "225"
+         endingLineNumber = "225"
+         landmarkName = "-TaskError:msg:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
+         shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "gokuai/interface/OSSApi.m"
-         timestampString = "436862638.861786"
+         timestampString = "436959642.580601"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "53"
-         endingLineNumber = "53"
-         landmarkName = "+CheckIDandKey:key:ishost:host:"
+         startingLineNumber = "544"
+         endingLineNumber = "544"
+         landmarkName = "+CompleteMultipartUpload:bucketname:objectname:uploadid:parts:ret:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

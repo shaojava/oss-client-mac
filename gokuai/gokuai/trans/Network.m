@@ -8,6 +8,8 @@
 
 @synthesize dManager;
 @synthesize uManager;
+@synthesize dCallback;
+@synthesize uCallback;
 @synthesize nDonwloadFinish;
 @synthesize nDownloadCount;
 @synthesize nDownloadSpeed;
@@ -20,6 +22,7 @@
     static Network* shareNetworkInstance = nil;
     static dispatch_once_t onceNetworkToken;
     dispatch_once(&onceNetworkToken, ^{
+        shareNetworkInstance = [[Network alloc]init];
         
     });
     return shareNetworkInstance;
@@ -32,6 +35,8 @@
         [TransPortDB shareTransPortDB];
         self.dManager=[[[DownloadManager alloc]init]autorelease];
         self.uManager=[[[UploadManager alloc]init]autorelease];
+        self.dCallback=[[[DownloadCallbackThread alloc]init]autorelease];
+        self.uCallback=[[[UploadCallbackThread alloc]init]autorelease];
         self.nDonwloadFinish=0;
         self.nDownloadCount=0;
         self.nDownloadSpeed=0;
@@ -46,6 +51,8 @@
 {
     dManager=nil;
     uManager=nil;
+    dCallback=nil;
+    uCallback=nil;
     [super dealloc];
 }
 
@@ -201,6 +208,7 @@
             item.strBucket=bucket;
             item.strObject=[NSString stringWithFormat:@"%@%@",object,[path getFilename]];
             item.strFullpath=path;
+            item.ullFilesize=[Util filesize:path];
             item.nStatus=TRANSTASK_NORMAL;
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];

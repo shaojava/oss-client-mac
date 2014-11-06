@@ -450,9 +450,9 @@ END:
         if (bHost) {
             [Util getAppDelegate].strArea=strLocation;
         }
-        NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/ossuser.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
+        NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
         [Util createfolder:[dbpath getParent]];
-        [[TransPortDB shareTransPortDB] InitPath:dbpath];
+        [[TransPortDB shareTransPortDB] OpenPath:dbpath];
         [Util getAppDelegate].bLogin=YES;
         retString=[Util errorInfoWithCode:MY_NO_ERROR];
     }
@@ -513,6 +513,11 @@ END:
             [Util getAppDelegate].strAccessKey=[[[NSString alloc] initWithData:ret.secret encoding:NSUTF8StringEncoding] autorelease];
             [Util getAppDelegate].strHost=user.strHost;
             [Util getAppDelegate].strArea=user.strArea;
+            NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[[Util getAppDelegate].strAccessID sha1HexDigest]];
+            [Util createfolder:[dbpath getParent]];
+            [[TransPortDB shareTransPortDB] OpenPath:dbpath];
+            [Util getAppDelegate].bLogin=YES;
+            retString=[Util errorInfoWithCode:MY_NO_ERROR];
         }
         else {
             retString=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];

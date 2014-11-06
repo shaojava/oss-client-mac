@@ -26,7 +26,6 @@
         if ([Util getAppDelegate].bShowPassword) {
             self.strUrl=[NSString stringWithFormat:@"%@#loginByPassword",[filePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         }
-        NSLog(@"%@",self.strUrl);
         self.bOut=NO;
     }
     return self;

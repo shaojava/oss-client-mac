@@ -12,7 +12,7 @@
 
 #pragma mark-
 #pragma mark- 表的打开，创建和关闭
--(id)InitPath:(NSString*)path;
+-(void)OpenPath:(NSString*)path;
 -(void)CreateTable;
 -(void)ChangeOld;
 -(void)ClearTrans;

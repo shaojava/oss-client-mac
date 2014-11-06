@@ -2,6 +2,7 @@
 #import "UploadPeer.h"
 #import "OSSApi.h"
 #import "NSDataExpand.h"
+#import "UploadTask.h"
 
 @implementation UploadPeer
 
@@ -59,22 +60,24 @@
 -(void)main{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     @try {
-        OSSAddObject *ret=[[[OSSAddObject alloc]init] autorelease];
-        if (self.strUploadID.length) {
+        OSSAddObject *ret;
+        if (self.strUploadID.length==0) {
             [self.pFileHandle seekToFileOffset:self.ullPos];
             NSData * data=[self.pFileHandle readDataOfLength:self.ullSize];
             if ([OSSApi AddObject:self.strHost bucketname:self.strBucket objectname:self.strObject filesize:self.ullSize filedata:data ret:&ret]) {
-                NSString * md5=[[NSString stringWithFormat:@"\"%@\"",[data md5Data2String]] lowercaseString];
-                NSString * retetage=[ret.strEtag lowercaseString];
-                if ([md5 isEqualToString:retetage]) {
-                    //zheng
+                NSString * md5=[NSString stringWithFormat:@"\"%@\"",[data md5Data2String]];
+                NSString * retetag=ret.strEtag;
+                if ([md5 isEqualToString:retetag]) {
+                    [((UploadTask*)self.pTask) FinishIndex:self.nIndex pos:self.ullPos size:self.ullSize etag:md5];
                 }
                 else {
-                    //
+                    NSString * message=[NSString stringWithFormat:@"md5 error:%@ %@",md5,retetag];
+                    [((UploadTask*)self.pTask) TaskError:TRANSERROR_MD5ERROR msg:message];
                 }
             }
             else {
-                //
+                
+                [((UploadTask*)self.pTask) TaskError:ret.nCode msg:@"http code"];
             }
         }
         else {
@@ -82,17 +85,21 @@
             [self.pFileHandle seekToFileOffset:self.ullPos];
             NSData * data=[self.pFileHandle readDataOfLength:self.ullSize];
             if ([OSSApi UploadPartObject:self.strHost bucketname:self.strBucket objectname:self.strObject uploadid:self.strUploadID partnumber:self.nIndex filesize:self.ullSize filedata:data ret:&ret]) {
-                NSString * md5=[[NSString stringWithFormat:@"\"%@\"",[data md5Data2String]] lowercaseString];
-                NSString * retetage=[ret.strEtag lowercaseString];
-                if ([md5 isEqualToString:retetage]) {
-                    //zheng
+                NSString * md5=[NSString stringWithFormat:@"\"%@\"",[data md5Data2String]];
+                NSString * retetag=ret.strEtag;
+                if ([md5 isEqualToString:retetag]) {
+                    [((UploadTask*)self.pTask) FinishIndex:self.nIndex pos:self.ullPos size:self.ullSize etag:md5];
                 }
                 else {
-                    //
+                    NSString * message=[NSString stringWithFormat:@"md5 error:%@ %@",md5,retetag];
+                    [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:TRANSERROR_MD5ERROR msg:message];
                 }
             }
             else {
-                //
+                if ([ret.strCode isEqualToString:@"NoSuchUpload"]) {
+                    [((UploadTask*)self.pTask) ResetUploadId];
+                }
+                [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:ret.nCode msg:@"http code"];
             }
         }
     }

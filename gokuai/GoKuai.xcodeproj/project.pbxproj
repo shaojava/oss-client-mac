@@ -36,6 +36,9 @@
 		1894BCE2162C0C1200995C15 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1894BCE1162C0C1100995C15 /* IOKit.framework */; };
 		18B1B55718D83D930013B2F0 /* statusSyncBg.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */; };
 		18B1B55818D83D930013B2F0 /* statusSyncMv.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */; };
+		18BBF0EA1A0B1A1C0067E395 /* CallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0E91A0B1A1C0067E395 /* CallbackThread.m */; };
+		18BBF0EE1A0B22B70067E395 /* DownloadCallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0ED1A0B22B70067E395 /* DownloadCallbackThread.m */; };
+		18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0F01A0B22CD0067E395 /* UploadCallbackThread.m */; };
 		18CF331A19FF71F60083C5F1 /* OSSRsa.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CF331919FF71F60083C5F1 /* OSSRsa.m */; };
 		18D1039416A64B3B00E92DAF /* MyTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D1039316A64B3B00E92DAF /* MyTimer.m */; };
 		18E8F61D15F9EE6100A3AE81 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8F61C15F9EE6100A3AE81 /* QuartzCore.framework */; };
@@ -114,7 +117,6 @@
 		F5EBB62B1876635E003948EF /* NSTextField+Resizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EBB62A1876635E003948EF /* NSTextField+Resizable.m */; };
 		F5EC6B071831ECA7006961BB /* ProgressManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EC6B061831ECA7006961BB /* ProgressManager.m */; };
 		F5FD052818B1DA2600FF5204 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5FD052718B1DA2600FF5204 /* AVFoundation.framework */; };
-		F5FD052A18B1DC0500FF5204 /* msg.wav in Resources */ = {isa = PBXBuildFile; fileRef = F5FD052918B1DC0500FF5204 /* msg.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -194,6 +196,12 @@
 		1894BCE1162C0C1100995C15 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncBg.tiff; sourceTree = "<group>"; };
 		18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncMv.tiff; sourceTree = "<group>"; };
+		18BBF0E81A0B1A1C0067E395 /* CallbackThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallbackThread.h; sourceTree = "<group>"; };
+		18BBF0E91A0B1A1C0067E395 /* CallbackThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallbackThread.m; sourceTree = "<group>"; };
+		18BBF0EC1A0B22B70067E395 /* DownloadCallbackThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCallbackThread.h; sourceTree = "<group>"; };
+		18BBF0ED1A0B22B70067E395 /* DownloadCallbackThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadCallbackThread.m; sourceTree = "<group>"; };
+		18BBF0EF1A0B22CD0067E395 /* UploadCallbackThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadCallbackThread.h; sourceTree = "<group>"; };
+		18BBF0F01A0B22CD0067E395 /* UploadCallbackThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadCallbackThread.m; sourceTree = "<group>"; };
 		18CF331819FF71F50083C5F1 /* OSSRsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSRsa.h; sourceTree = "<group>"; };
 		18CF331919FF71F60083C5F1 /* OSSRsa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSRsa.m; sourceTree = "<group>"; };
 		18D1039216A64B3B00E92DAF /* MyTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTimer.h; sourceTree = "<group>"; };
@@ -212,7 +220,7 @@
 		18F1EE9119ED26AB00D3F252 /* OSSRet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSRet.m; sourceTree = "<group>"; };
 		18F6A02E18487825005B419C /* TransPortDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransPortDB.h; path = ../TransPortDB.h; sourceTree = "<group>"; };
 		18F6A02F18487825005B419C /* TransPortDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransPortDB.m; path = ../TransPortDB.m; sourceTree = "<group>"; };
-		18FC3FCA15E5C950007927F8 /* YunKu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YunKu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18FC3FCA15E5C950007927F8 /* YunKu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YunKu.app; path = OSS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FC3FCE15E5C950007927F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		18FC3FD115E5C950007927F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		18FC3FD215E5C950007927F8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -327,7 +335,6 @@
 		F5EC6B051831ECA7006961BB /* ProgressManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressManager.h; sourceTree = "<group>"; };
 		F5EC6B061831ECA7006961BB /* ProgressManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressManager.m; sourceTree = "<group>"; };
 		F5FD052718B1DA2600FF5204 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		F5FD052918B1DC0500FF5204 /* msg.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = msg.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -506,7 +513,6 @@
 		18FC3FD515E5C950007927F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F5FD052918B1DC0500FF5204 /* msg.wav */,
 				F5E8FED018502C8700D95136 /* Localizable.strings */,
 				F5EA5D5117D735E0001CB837 /* Credits.rtf */,
 				F5EA5D4D17D735B1001CB837 /* MainMenu.xib */,
@@ -578,6 +584,12 @@
 				D187F01717029D770027177E /* GKWebViewDelegate.m */,
 				F5388094187D199600E1E2B1 /* BaseWebWindowController.h */,
 				F5388095187D199600E1E2B1 /* BaseWebWindowController.m */,
+				18BBF0EC1A0B22B70067E395 /* DownloadCallbackThread.h */,
+				18BBF0ED1A0B22B70067E395 /* DownloadCallbackThread.m */,
+				18BBF0EF1A0B22CD0067E395 /* UploadCallbackThread.h */,
+				18BBF0F01A0B22CD0067E395 /* UploadCallbackThread.m */,
+				18BBF0E81A0B1A1C0067E395 /* CallbackThread.h */,
+				18BBF0E91A0B1A1C0067E395 /* CallbackThread.m */,
 			);
 			name = WebController;
 			sourceTree = "<group>";
@@ -793,7 +805,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5FD052A18B1DC0500FF5204 /* msg.wav in Resources */,
 				D10ED7E51688191F008984B4 /* LoginWebWindowController.xib in Resources */,
 				D114017916966FD800552FEC /* LaunchpadWindowController.xib in Resources */,
 				D11E8F841697D00600909E48 /* BrowserWebWindowController.xib in Resources */,
@@ -898,6 +909,9 @@
 				187966EF1A009B1C00BB44FE /* NSData+Base64.m in Sources */,
 				187966F01A009B1C00BB44FE /* NSData+CommonCrypto.m in Sources */,
 				187966F11A009B1C00BB44FE /* NSString+Base64.m in Sources */,
+				18BBF0EA1A0B1A1C0067E395 /* CallbackThread.m in Sources */,
+				18BBF0EE1A0B22B70067E395 /* DownloadCallbackThread.m in Sources */,
+				18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,7 +1024,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "";
-				PRODUCT_NAME = YunKu;
+				PRODUCT_NAME = OSS;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1039,7 +1053,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "";
-				PRODUCT_NAME = YunKu;
+				PRODUCT_NAME = OSS;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

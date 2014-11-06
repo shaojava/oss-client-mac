@@ -102,6 +102,7 @@
     ULONGLONG count=0;
     for (DataPair * item in arrayData) {
         count+=item.ullLastMark-item.ullFirstMark+1;
+        NSLog(@"Size:%llu,%llu",item.ullLastMark,item.ullFirstMark);
     }
     return count;
 }
@@ -198,7 +199,89 @@
 
 -(void)RemovePairs:(ULONGLONG)ullFirst last:(ULONGLONG)ullLast
 {
-    
+    if (ullFirst>ullLast) {
+        return;
+    }
+    ULONGLONG ullTempFirst=ullFirst;
+    ULONGLONG ullTempLast=ullLast;
+    NSMutableArray* arraydelete=[NSMutableArray arrayWithCapacity:0];
+    NSMutableArray* arrayadd=[NSMutableArray arrayWithCapacity:0];
+    for (DataPair *item in arrayData) {
+        if (ullTempFirst<item.ullFirstMark) {
+            if (ullTempLast<item.ullFirstMark) {
+                break;
+            }
+            if (ullTempLast>=item.ullFirstMark&&ullTempLast<=item.ullLastMark) {
+                [arraydelete addObject:item];
+                if (ullTempLast<item.ullLastMark) {
+                    DataPair *newitem=[[[DataPair alloc]init:ullTempLast+1 last:item.ullLastMark]autorelease];
+                    [arrayadd addObject:newitem];
+                }
+                break;
+            }
+            if (ullTempLast>item.ullLastMark) {
+                [arraydelete addObject:item];
+                ullTempFirst=item.ullLastMark+1;
+                continue;
+            }
+        }
+        else if (ullTempFirst==item.ullFirstMark) {
+            [arraydelete addObject:item];
+            if (ullTempLast==item.ullLastMark) {
+                break;
+            }
+            if (ullTempLast<item.ullLastMark) {
+                DataPair *newitem=[[[DataPair alloc]init:ullTempLast+1 last:item.ullLastMark]autorelease];
+                [arrayadd addObject:newitem];
+                break;
+            }
+            if (ullTempLast>item.ullLastMark) {
+                ullFirst=item.ullLastMark+1;
+                continue;
+            }
+        }
+        else if (ullTempFirst>item.ullFirstMark&&ullTempFirst<item.ullLastMark) {
+            [arraydelete addObject:item];
+            if (ullTempLast==item.ullLastMark) {
+                DataPair *newitem=[[[DataPair alloc]init:item.ullFirstMark last:ullTempFirst-1]autorelease];
+                [arrayadd addObject:newitem];
+                break;
+            }
+            if (ullTempLast<=item.ullLastMark) {
+                DataPair *newitem=[[[DataPair alloc]init:item.ullFirstMark last:ullTempFirst-1]autorelease];
+                [arrayadd addObject:newitem];
+                
+                DataPair *newitem1=[[[DataPair alloc]init:ullTempLast+1 last:item.ullLastMark]autorelease];
+                [arrayadd addObject:newitem1];
+                break;
+            }
+            if (ullTempLast>item.ullLastMark) {
+                DataPair *newitem=[[[DataPair alloc]init:item.ullFirstMark last:ullTempFirst-1]autorelease];
+                [arrayadd addObject:newitem];
+                ullTempFirst=item.ullLastMark+1;
+                continue;
+            }
+        }
+        else {
+            continue;
+        }
+    }
+    for (DataPair * removeitem in arraydelete) {
+        for (int i=0;i<arrayData.count;) {
+            DataPair* item=[arrayData objectAtIndex:i];
+            if (item.ullFirstMark==removeitem.ullFirstMark&&item.ullLastMark==removeitem.ullLastMark) {
+                [arrayData removeObjectAtIndex:i];
+            }
+            else {
+                i++;
+            }
+        }
+    }
+    for (DataPair * additem in arrayadd) {
+        [arrayData addObject:additem];
+    }
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"ullFirstMark" ascending:YES];
+    [arrayData sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 }
 
 @end

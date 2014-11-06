@@ -67,6 +67,10 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    self.strAccessID=@"";
+    self.strAccessKey=@"";
+    self.strArea=@"";
+    self.strHost=@"";
 //    OSSRsa * rsa=[[[OSSRsa alloc] init]autorelease];
 //    self.strAccessID=@"fmVEoAkpUByBS1cs";
 //    self.strAccessKey=@"HWsJ79uEwsrh7PB6ASGpyrdZkwJWdR";

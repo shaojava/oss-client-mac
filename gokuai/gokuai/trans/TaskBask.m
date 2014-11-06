@@ -24,9 +24,13 @@
 {
     if (self=[super init]) {
         self.pItem=item;
+        self.nMax=5;
+        self.ullPiecesize=1048576;
         self.listPeer = [[[NSMutableArray alloc]init] autorelease];
         self.pLocksc = [[[NSLock alloc]init]autorelease];
         self.pFilesc = [[[NSLock alloc]init]autorelease];
+        self.pFinish=[[[DataLocator alloc]init]autorelease];
+        self.pUnFinish=[[[DataLocator alloc]init]autorelease];
         self.pQueue=[[NSOperationQueue alloc] init];
         [self.pQueue setMaxConcurrentOperationCount:nMax];
         self.bStop=NO;
@@ -87,7 +91,7 @@
 {
     [self.pFilesc lock];
     ULONGLONG filesize=[self.pFinish Size];
-    [self.pFilesc lock];
+    [self.pFilesc unlock];
     if (self.pItem.ullFilesize==filesize) {
         return YES;
     }

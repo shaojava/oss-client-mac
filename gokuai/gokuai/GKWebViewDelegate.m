@@ -364,18 +364,16 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"changeUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[Network shareNetwork].uCallback SetCallbackStatus:[baseController mainframe] cb:cb];
     }
-    //zheng
 }
 
 -(void) changeDownload:(NSString*) json cb:(WebScriptObject*)cb
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"changeDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[Network shareNetwork].dCallback SetCallbackStatus:[baseController mainframe] cb:cb];
     }
-    //zheng
 }
 
 -(NSString*) getErrorLog

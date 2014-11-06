@@ -17,23 +17,20 @@
     static TransPortDB* shareTransPortDBInstance = nil;
     static dispatch_once_t onceTransPortDBToken;
     dispatch_once(&onceTransPortDBToken, ^{
-        
+        shareTransPortDBInstance = [[TransPortDB alloc]init];
     });
     return shareTransPortDBInstance;
 }
 #pragma mark-
 #pragma mark- 表的打开，创建和关闭
--(id)InitPath:(NSString*)path
+-(void)OpenPath:(NSString*)path
 {
-    if (self = [super init])
-    {
-        self.dbQueue= [FMDatabaseQueue databaseQueueWithPath:path];
-        [self CreateTable];
-        [self ChangeOld];
-        [self ClearTrans];
-        [self ResetError];
-    }
-    return self;
+    self.dbQueue= [FMDatabaseQueue databaseQueueWithPath:path];
+    [self CreateTable];
+    [self ChangeOld];
+    [self ClearTrans];
+    [self ResetError];
+    [self ResetStart];
 }
 
 -(void)CreateTable
@@ -590,9 +587,9 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"update Download set status='%ld',actlast='0',where status='%ld';",TRANSTASK_NORMAL,TRANSTASK_START];
+         NSString *sql =[NSString stringWithFormat:@"update Download set status='%ld',actlast='0' where status='%ld';",TRANSTASK_NORMAL,TRANSTASK_START];
          [db executeUpdate:sql];
-         sql =[NSString stringWithFormat:@"update Upload set status='%ld',actlast='0',where status='%ld';",TRANSTASK_NORMAL,TRANSTASK_START];
+         sql =[NSString stringWithFormat:@"update Upload set status='%ld',actlast='0' where status='%ld';",TRANSTASK_NORMAL,TRANSTASK_START];
          [db executeUpdate:sql];
      }];
 }

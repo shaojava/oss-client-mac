@@ -1,20 +1,27 @@
 #import <Foundation/Foundation.h>
 #import "DownloadManager.h"
 #import "UploadManager.h"
+#import "DownloadCallbackThread.h"
+#import "UploadCallbackThread.h"
 
 @interface Network : NSObject{
     DownloadManager*    dManager;
     UploadManager*      uManager;
+    DownloadCallbackThread* dCallback;
+    UploadCallbackThread*   uCallback;
     NSInteger           nDownloadFinish;
     NSInteger           nDownloadCount;
     ULONGLONG           nDownloadSpeed;
     NSInteger           nUploadFinish;
     NSInteger           nUploadCount;
     ULONGLONG           nUploadSpeed;
+    
 }
 
 @property(nonatomic,retain)DownloadManager* dManager;
 @property(nonatomic,retain)UploadManager* uManager;
+@property(nonatomic,retain)DownloadCallbackThread* dCallback;
+@property(nonatomic,retain)UploadCallbackThread* uCallback;
 @property(nonatomic)NSInteger nDonwloadFinish;
 @property(nonatomic)NSInteger nDownloadCount;
 @property(nonatomic)ULONGLONG nDownloadSpeed;

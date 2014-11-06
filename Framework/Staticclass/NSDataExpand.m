@@ -46,7 +46,13 @@
     {
         [hash appendFormat:@"%02X", result[i]];
     }
-    return [hash lowercaseString];
+    return hash;
+}
+
+-(NSString*)    md5base64Encode
+{
+    NSData * data=[self md5HexDigest];
+    return [data base64Encoded];
 }
 static void generateCRC32Table(uint32_t *pTable, uint32_t poly)
 {

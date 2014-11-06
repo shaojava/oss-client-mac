@@ -46,6 +46,7 @@
             else {
                 [self CheckFinish];
                 [NSThread sleepForTimeInterval:0.1];
+                break;
             }
         }
     }

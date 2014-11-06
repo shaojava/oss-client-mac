@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "18FC3FC915E5C950007927F8"
-               BuildableName = "YunKu.app"
+               BuildableName = "OSS.app"
                BlueprintName = "gokuai"
                ReferencedContainer = "container:GoKuai.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "18FC3FC915E5C950007927F8"
-            BuildableName = "YunKu.app"
+            BuildableName = "OSS.app"
             BlueprintName = "gokuai"
             ReferencedContainer = "container:GoKuai.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "18FC3FC915E5C950007927F8"
-            BuildableName = "YunKu.app"
+            BuildableName = "OSS.app"
             BlueprintName = "gokuai"
             ReferencedContainer = "container:GoKuai.xcodeproj">
          </BuildableReference>
@@ -81,7 +81,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "18FC3FC915E5C950007927F8"
-            BuildableName = "YunKu.app"
+            BuildableName = "OSS.app"
             BlueprintName = "gokuai"
             ReferencedContainer = "container:GoKuai.xcodeproj">
          </BuildableReference>
