@@ -207,7 +207,7 @@
 
 -(void)ErrorIndex:(ULONGLONG)pos size:(ULONGLONG)size error:(NSInteger)error msg:(NSString*)msg
 {
-    NSString * errormsg=[NSString stringWithFormat:@"[ErrorIndex:%@|%@][%ld,%llu,%llu,%ld,%@]",self.pItem.strBucket,self.pItem.strObject,index,pos,size,error,msg];
+    NSString * errormsg=[NSString stringWithFormat:@"[ErrorIndex:%@|%@][%llu,%llu,%ld,%@]",self.pItem.strBucket,self.pItem.strObject,pos,size,error,msg];
     NSLog(@"%@",errormsg);
     [self.pLocksc lock];
     NSArray * ret=[self.pFinish GetInPairs:pos last:pos+size-1];
@@ -234,10 +234,10 @@
     NSString* strDir=[self.pItem.strFullpath getParent];
     NSString* strFilename=[self.pItem.strFullpath getFilename];
     if (self.pItem.strPathhash.length) {
-        return [NSString stringWithFormat:@"%@/%@.%@",strDir,strFilename,self.pItem.strPathhash];
+        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,self.pItem.strPathhash];//zheng 删除的问题
     }
     else {
-        return [NSString stringWithFormat:@"%@/%@.%@",strDir,strFilename,OSSTMP];
+        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,OSSTMP];
     }
 }
 

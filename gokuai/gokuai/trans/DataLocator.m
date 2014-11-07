@@ -23,7 +23,7 @@
 -(void)LoadParisFromString:(NSString*)data{
     NSArray* array=[data componentsSeparatedByString:@","];
     for (NSString * item in array) {
-        NSArray* arrayitem=[data componentsSeparatedByString:@"-"];
+        NSArray* arrayitem=[item componentsSeparatedByString:@"-"];
         if (![arrayitem isKindOfClass:[NSArray class]]||arrayitem.count<2) {
             continue;
         }
