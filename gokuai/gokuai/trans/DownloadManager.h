@@ -7,5 +7,6 @@
 -(void)Run;
 -(void)Stop:(NSString*)fullpath;
 -(void)Delete:(NSString*)fullpath;
+-(void)CheckFinish;
 
 @end

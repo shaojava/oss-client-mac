@@ -53,7 +53,10 @@
 -(BOOL)DeleteUploadAll;
 -(BOOL)DeleteUploadAllFinish;
 
--(NSInteger)GetTransCount;
+-(NSInteger)GetUploadCount;
+-(NSInteger)GetDownloadCount;
+-(NSInteger)GetUploadFinishCount;
+-(NSInteger)GetDownloadFinishCount;
 -(void)ResetError;
 -(void)ResetErrorTime;
 -(void)ResetStart;

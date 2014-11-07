@@ -102,7 +102,6 @@
     ULONGLONG count=0;
     for (DataPair * item in arrayData) {
         count+=item.ullLastMark-item.ullFirstMark+1;
-        NSLog(@"Size:%llu,%llu",item.ullLastMark,item.ullFirstMark);
     }
     return count;
 }

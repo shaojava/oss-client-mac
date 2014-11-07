@@ -3,6 +3,7 @@
 #import "Util.h"
 #import "Network.h"
 #import "JSONKit.h"
+#import "TransPortDB.h"
 
 @implementation DownloadCallbackThread
 
@@ -23,6 +24,9 @@
         @try {
             CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
             if (now-timerrun>1) {
+                [Network shareNetwork].nDownloadSpeed=[[Network shareNetwork].dManager GetSpeed];
+                [Network shareNetwork].nDownloadCount=[[TransPortDB shareTransPortDB] GetDownloadCount];
+                [Network shareNetwork].nDonwloadFinish=[[TransPortDB shareTransPortDB] GetDownloadFinishCount];
                 [self SendCallbackInfos];
                 timerrun=now;
             }
@@ -47,9 +51,6 @@
     [dicRetlist setValue:[NSNumber numberWithInteger:[Network shareNetwork].nUploadCount] forKey:@"upload_total_count"];
     [dicRetlist setValue:[NSNumber numberWithInteger:[Network shareNetwork].nUploadFinish] forKey:@"upload_done_count"];
     NSMutableDictionary* dicRet=[NSMutableDictionary dictionary];
-    if (item.nStatus==TRANSTASK_START) {
-        item.ullSpeed=[[Network shareNetwork].dManager GetSpeed:item.strBucket object:item.strObject];
-    }
     [dicRet setValue:item.strPathhash forKey:@"pathhash"];
     [dicRet setValue:item.strBucket forKey:@"bucket"];
     [dicRet setValue:item.strObject forKey:@"object"];
@@ -80,9 +81,6 @@
     [dicRetlist setValue:[NSNumber numberWithInteger:[Network shareNetwork].nUploadFinish] forKey:@"upload_done_count"];
     for (TransTaskItem* item in items) {
         NSMutableDictionary* dicRet=[NSMutableDictionary dictionary];
-        if (item.nStatus==TRANSTASK_START) {
-            item.ullSpeed=[[Network shareNetwork].dManager GetSpeed:item.strBucket object:item.strObject];
-        }
         [dicRet setValue:item.strPathhash forKey:@"pathhash"];
         [dicRet setValue:item.strBucket forKey:@"bucket"];
         [dicRet setValue:item.strObject forKey:@"object"];

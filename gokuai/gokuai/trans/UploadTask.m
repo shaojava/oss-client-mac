@@ -59,6 +59,7 @@
     [self.pFinish InsertPart:pos last:pos+size-1];
     [self.pLocksc unlock];
     self.pItem.ullOffset+=size;
+    self.ullTranssize+=size;
     [[TransPortDB shareTransPortDB] Update_UploadOffset:self.pItem.strPathhash offset:self.pItem.ullOffset];
     [self SaveMultipartFile];
 }

@@ -16,36 +16,6 @@
 
 @end
 
-@implementation DirectoryhandlerTask
-
-@synthesize _handler;
-@synthesize _array;
-
--(void)dealloc
-{
-    [_array release];
-    self._handler=nil;
-    [super dealloc];
-}
-
--(id)initWithTask:(id)handler
-            array:(NSMutableArray*)array
-{
-    if (self =[super init]) {
-        
-        self._handler = handler;
-        self._array=array;
-    }
-    return self;
-}
-- (void)main{
-  
-    
-}
-
-@end
-
-
 @implementation DownloadImageTask
 
 @synthesize strFilehash;

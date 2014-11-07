@@ -33,6 +33,7 @@
     WebFrame* _webframe;
     WebScriptObject* _cb;
     NSWindow* _window;
+    NSArray*  _array;
 }
 
 @property(retain,nonatomic) NSString* _operName;
@@ -40,6 +41,7 @@
 @property(retain,nonatomic) WebFrame* _webframe;
 @property(retain,nonatomic) WebScriptObject* _cb;
 @property(retain,nonatomic) NSWindow* _window;
+@property(retain,nonatomic) NSArray* _array;
 
 @end
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +75,8 @@
      jsoninfo:(NSString*)jsonInfo
      webframe:(WebFrame*)webframe
            cb:(WebScriptObject*)cb
-retController:(NSWindowController*)retController;
+retController:(NSWindowController*)retController
+        array:(NSArray*)array;
 
 
 @end

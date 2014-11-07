@@ -26,5 +26,6 @@
 -(void)ErrorIndex:(ULONGLONG)pos size:(ULONGLONG)size error:(NSInteger)error msg:(NSString*)msg;
 -(void)SaveIndexFile;
 -(NSString*)GetTmpPath;
+-(void)CheckPeer;
 
 @end

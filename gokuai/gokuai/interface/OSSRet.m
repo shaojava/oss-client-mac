@@ -336,6 +336,7 @@
         self.strMaxUploads =@"";
         self.strIsTruncated =@"";
         self.strLocation =@"";
+        self.arrayUpload = [[[NSMutableArray alloc]init] autorelease];
     }
     return self;
 }
@@ -569,6 +570,7 @@
         self.strPrefix =@"";
         self.strMarker =@"";
         self.strNextMarker =@"";
+        self.arrayContent = [[[NSMutableArray alloc]init] autorelease];
     }
     return self;
 }
@@ -610,27 +612,27 @@
         if ([arraycontent isKindOfClass:[NSArray class]]&&[arraycontent count]) {
             for (GDataXMLElement * eItem in arraycontent) {
                 OSSListObject * item =[[[OSSListObject alloc]init]autorelease];
-                NSArray * arrayKey=[rootElement elementsForName:@"Key"];
+                NSArray * arrayKey=[eItem elementsForName:@"Key"];
                 if ([arrayKey isKindOfClass:[NSArray class]]&&[arrayKey count]) {
                     GDataXMLElement * key=[arrayKey objectAtIndex:0];
                     item.strKey=[key stringValue];
                 }
-                NSArray * arraykeylastmodified=[rootElement elementsForName:@"LastModified"];
+                NSArray * arraykeylastmodified=[eItem elementsForName:@"LastModified"];
                 if ([arraykeylastmodified isKindOfClass:[NSArray class]]&&[arraykeylastmodified count]) {
                     GDataXMLElement * lastmodified=[arraykeylastmodified objectAtIndex:0];
                     item.strLastModified=[lastmodified stringValue];
                 }
-                NSArray * arrayetag=[rootElement elementsForName:@"ETag"];
+                NSArray * arrayetag=[eItem elementsForName:@"ETag"];
                 if ([arrayetag isKindOfClass:[NSArray class]]&&[arrayetag count]) {
                     GDataXMLElement * etag=[arrayetag objectAtIndex:0];
                     item.strEtag=[etag stringValue];
                 }
-                NSArray * arraytype=[rootElement elementsForName:@"Type"];
+                NSArray * arraytype=[eItem elementsForName:@"Type"];
                 if ([arraytype isKindOfClass:[NSArray class]]&&[arraytype count]) {
                     GDataXMLElement * type=[arraytype objectAtIndex:0];
                     item.strType=[type stringValue];
                 }
-                NSArray * arraysize=[rootElement elementsForName:@"Size"];
+                NSArray * arraysize=[eItem elementsForName:@"Size"];
                 if ([arraysize isKindOfClass:[NSArray class]]&&[arraysize count]) {
                     GDataXMLElement * size=[arraysize objectAtIndex:0];
                     item.strFilesize=[size stringValue];
@@ -644,7 +646,7 @@
         if ([arrayprefixes isKindOfClass:[NSArray class]]&&[arrayprefixes count]) {
             for (GDataXMLElement * eItem in arrayprefixes) {
                 OSSListObject * item =[[[OSSListObject alloc]init]autorelease];
-                NSArray * arrayPrefix=[rootElement elementsForName:@"Prefix"];
+                NSArray * arrayPrefix=[eItem elementsForName:@"Prefix"];
                 if ([arrayPrefix isKindOfClass:[NSArray class]]&&[arrayPrefix count]) {
                     GDataXMLElement * prefix=[arrayPrefix objectAtIndex:0];
                     item.strPefix=[prefix stringValue];

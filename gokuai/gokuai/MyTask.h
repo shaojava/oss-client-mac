@@ -8,18 +8,6 @@
 
 @end
 
-@interface DirectoryhandlerTask : NSOperation
-{
-    id  _handler;
-    NSMutableArray*  _array;
-}
-
-@property(nonatomic, retain) id _handler;
-@property(nonatomic, copy) NSMutableArray* _array;
--(id)initWithTask:(id)handler
-            array:(NSMutableArray*)array;
-@end
-
 
 @interface GetSyncUpdates : NSOperation
 {

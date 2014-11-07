@@ -252,14 +252,14 @@
 
 -(BOOL)Check_DownloadFinish
 {
-    __block BOOL ret=NO;
+    __block BOOL ret=YES;
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
          NSString *sql =[NSString stringWithFormat:@"select * from Download where status!='%ld' limit 1;",TRANSTASK_FINISH];
          FMResultSet *rs = [db executeQuery:sql];
          while ([rs next]) 
          {
-             ret=YES;
+             ret=NO;
          }
          [rs close];
      }];
@@ -490,14 +490,14 @@
 }
 -(BOOL)Check_UploadFinish
 {
-    __block BOOL ret=NO;
+    __block BOOL ret=YES;
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
          NSString *sql =[NSString stringWithFormat:@"select * from Upload where status!='%ld' limit 1;",TRANSTASK_FINISH];
          FMResultSet *rs = [db executeQuery:sql];
          while ([rs next]) 
          {
-             ret=YES;
+             ret=NO;
          }
          [rs close];
      }];
@@ -545,20 +545,45 @@
     return ret;
 }
 
--(NSInteger)GetTransCount
+-(NSInteger)GetUploadCount
 {
     __block NSInteger ret=0;
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"select count(*) as 'icount' from Download where status!='%ld' and status!='%ld';",TRANSTASK_STOP,TRANSTASK_FINISH];
+         NSString *sql=@"select count(*) as 'icount' from Upload;";
          FMResultSet *rs = [db executeQuery:sql];
          while ([rs next]) 
          {
-             ret+=[rs intForColumn:@"icount"];
+             ret=[rs intForColumn:@"icount"];
          }
          [rs close];
-         sql =[NSString stringWithFormat:@"select count(*) as 'icount' from Upload where status!='%ld' and status!='%ld';",TRANSTASK_STOP,TRANSTASK_FINISH];
-         rs = [db executeQuery:sql];
+     }];
+    return ret;
+}
+
+-(NSInteger)GetDownloadCount
+{
+    __block NSInteger ret=0;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql=@"select count(*) as 'icount' from Download;";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret=[rs intForColumn:@"icount"];
+         }
+         [rs close];
+     }];
+    return ret;
+}
+
+-(NSInteger)GetUploadFinishCount
+{
+    __block NSInteger ret=0;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"select count(*) as 'icount' from Upload where status='%ld';",TRANSTASK_FINISH];
+         FMResultSet *rs = [db executeQuery:sql];
          while ([rs next]) 
          {
              ret+=[rs intForColumn:@"icount"];
@@ -567,7 +592,21 @@
      }];
     return ret;
 }
-
+-(NSInteger)GetDownloadFinishCount
+{
+    __block NSInteger ret=0;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"select count(*) as 'icount' from Download where status='%ld';",TRANSTASK_FINISH];
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret+=[rs intForColumn:@"icount"];
+         }
+         [rs close];
+     }];
+    return ret;
+}
 -(void)ResetError
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 

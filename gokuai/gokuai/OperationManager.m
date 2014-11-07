@@ -62,6 +62,7 @@
 @synthesize _webframe;
 @synthesize _cb;
 @synthesize _window;
+@synthesize _array;
 
 
 -(id) init {
@@ -71,6 +72,7 @@
         self._jsonInfo=nil;
         self._webframe=nil;
         self._window=nil;
+        self._array=nil;
     }
     return self;
 }
@@ -81,6 +83,7 @@
     self._jsonInfo=nil;
     self._webframe=nil;
     self._window=nil;
+    self._array=nil;
     [super dealloc];
 }
 
@@ -214,9 +217,68 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(void) saveFile:(OperPackage*)tran {
-    //zheng
++(void) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath
+{
+    NSString* tempobject=@"";
+    NSString* tempparent=object;
+    NSString* nextmarker=@"";
+    while (YES) {
+        OSSListObjectRet* ret;
+        if ([OSSApi GetBucketObject:host bucetname:bucket ret:&ret prefix:object marker:nextmarker delimiter:@"" maxkeys:@"1000"]) {
+            for (OSSListObject* item in ret.arrayContent) {
+                TransTaskItem * tranitem=[[TransTaskItem alloc] init];
+                
+                tranitem.strHost=host;
+                tranitem.strBucket=bucket;
+                if (item.strPefix.length) {
+                    tranitem.strObject=item.strPefix;
+                }
+                else {
+                    tranitem.strObject=item.strKey;
+                }
+                tempobject=tranitem.strObject;
+                if (tranitem.strObject.length>0&&[tranitem.strObject hasSuffix:@"/"]) {
+                    tempobject=[tranitem.strObject substringToIndex:tranitem.strObject.length-1];
+                }
+                NSString * subpath=[tempobject substringFromIndex:tempparent.length]; 
+                tranitem.strFullpath=[NSString stringWithFormat:@"%@/%@",fullpath,subpath];
+                tranitem.ullFilesize=[item.strFilesize longLongValue];
+                tranitem.strPathhash=item.strEtag;
+                tranitem.nStatus=TRANSTASK_NORMAL;
+                [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+            }
+            if (ret.strNextMarker.length==0) {
+                break;
+            }
+            nextmarker=ret.strNextMarker;
+        }
+        else {
+            break;
+        }
+    }
 }
+
++(void) saveFile:(OperPackage*)tran {
+    NSString* retString=nil;
+    for (SaveFileItem *item in tran._array) {
+        TransTaskItem * tranitem=[[TransTaskItem alloc] init];
+        tranitem.strHost=item.strHost;
+        tranitem.strBucket=item.strBucket;
+        tranitem.strObject=item.strObject;
+        tranitem.strFullpath=item.strFullpath;
+        tranitem.ullFilesize=item.ullFilesize;
+        tranitem.strPathhash=item.strEtag;
+        tranitem.nStatus=TRANSTASK_NORMAL;
+        [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+        if (item.bDir) {
+            [self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
+        }
+    }
+    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+END:
+    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
+}
+
 +(void) startUpload:(OperPackage*)tran {
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
@@ -553,7 +615,7 @@ END:
     //zheng
 }
 
--(void) pack:(NSString*)name jsoninfo:(NSString*)jsonInfo webframe:(WebFrame*)webframe cb:(WebScriptObject*)cb retController:(NSWindowController*)retController
+-(void) pack:(NSString*)name jsoninfo:(NSString*)jsonInfo webframe:(WebFrame*)webframe cb:(WebScriptObject*)cb retController:(NSWindowController*)retController array:(NSArray*)array
 {
     OperPackage* tran=[[[OperPackage alloc] init] autorelease];
     tran._operName=name;
@@ -561,7 +623,7 @@ END:
     tran._webframe=webframe;
     tran._cb=cb;
     tran._window=retController.window;
-    
+    tran._array=array;
     [_operQueue addOperation:tran];
 }
 

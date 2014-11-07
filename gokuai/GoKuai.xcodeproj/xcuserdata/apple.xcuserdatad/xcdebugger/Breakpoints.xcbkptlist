@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "gokuai/trans/UploadTask.m"
-         timestampString = "436944739.005454"
+         timestampString = "437032128.482694"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "225"
-         endingLineNumber = "225"
+         startingLineNumber = "226"
+         endingLineNumber = "226"
          landmarkName = "-TaskError:msg:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -66,6 +66,19 @@
          startingLineNumber = "544"
          endingLineNumber = "544"
          landmarkName = "+CompleteMultipartUpload:bucketname:objectname:uploadid:parts:ret:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "gokuai/trans/DownloadTask.m"
+         timestampString = "437034204.427216"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "329"
+         endingLineNumber = "329"
+         landmarkName = "-main"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

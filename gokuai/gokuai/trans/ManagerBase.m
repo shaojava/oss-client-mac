@@ -112,7 +112,7 @@
             titem.strUploadId=item.pItem.strUploadId;
             titem.nErrorNum=item.pItem.nErrorNum;
             titem.strMsg=item.pItem.strMsg;
-            titem.ullSpeed=item.pItem.ullSpeed;
+            titem.ullSpeed=item.ullSpeed;
             [all addObject:titem];
         }
     }

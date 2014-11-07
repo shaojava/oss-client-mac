@@ -3,6 +3,7 @@
 #import "Util.h"
 #import "TransPortDB.h"
 #import "DownloadPeer.h"
+#import "Network.h"
 
 @implementation DownloadTask
 
@@ -34,16 +35,10 @@
             if (ret) {
                 self.pIndexFileHandle=[NSFileHandle fileHandleForUpdatingAtPath:temp];
                 if (self.pIndexFileHandle) {
-                    unsigned long long length=[self.pIndexFileHandle seekToEndOfFile];
-                    if (length>0) {
-                        NSData * data=[self.pIndexFileHandle readDataToEndOfFile];
-                        if (data.length!=length) {
-                            ret=NO;
-                        }
-                        else {
-                            NSString * downloadtemp=[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-                            [self.pFinish LoadParisFromString:downloadtemp];
-                        }
+                    NSData * data=[self.pIndexFileHandle readDataToEndOfFile];
+                    if (data.length>0) {
+                        NSString * downloadtemp=[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+                        [self.pFinish LoadParisFromString:downloadtemp];
                     }
                     else {
                         [self.pFinish Clear];
@@ -118,7 +113,7 @@
         [self DeleteTmpFile];
         self.pItem.nStatus=TRANSTASK_FINISH;
     }
-    //zheng callback
+    [[Network shareNetwork].dCallback SendCallbackInfo:self.pItem];
 }
 
 -(BOOL)WriteFile:(char *)data pos:(ULONGLONG)pos size:(NSInteger)size
@@ -207,6 +202,7 @@
     NSLog(@"%@",errormsg);
     [[TransPortDB shareTransPortDB] Update_DownloadError:self.pItem.strFullpath error:error msg:msg];
     self.pItem.nStatus=TRANSTASK_ERROR;
+    [[Network shareNetwork].dCallback SendCallbackInfo:self.pItem];
 }
 
 -(void)ErrorIndex:(ULONGLONG)pos size:(ULONGLONG)size error:(NSInteger)error msg:(NSString*)msg
@@ -224,7 +220,6 @@
     if (self.bStop) {
         return;
     }
-    [self.pFilesc lock];
     if (self.pIndexFileHandle) {
         NSString* indexdata=[self.pFinish OutPut];
         NSData * data=[indexdata dataUsingEncoding: NSUTF8StringEncoding];
@@ -232,7 +227,6 @@
         [self.pIndexFileHandle writeData:data];
         [self.pIndexFileHandle synchronizeFile];
     }
-    [self.pFilesc unlock];
 }
 
 -(NSString*)GetTmpPath
@@ -240,10 +234,10 @@
     NSString* strDir=[self.pItem.strFullpath getParent];
     NSString* strFilename=[self.pItem.strFullpath getFilename];
     if (self.pItem.strPathhash.length) {
-        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,self.pItem.strPathhash];
+        return [NSString stringWithFormat:@"%@/%@.%@",strDir,strFilename,self.pItem.strPathhash];
     }
     else {
-        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,OSSTMP];
+        return [NSString stringWithFormat:@"%@/%@.%@",strDir,strFilename,OSSTMP];
     }
 }
 
@@ -306,6 +300,8 @@
                     [peer StartDownload:pos size:size];
                     [self.pQueue addOperation:peer];
                 }
+                [self CheckPeer];
+                /*
                 else {
                     BOOL bhave=NO;
                     [self.pLocksc lock];
@@ -321,7 +317,7 @@
                         }
                     }
                     [self.pLocksc unlock];
-                }
+                }*/
             }
             else {
                 [NSThread sleepForTimeInterval:2];
@@ -329,7 +325,7 @@
         }
     }
     @catch (NSException *exception) {
-        
+        NSLog(@"%@",exception);
     }
     @finally {
         [self CloseFile];
@@ -337,6 +333,21 @@
         [pool release];
         self.pItem.nStatus=TRANSTASK_REMOVE;
     }
+}
+
+-(void)CheckPeer
+{
+    [self.pLocksc lock];
+    for (int i=0;i<self.listPeer.count;i++) {
+        DownloadPeer*item = [self.listPeer objectAtIndex:i];
+        if ([item IsIdle]) {
+            [self.listPeer removeObjectAtIndex:i];
+        }
+        else {
+            i++;
+        }
+    }
+    [self.pLocksc unlock];
 }
 
 @end

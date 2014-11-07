@@ -159,16 +159,56 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"addFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"addFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
 -(void) saveFile:(NSString*) json cb:(WebScriptObject*)cb
 {
-    if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
-        BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
-    } 
+    NSLog(@"%@",json);
+    BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
+    NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :nil];
+    [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
+        if (NSOKButton!=result) {
+            return;
+        }
+        NSURL *url=[[panel URLs] objectAtIndex:0];
+        NSString* path=url.path;
+        NSDictionary* dictionary=[json objectFromJSONString];
+        if ([dictionary isKindOfClass:[NSDictionary class]]) {
+            NSArray* list = [dictionary objectForKey:@"list"];
+            if ([list isKindOfClass:[NSArray class]]) {
+                NSMutableArray *array = [NSMutableArray arrayWithCapacity:list.count];
+                for (int i=0; i<list.count; i++) {
+                    NSDictionary* dic=[list objectAtIndex:i];
+                    SaveFileItem* savItem=[[[SaveFileItem alloc]init] autorelease];
+                    savItem.strBucket=[dic objectForKey:@"bucket"];
+                    savItem.strObject=[dic objectForKey:@"object"];
+                    savItem.strHost=[Util ChangeHost:[dic objectForKey:@"location"]];
+                    savItem.ullFilesize=[[dic objectForKey:@"filesize"] longLongValue];
+                    savItem.strEtag=[dic objectForKey:@"etag"];
+                    if (savItem.strEtag.length==0) {
+                        savItem.strEtag=@"";
+                    }
+                    NSString * temp=savItem.strObject;
+                    if ([savItem.strObject hasSuffix:@"/"]) {
+                        savItem.bDir=YES;
+                        temp=[savItem.strObject substringToIndex:savItem.strObject.length-1];
+                    }
+                    savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp getFilename]];
+                    if (savItem.strObject.length&&savItem.strBucket.length) {
+                        [array addObject:savItem];
+                    }
+                }
+          /*      MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
+                if (![moveController pastefilesfrom:array savepath:path]) {
+                    return;
+                }*/
+                
+                [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
+            }
+        }
+    }];
 }
 
 -(void) selectFileDlg:(NSString*) json cb:(WebScriptObject*)cb
@@ -277,7 +317,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"startUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"startUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     } 
 }
 
@@ -285,7 +325,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"startDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"startDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     } 
 }
 
@@ -293,7 +333,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"stopUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"stopUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     } 
 }
 
@@ -301,7 +341,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"stopDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"stopDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     } 
 }
 
@@ -309,7 +349,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"deleteUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"deleteUpload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     } 
 }
 
@@ -317,7 +357,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"deleteDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"deleteDownload" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }  
 }
 
@@ -348,7 +388,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"deleteObject" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"deleteObject" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -356,7 +396,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"copyObject" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"copyObject" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -385,7 +425,7 @@ END:
 -(void) loginByKey:(NSString*) json cb:(WebScriptObject*)cb
 {
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-    [[OperationManager sharedInstance] pack:@"loginByKey" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+    [[OperationManager sharedInstance] pack:@"loginByKey" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     /*
      if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
      BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
@@ -397,7 +437,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"loginByFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"loginByFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -405,7 +445,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"setPassword" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"setPassword" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -413,7 +453,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"loginPassword" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"loginPassword" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -421,7 +461,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"setServerLocation" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"setServerLocation" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -429,7 +469,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"saveAuthorization" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"saveAuthorization" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 
@@ -507,7 +547,7 @@ END:
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
         BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"deleteBucket" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
+        [[OperationManager sharedInstance] pack:@"deleteBucket" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
     }
 }
 -(NSString*) changeHost:(NSString*)json
