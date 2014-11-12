@@ -32,6 +32,7 @@
 @synthesize strUserDB;
 @synthesize strTransDB;
 @synthesize strLogPath;
+@synthesize strConfig;
 
 @synthesize appversion;
 
@@ -71,14 +72,9 @@
     self.strAccessKey=@"";
     self.strArea=@"";
     self.strHost=@"";
-//    OSSRsa * rsa=[[[OSSRsa alloc] init]autorelease];
-//    self.strAccessID=@"fmVEoAkpUByBS1cs";
-//    self.strAccessKey=@"HWsJ79uEwsrh7PB6ASGpyrdZkwJWdR";
-   //OSSClient.selectFileDlg(JSON.stringify({disable_root:1}),function(re){console.log(re)}) 
     [self setMainMenu];
-    
-    self.strUIPath=@"/Users/apple/oss-client-ui/dist";
-    
+
+    self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
         NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
@@ -93,15 +89,12 @@
             }
         }
     }
-    
     self.strTransCachePath=[NSString stringWithFormat:@"%@/transcache/",[[NSBundle mainBundle] bundlePath]];
     [Util createfolder:self.strTransCachePath];
     self.strUserDB=[NSString stringWithFormat:@"%@/user/ossuser.db",[[NSBundle mainBundle] bundlePath]];
-    [Util createfolder:[self.strUserDB getParent]];
+    [Util createfolder:[self.strUserDB stringByDeletingLastPathComponent]];
     self.strLogPath=[NSString stringWithFormat:@"%@/log",[[NSBundle mainBundle] bundlePath]];
     [Util createfolder:self.strLogPath];
-    
-    
     self.browserWindowControllers=[NSMutableArray array];
     self.progressWindowControllers=[NSMutableDictionary dictionary];
     self.appversion=[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -224,13 +217,6 @@
         }
         
     }
-    else if([window.windowController isKindOfClass:[ProgressWindowController class]]) {
-
-        NSString *uniquestring = [((ProgressWindowController *)window.windowController) uniquestring];
-        if (uniquestring) {
-            [progressWindowControllers removeObjectForKey:uniquestring];
-        }
-    }
     else {}
 }
 
@@ -268,4 +254,17 @@
     [NSApp setWindowsMenu: [itemWd submenu]];
 }
 
+-(void)startCopy:(NSArray*)items
+{
+    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    progressWindowController._package = [[[ProgressPackage alloc] initCopy:items] autorelease];
+    [progressWindowController displayex];
+}
+
+-(void)startDelete:(NSArray*)items
+{
+    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    progressWindowController._package = [[[ProgressPackage alloc] initDelete:items] autorelease];
+    [progressWindowController displayex];
+}
 @end

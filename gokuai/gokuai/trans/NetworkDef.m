@@ -88,16 +88,24 @@
 
 @implementation CopyFileItem
 
+@synthesize strHost;
+@synthesize strBucket;
 @synthesize strObject;
 @synthesize ullFilesize;
+@synthesize strDstHost;
+@synthesize strDstBucket;
 @synthesize strDstObject;
 
 -(id)init
 {
     if (self = [super init])
     {
+        self.strHost=@"";
+        self.strBucket=@"";
         self.strObject=@"";
         self.ullFilesize=0;
+        self.strDstHost=@"";
+        self.strDstBucket=@"";
         self.strDstObject=@"";
     }
     return self;
@@ -105,8 +113,39 @@
 
 -(void)dealloc
 {
+    strHost=nil;
+    strBucket=nil;
     strObject=nil;
+    strDstHost=nil;
+    strDstBucket=nil;
     strDstObject=nil;
+    [super dealloc];
+}
+
+@end
+
+@implementation DeleteFileItem
+
+@synthesize strHost;
+@synthesize strBucket;
+@synthesize strObject;
+
+-(id)init
+{
+    if (self = [super init])
+    {
+        self.strHost=@"";
+        self.strBucket=@"";
+        self.strObject=@"";
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    strHost=nil;
+    strBucket=nil;
+    strObject=nil;
     [super dealloc];
 }
 

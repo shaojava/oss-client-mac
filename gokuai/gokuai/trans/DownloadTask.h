@@ -15,6 +15,7 @@
 @property(nonatomic,retain)NSFileHandle* pFileHandle;
 @property(nonatomic)ULONGLONG ullWriteTime;
 
+-(id)init:(TransTaskItem*)item;
 -(BOOL)CreateFile;
 -(void)CloseFile;
 -(void)CheckDeleteFile;

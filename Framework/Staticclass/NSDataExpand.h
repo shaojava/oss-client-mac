@@ -9,5 +9,4 @@
 -(uint32_t)     crc32;
 +(NSData*)      base64Decoded:(NSString*)string;
 -(NSString*)    base64Encoded;
-
 @end

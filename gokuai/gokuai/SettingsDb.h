@@ -55,4 +55,8 @@
 -(NSInteger)getDMax;
 -(void)setUMax:(NSInteger)value;
 -(NSInteger)getUMax;
+-(void)setDPMax:(NSInteger)value;
+-(NSInteger)getDPMax;
+-(void)setUPMax:(NSInteger)value;
+-(NSInteger)getUPMax;
 @end

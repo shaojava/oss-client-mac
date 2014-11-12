@@ -98,24 +98,6 @@
     return outStr;
 }
 
--(NSString*)getParent
-{
-    NSRange range=[self rangeOfString:@"/" options:NSBackwardsSearch];
-    if (range.location==NSNotFound) {
-        return @"";
-    }
-    return [self substringToIndex:range.location];
-}
-
--(NSString*)getFilename
-{
-    NSRange range=[self rangeOfString:@"/" options:NSBackwardsSearch];
-    if (range.location==NSNotFound) {
-        return self;
-    }
-    return [self substringFromIndex:range.location+1];
-}
-
 -(NSString*)lastaddslash
 {
     if (![self hasSuffix:@"/"]) {

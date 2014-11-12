@@ -1,5 +1,3 @@
-
-
 #import <Cocoa/Cocoa.h>
 
 @interface ProgressManager : NSObject{
@@ -7,6 +5,6 @@
 }
 
 + (ProgressManager*) sharedInstance;
--(void) addProgress:(NSOperation*)progress;
+-(void)addProgress:(NSOperation*)progress;
 
 @end

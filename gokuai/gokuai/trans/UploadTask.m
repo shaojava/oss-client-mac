@@ -19,6 +19,7 @@
         self.pIndexFileHandle=nil;
         self.pPartList=[[[NSMutableArray alloc]init] autorelease];
         pPartBuffer=malloc(10000*UPLOADPARTSIZE);
+        self.nMax=[Network shareNetwork].nUPeerMax;
     }
     return self;
 }

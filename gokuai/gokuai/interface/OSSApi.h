@@ -21,12 +21,16 @@
 +(BOOL)CopyObject:(NSString*)host dstbucketname:(NSString*)dstbucketname dstobjectname:(NSString*)dstobjectname srcbucketname:(NSString*)srcbucketname srcobjectname:(NSString*)srcobjectname ret:(OSSCopyRet**)ret;
 +(BOOL)DeleteObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname ret:(OSSRet**)ret;
 +(BOOL)DeleteObject:(NSString*)host bucketname:(NSString*)bucketname objectnames:(NSArray*)objectnamss quiet:(BOOL)quiet ret:(OSSRet**)ret;
++(BOOL)HeadObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname;
 
 +(BOOL)AddObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname filesize:(ULONGLONG)filesize filedata:(NSData*)filedata ret:(OSSAddObject**)ret;
 +(BOOL)InitiateMultipartUploadObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname ret:(OSSInitiateMultipartUploadRet**)ret;
 +(BOOL)UploadPartObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid partnumber:(NSInteger)partnumber filesize:(ULONGLONG)fileszie filedata:(NSData*)filedata ret:(OSSAddObject**)ret;
 +(BOOL)UploadPartCopy:(NSString*)host dstbucketname:(NSString*)dstbucketname dstobjectname:(NSString*)dstobjectname srcbucketname:(NSString*)srcbucketname srcobjectname:(NSString*)srcobjectname uploadid:(NSString*)uploadid partnumber:(NSInteger)partnumber pos:(ULONGLONG)pos size:(ULONGLONG)size ret:(OSSAddObject**)ret;
 +(BOOL)CompleteMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid parts:(NSArray*)parts ret:(OSSRet**)ret;
+
++(BOOL)ListMultipartUploads:(NSString*)host bucketname:(NSString*)bucketname reet:(OSSListMultipartUploadRet**)ret;
++(BOOL)AbortMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid;
 
 +(NSString*)Authorization:(NSString*)method contentmd5:(NSString*)contentmd5 contenttype:(NSString*)contenttype date:(NSString*)date keys:(NSArray*)keys resource:(NSString*)resource;
 +(NSString*)Authorization:(NSString *)method contentmd5:(NSString *)contentmd5 contenttype:(NSString *)contenttype date:(NSString *)date keys:(NSArray *)keys resource:(NSString *)resource accessid:(NSString*)accessid accesskey:(NSString*)accesskey;

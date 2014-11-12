@@ -68,7 +68,6 @@
 +(void) setPassword:(OperPackage*)tran;
 +(void) loginPassword:(OperPackage*)tran;
 +(void) setServerLocation:(OperPackage*)tran;
-+(void) saveAuthorization:(OperPackage*)tran;
 +(void) deleteBucket:(OperPackage*)tran;
 
 - (void) pack:(NSString*)name

@@ -11,8 +11,6 @@
 -(NSString*)toUtf8;
 -(NSString*)urlDecoded;
 -(NSString*)urlEncoded;
--(NSString*)getParent;
--(NSString*)getFilename;
 -(NSString*)lastaddslash;
 -(NSString*)lastremoveslash;
 -(NSString*)replacetojson;

@@ -446,7 +446,7 @@
 
 +(BOOL)findspace:(NSString*)path
 {
-    NSString* filename=[path getFilename];
+    NSString* filename=[path lastPathComponent];
     NSString* key=@" ";
     if ([filename hasSuffix:key]) {
         return YES;
@@ -459,8 +459,8 @@
 
 +(NSString*)replacespace:(NSString*)path
 {
-    NSString* dir=[path getParent];
-    NSString* filename=[path getFilename];
+    NSString* dir=[path stringByDeletingLastPathComponent];
+    NSString* filename=[path lastPathComponent];
     NSString* key=@" ";
     NSString* temp;
     while ([filename hasSuffix:key]) {
@@ -494,7 +494,7 @@
 {
     NSFileManager *fileManager= [NSFileManager defaultManager];
     NSString * filename=[fileManager displayNameAtPath:path];
-    NSString * filename1=[path getFilename];
+    NSString * filename1=[path lastPathComponent];
     if (filename.length>0) {
         if ([filename isEqualToString:filename1]) {
             return NO;

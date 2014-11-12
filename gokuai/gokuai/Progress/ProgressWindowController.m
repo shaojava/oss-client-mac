@@ -1,9 +1,6 @@
 
 #import "ProgressWindowController.h"
-
-
 #import "ProgressManager.h"
-
 #import "Util.h"
 #import "TransPortDB.h"
 #import "LaunchpadWindowController.h"
@@ -14,55 +11,37 @@
 
 @synthesize _oper;
 @synthesize _obj;
-@synthesize _lck;
-@synthesize _defApp;
-@synthesize _opentype;
 
--(id) initOpen:(id)obj lck:(BOOL)lck defApp:(NSString *)defApp type:(NSString*)type;
-{
-    if (self = [super init]) {
-        self._oper = pc_load;
-        self._obj = obj;
-        self._lck = lck;
-        self._defApp = defApp;
-        self._opentype=type;
-    }
-    
-    return self;
-}
-
--(id) initCopy:(id)obj;
+-(id) initCopy:(id)obj
 {
     if (self = [super init]) {
         self._oper = pc_copy;
         self._obj = obj;
     }
-    
+    return self;
+}
+
+-(id) initDelete:(id)obj
+{
+    if (self = [super init]) {
+        self._oper = pc_delete;
+        self._obj = obj;
+    }
     return self;
 }
 
 -(void) dealloc
 {
     self._obj = nil;
-    self._defApp = nil;
-    self._opentype=nil;
     [super dealloc];
 }
 
 @end
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 @implementation ProgressWindowController
 
 @synthesize _package;
-
-@synthesize _progress;
 @synthesize _cpyprogress;
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (id)initWithWindow:(NSWindow *)window
 {
@@ -70,7 +49,6 @@
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(window_close:) name:NSWindowWillCloseNotification object:nil];
     }
-    
     return self;
 }
 
@@ -83,183 +61,113 @@
 -(void) window_close:(NSNotification*)notification
 {
     if ([notification object]==self.window) {
-        
-        if (pc_copy == _package._oper ) {
-            [[Util getAppDelegate].launchpadWindowController makeAble:YES];
-        }
-        
+        [[Util getAppDelegate].launchpadWindowController makeAble:YES];
         [self myclear];
         [self release];
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
--(void) updateLoadProgress:(DownloadState)retval progress:(double)progress retstr:(NSString*)retstr prompt:(NSString*)prompt
-{
-    BOOL close = YES;
-    if (DS_Ing==retval) {
-        [_progressIndicator setHidden:NO];
-        [_actionProgress setHidden:NO];
-        [_btnMultiFunc setHidden:NO];
-        _progressIndicator.doubleValue=progress;
-        _actionProgress.stringValue=retstr;
-        _actionTarget.stringValue=prompt;
-        close = NO;
-    }
-    else if (DS_Int==retval) {
-        _actionTarget.stringValue=prompt;
-        close = NO;
-    }
-    else if (DS_Done==retval) {
-        [_progressIndicator setHidden:NO];
-        [_actionProgress setHidden:NO];
-        [_btnMultiFunc setHidden:NO];
-        _progressIndicator.doubleValue=progress;
-        _actionProgress.stringValue=retstr;
-        [self myopen];
-    }
-    else if (DS_Cancel==retval) {
-    }
-    else if (DS_Err==retval) {
-    }
-    if (close) {
-        [self performSelectorOnMainThread:@selector(myhide) withObject:nil waitUntilDone:YES];
-    }
-}
-
--(void) updateCopyProgress:(NSInteger)value
-{
-    if (value >= 0 && value <=100) {
-        [_progressIndicator setHidden:NO];
-        [_actionProgress setHidden:NO];
-        [_btnMultiFunc setHidden:NO];
-        
-        [_progressIndicator setDoubleValue:value];
-        _actionProgress.stringValue=[NSString stringWithFormat:@"%ld %%",value];
-    }
-    
-    if (_cpyprogress.isfinished) {
-        [self performSelectorOnMainThread:@selector(myhide) withObject:nil waitUntilDone:YES];
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--(IBAction)buttonCancelClicked:(id)sender
-{
-    if (pc_load == _package._oper ) {
-        [self.window orderOut:nil];
-    }
-    else if ( pc_copy == _package._oper ) {
-        [self.window close];
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 -(void) myshow {
-    if ( pc_copy == _package._oper) {
-        [self.window setParentWindow:[Util getAppDelegate].launchpadWindowController.window];
-        [[Util getAppDelegate].launchpadWindowController makeAble:NO];
-    }
-    
+    [self.window setParentWindow:[Util getAppDelegate].launchpadWindowController.window];
+    [[Util getAppDelegate].launchpadWindowController makeAble:NO];
     [self.window makeKeyAndOrderFront:nil];
 }
 
 -(void) myhide {
+    
     [self.window close];
-}
-
--(void) myopen
-{
-   
 }
 
 -(void) myclear
 {
-    if (_progress) {
-        if (DS_Ing==_progress.loadstate) {
-
-        }
-        
-        [_progress cancel];
-        self._progress=nil;
-    }
-    
     if (_cpyprogress) {
         if (![_cpyprogress isfinished]) {
         }
-        
         [_cpyprogress cancel];
         self._cpyprogress=nil;
     }
-    
     if (_package) {
         [_package release];
         _package = nil;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--(void) setActionType:(NSInteger)type filename:(NSString*)filename prompt:(NSString*)prompt
-{
-    if ( 0 == type ) {
-        self.window.title=[Util localizedStringForKey:@"打开中" alternate:nil];
-        _actionTarget.stringValue=prompt;
-        
-        [_btnMultiFunc setImage:[NSImage imageNamed:@"bc_normal.png"]];
-        [_btnMultiFunc setAlternateImage:[NSImage imageNamed:@"bc_hover.png"]];
-        [_btnMultiFunc setToolTip:[Util localizedStringForKey:@"取消下载" alternate:nil]];
-    }
-    else if ( 1 == type ) {
-        self.window.title=[Util localizedStringForKey:@"复制中" alternate:nil];
-        _actionTarget.stringValue=prompt;
-        
-        [_btnMultiFunc setImage:[NSImage imageNamed:@"bc_normal.png"]];
-        [_btnMultiFunc setAlternateImage:[NSImage imageNamed:@"bc_hover.png"]];
-        [_btnMultiFunc setToolTip:[Util localizedStringForKey:@"取消复制" alternate:nil]];
-    }
-    
-    [_actionProgress setHidden:YES];
-    [_progressIndicator setHidden:YES];
-    [_btnMultiFunc setHidden:YES];
-    
-    _progressIndicator.doubleValue=0;
-    [_fileIcon setImage:[Util iconFromFileType:filename]];
-}
-
--(void) _openfile:(transportnode*)transitem specified:(NSString*)specified lock:(BOOL)lock
-{
-
-}
-
--(void) _copyFile:(NSArray*)cpyItems
+-(void) copyFiles:(NSArray*)items
 {
     NSString* filename=nil;
     NSString* prompt=nil;
-    
-    if (0==cpyItems.count) {
+    if (0==items.count) {
         return;
     }
-    else if (1==cpyItems.count) {
-        CopyItem* cm=[cpyItems objectAtIndex:0];
-        
-        filename=[cm.oldpath lastPathComponent];
-        prompt=[NSString stringWithFormat:[Util localizedStringForKey:@"正在拷贝［%@］" alternate:nil],filename];
+    else if (1==items.count) {
+        CopyFileItem* item=[items objectAtIndex:0];
+        filename=[item.strDstObject lastPathComponent];
+        prompt=[NSString stringWithFormat:@"正在拷贝［%@］",filename];
     }
     else {
-        prompt=[NSString stringWithFormat:[Util localizedStringForKey:@"正在拷贝%ld个项目" alternate:nil], cpyItems.count];
+        prompt=[NSString stringWithFormat:@"正在拷贝0/%ld个项目", items.count];
     }
-    
-    [self setActionType:1 filename:filename prompt:prompt];
-    
-    self._cpyprogress=[[[CopyProgress alloc]initWithPaths:cpyItems] autorelease];
+    NSLog(@"%@",prompt);
+    self.window.title=@"复制中";
+    _actionTarget.stringValue=prompt;
+    [_progressIndicator setHidden:YES];
+    _progressIndicator.doubleValue=0;
+    self._cpyprogress=[[[CopyProgress alloc]initWithPaths:items type:pc_copy] autorelease];
     [self._cpyprogress setProgressCallBack:^(NSInteger v) {
-        [self updateCopyProgress:v];
+        NSUInteger pos=v*100/items.count;
+        [_progressIndicator setHidden:NO];
+        [_progressIndicator setDoubleValue:pos];
+        if (1==items.count) {
+            _actionTarget.stringValue=[NSString stringWithFormat:@"正在拷贝［%@］",filename];
+        }
+        else {
+            _actionTarget.stringValue=[NSString stringWithFormat:@"正在拷贝%ld/%ld个项目",v,items.count];
+        }
+        NSLog(@"%@",_actionTarget.stringValue);
+        if (_cpyprogress.isfinished) {
+            [NSThread sleepForTimeInterval:1];
+            [self performSelectorOnMainThread:@selector(myhide) withObject:nil waitUntilDone:YES];
+        }
     }];
     
+    [[ProgressManager sharedInstance] addProgress:_cpyprogress];
+}
+
+-(void) deleteFiles:(NSArray*)items
+{
+    NSString* filename=nil;
+    NSString* prompt=nil;
+    if (0==items.count) {
+        return;
+    }
+    else if (1==items.count) {
+        DeleteFileItem* item=[items objectAtIndex:0];
+        filename=[item.strObject lastPathComponent];
+        prompt=[NSString stringWithFormat:@"正在删除［%@］",filename];
+    }
+    else {
+        prompt=[NSString stringWithFormat:@"正在删除0/%ld个项目",items.count];
+    }
+    self.window.title=@"删除中";
+    _actionTarget.stringValue=prompt;
+    [_progressIndicator setHidden:YES];
+    _progressIndicator.doubleValue=0;
+    self._cpyprogress=[[[CopyProgress alloc]initWithPaths:items type:pc_delete] autorelease];
+    [self._cpyprogress setProgressCallBack:^(NSInteger v) {
+        NSUInteger pos=v*100/items.count;
+        [_progressIndicator setHidden:NO];
+        [_progressIndicator setDoubleValue:pos];
+        if (1==items.count) {
+            _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除［%@］",filename];
+        }
+        else {
+            _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除%ld/%ld个项目",v,items.count];
+        }
+        if (_cpyprogress.isfinished) {
+            [NSThread sleepForTimeInterval:1];
+            [self performSelectorOnMainThread:@selector(myhide) withObject:nil waitUntilDone:YES];
+        }
+    }];
     [[ProgressManager sharedInstance] addProgress:_cpyprogress];
 }
 
@@ -272,26 +180,15 @@
     [self.window setHasShadow:YES];
     
     switch (_package._oper) {
-        case 0:
-            [self _openfile:_package._obj specified:_package._defApp lock:_package._lck];
+        case pc_copy:
+            [self copyFiles:_package._obj];
             break;
-        case 1:
-            [self _copyFile:_package._obj];
+        case pc_delete:
+            [self deleteFiles:_package._obj];
             break;
-            
         default:
             break;
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--(NSString *)uniquestring;
-{
-    if ( pc_copy == _package._oper ) {
-        return nil;
-    }
-    return nil;
 }
 
 -(void) displayex;
@@ -304,7 +201,4 @@
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////

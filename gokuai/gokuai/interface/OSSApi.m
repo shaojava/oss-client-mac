@@ -62,7 +62,7 @@
 {
     NSString* date=[Util getGMTDate];
     NSString* method=@"DELETE";
-    NSString* resource=@"/";
+    NSString* resource=[NSString stringWithFormat:@"/%@/",bucketname];
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
     NSString* retsign=[self Authorization:method contentmd5:@"" contenttype:@"" date:date keys:array resource:resource];
     OssSignKey *item=[[OssSignKey alloc]init];
@@ -75,7 +75,7 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@%@",bucketname,host,resource]];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/",bucketname,host]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
@@ -193,7 +193,7 @@
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
     OssSignKey *item=[[OssSignKey alloc]init];
     item.key=@"x-oss-copy-source";
-    item.value=[NSString stringWithFormat:@"/%@/%@",srcbucketname,srcobjectname];
+    item.value=[NSString stringWithFormat:@"/%@/%@",srcbucketname,[srcobjectname urlEncoded]];
     [array addObject:item];
     [item release];
     NSString* retsign=[self Authorization:method contentmd5:@"" contenttype:@"" date:date keys:array resource:resource];
@@ -301,6 +301,39 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
+    NSInteger status=[response statusCode];
+    if (status>=200&&status<400) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
++(BOOL)HeadObject:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname;
+{
+    NSString* date=[Util getGMTDate];
+    NSString* method=@"HEAD";
+    NSString* resource=[NSString stringWithFormat:@"/%@/%@",bucketname,objectname];
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSString* retsign=[self Authorization:method contentmd5:@"" contenttype:@"" date:date keys:array resource:resource];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"Date";
+    item.value=date;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"Authorization";
+    item.value=retsign;
+    [array addObject:item];
+    [item release];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@",bucketname,host,[objectname urlEncoded]]];
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:[self GetHeader:array]
+                                                        bodyData:nil] autorelease];
+    NSHTTPURLResponse* response;
+    [request connectNetSyncWithResponse:&response error:nil];
     NSInteger status=[response statusCode];
     if (status>=200&&status<400) {
         return YES;
@@ -500,6 +533,7 @@
     }
     return NO;
 }
+
 +(BOOL)CompleteMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid parts:(NSArray*)parts ret:(OSSRet**)ret
 {
     NSString* date=[Util getGMTDate];
@@ -551,7 +585,73 @@
         return NO;
     }
 }
-
++(BOOL)ListMultipartUploads:(NSString*)host bucketname:(NSString*)bucketname reet:(OSSListMultipartUploadRet**)ret
+{
+    NSString* date=[Util getGMTDate];
+    NSString* method=@"GET";
+    NSString* resource=[NSString stringWithFormat:@"/%@/?uploads",bucketname];
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSString* retsign=[self Authorization:method contentmd5:@"" contenttype:@"" date:date keys:array resource:resource];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"Date";
+    item.value=date;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"Authorization";
+    item.value=retsign;
+    [array addObject:item];
+    [item release];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/?uploads",bucketname,host]];
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:[self GetHeader:array]
+                                                        bodyData:nil] autorelease];
+    NSHTTPURLResponse* response;
+    NSData* data = [request connectNetSyncWithResponse:&response error:nil];
+    *ret =[[[OSSListMultipartUploadRet alloc]init]autorelease];
+    [(*ret) SetValueWithData:data];
+    NSInteger status=[response statusCode];
+    if (status>=200&&status<400) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+    
++(BOOL)AbortMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid
+{
+    NSString* date=[Util getGMTDate];
+    NSString* method=@"DELETE";
+    NSString* resource=[NSString stringWithFormat:@"/%@/%@?uploadId=%@",bucketname,objectname,uploadid];
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSString* retsign=[self Authorization:method contentmd5:@"" contenttype:@"" date:date keys:array resource:resource];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"Date";
+    item.value=date;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"Authorization";
+    item.value=retsign;
+    [array addObject:item];
+    [item release];
+    NSString* strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@.%@/%@?uploadId=%@",bucketname,host,[objectname urlEncoded],uploadid]];
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:[self GetHeader:array]
+                                                        bodyData:nil] autorelease];
+    NSHTTPURLResponse* response;
+    [request connectNetSyncWithResponse:&response error:nil];
+    NSInteger status=[response statusCode];
+    if (status>=200&&status<400) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
 
 +(NSString*)Authorization:(NSString*)method contentmd5:(NSString*)contentmd5 contenttype:(NSString*)contenttype date:(NSString*)date keys:(NSArray*)keys resource:(NSString*)resource
 {
@@ -571,7 +671,6 @@
         [signString appendFormat:@"%@:%@\n",sk.key,sk.value];
     }
     [signString appendFormat:resource];
-    
     const char * secretStr = [[Util getAppDelegate].strAccessKey UTF8String];
     const char * signStr = [signString UTF8String];
     unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
@@ -598,7 +697,6 @@
         [signString appendFormat:@"%@:%@\n",sk.key,sk.value];
     }
     [signString appendFormat:resource];
-    NSLog(@"%@",signString);
     const char * secretStr = [accesskey UTF8String];
     const char * signStr = [signString UTF8String];
     unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];

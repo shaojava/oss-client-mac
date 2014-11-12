@@ -13,6 +13,7 @@
 #import "MoveItem.h"
 #import "NSStringExpand.h"
 #import "MyTask.h"
+#import "OSSApi.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -150,13 +151,215 @@
     return retstring;
 }
 
--(BOOL) pastefilesfrom:(NSArray*)srcfiles mountid:(NSInteger)mountid overwrite:(id)overwrite
+-(void) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object dsthost:(NSString*)dsthost dstbucket:(NSString*)dstbucket dstobject:(NSString*)dstobject array:(NSMutableArray*)array
 {
+    NSString* nextmarker=@"";
+    while (YES) {
+        OSSListObjectRet* ret;
+        if ([OSSApi GetBucketObject:host bucetname:bucket ret:&ret prefix:object marker:nextmarker delimiter:@"" maxkeys:@"1000"]) {
+            for (OSSListObject* item in ret.arrayContent) {
+                CopyFileItem * copyitem=[[CopyFileItem alloc] init];
+                if (item.strPefix.length) {
+                    copyitem.strObject=item.strPefix;
+                }
+                else {
+                    copyitem.strObject=item.strKey;
+                }
+                copyitem.ullFilesize=[item.strFilesize longLongValue];
+                copyitem.strHost=host;
+                copyitem.strBucket=bucket;
+                copyitem.strDstHost=dsthost;
+                copyitem.strDstBucket=dstbucket;
+                copyitem.strDstObject=[copyitem.strObject stringByReplacingOccurrencesOfString:object withString:dstobject];
+                [array addObject:copyitem];
+            }
+            if (ret.strNextMarker.length==0) {
+                break;
+            }
+            nextmarker=ret.strNextMarker;
+        }
+        else {
+            break;
+        }
+    }
+}
+
+-(BOOL) copyfiles:(NSArray*)srcfiles dstobject:(NSString*)dstobject;
+{
+    BOOL bAll = NO;
+    BOOL bKeepBoth = NO;
+    for (CopyFileItem* copyitem in srcfiles) {
+        BOOL bDir=NO;
+        NSString* temp=copyitem.strObject;
+        if ([copyitem.strObject hasSuffix:@"/"]) {
+            bDir=YES;
+            temp=[copyitem.strObject substringToIndex:copyitem.strObject.length-1];
+        }
+        NSString * parent=[temp stringByDeletingLastPathComponent];
+        if (parent.length==0) {
+            copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",dstobject,copyitem.strObject];
+        }
+        else {
+            copyitem.strDstObject=[copyitem.strObject stringByReplacingOccurrencesOfString:parent withString:dstobject];
+        }
+        if ([OSSApi HeadObject:copyitem.strDstHost bucketname:copyitem.strDstBucket objectname:copyitem.strDstObject]) {
+            NSString* filename=[copyitem.strObject lastPathComponent];
+            if (!bAll) {
+                NSString* prompt=[NSString stringWithFormat:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？",filename];
+                [_copyinfo setStringValue:prompt];
+                [_icon setImage:[Util iconFromFileType:bDir?NSFileTypeForHFSTypeCode(kGenericFolderIcon):filename]];
+                BOOL onlyone=(1==srcfiles.count);
+                [self alertDisplay:0 onlyone:onlyone isdir:bDir];
+                if (0==_applyflag) {//不替换 or keepboth
+                    if (_applytoall.state) {//所有不替换
+                        bAll=YES;
+                    }
+                    bKeepBoth=YES;
+                    NSInteger num=2;
+                    while (YES) {
+                        NSString* pathext=[filename pathExtension];
+                        NSString *newname;
+                        if (pathext.length) {
+                            newname=[NSString stringWithFormat:@"%@(%ld).%@",[filename substringToIndex:filename.length-pathext.length-1],num,pathext];
+                        }
+                        else 
+                            newname=[NSString stringWithFormat:@"%@(%ld)",filename,num];
+                        if (bDir) {
+                            newname=[NSString stringWithFormat:@"%@/",newname];
+                        }
+                        NSString* tempParent=[copyitem.strDstObject stringByDeletingLastPathComponent];
+                        if (tempParent.length) {
+                            copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",[tempParent lastaddslash],newname];
+                        }
+                        else {
+                            copyitem.strDstObject=[NSString stringWithFormat:@"%@",newname];
+                        }
+                        if ([OSSApi HeadObject:copyitem.strDstHost bucketname:copyitem.strDstBucket objectname:copyitem.strDstObject]) {
+                            num++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+                else if (1==_applyflag) {//停止
+                    return NO;
+                }
+                else if (2==_applyflag) {//替换
+                    if (_applytoall.state) {
+                        bAll=YES;
+                    }
+                    bKeepBoth=NO;
+                }
+            }
+            else {
+                if (bKeepBoth) {
+                    NSInteger num=2;
+                    while (YES) {
+                        NSString* pathext=[filename pathExtension];
+                        NSString *newname;
+                        if (pathext.length) {
+                            newname=[NSString stringWithFormat:@"%@(%ld).%@",[filename substringToIndex:filename.length-pathext.length-1],num,pathext];
+                        }
+                        else 
+                            newname=[NSString stringWithFormat:@"%@(%ld)",filename,num];
+                        if (bDir) {
+                            newname=[NSString stringWithFormat:@"%@/",newname];
+                        }
+                        NSString* tempParent=[copyitem.strDstObject stringByDeletingLastPathComponent];
+                        if (tempParent.length) {
+                            copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",[tempParent lastaddslash],newname];
+                        }
+                        else {
+                            copyitem.strDstObject=[NSString stringWithFormat:@"%@",newname];
+                        }
+                        if ([OSSApi HeadObject:copyitem.strDstHost bucketname:copyitem.strDstBucket objectname:copyitem.strDstObject]) {
+                            num++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (bDir) {
+            [self GetFileList:copyitem.strHost bucket:copyitem.strBucket object:copyitem.strObject dsthost:copyitem.strDstHost dstbucket:copyitem.strDstBucket dstobject:copyitem.strDstObject array:(NSMutableArray*)srcfiles];
+        }
+    }
     return YES;
 }
--(BOOL) pastefilesfrom:(NSArray*)srcfiles savepath:(NSString*)savepath
+
+-(BOOL) savefiles:(NSArray*)srcfiles savepath:(NSString*)savepath
 {
-        return YES;
+    BOOL bAll = NO;
+    BOOL bKeepBoth = NO;
+    for (SaveFileItem* saveitem in srcfiles) {
+        if ([Util existfile:saveitem.strFullpath]) {
+            NSString* filename=[saveitem.strObject lastPathComponent];
+            if (!bAll) {
+                NSString* prompt=[NSString stringWithFormat:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？",filename];
+                [_copyinfo setStringValue:prompt];
+                [_icon setImage:[Util iconFromFileType:saveitem.bDir?NSFileTypeForHFSTypeCode(kGenericFolderIcon):filename]];
+                BOOL onlyone=(1==srcfiles.count);
+                [self alertDisplay:0 onlyone:onlyone isdir:saveitem.bDir];
+                if (0==_applyflag) {//不替换 or keepboth
+                    if (_applytoall.state) {//所有不替换
+                        bAll=YES;
+                    }
+                    bKeepBoth=YES;
+                    NSInteger num=2;
+                    while (YES) {
+                        NSString* pathext=[filename pathExtension];
+                        NSString *newname;
+                        if (pathext.length) {
+                            newname=[NSString stringWithFormat:@"%@(%ld).%@",[filename substringToIndex:filename.length-pathext.length-1],num,pathext];
+                        }
+                        else 
+                            newname=[NSString stringWithFormat:@"%@(%ld)",filename,num];
+                        saveitem.strFullpath=[NSString stringWithFormat:@"%@%@",[savepath lastaddslash],newname];
+                        if ([Util existfile:saveitem.strFullpath]) {
+                            num++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+                else if (1==_applyflag) {//停止
+                    return NO;
+                }
+                else if (2==_applyflag) {//替换
+                    if (_applytoall.state) {
+                        bAll=YES;
+                    }
+                    bKeepBoth=NO;
+                }
+            }
+            else {
+                if (bKeepBoth) {
+                    NSInteger num=2;
+                    while (YES) {
+                        NSString* pathext=[filename pathExtension];
+                        NSString *newname;
+                        if (pathext.length) {
+                            newname=[NSString stringWithFormat:@"%@(%ld).%@",[filename substringToIndex:filename.length-pathext.length-1],num,pathext];
+                        }
+                        else 
+                            newname=[NSString stringWithFormat:@"%@(%ld)",filename,num];
+                        saveitem.strFullpath=[NSString stringWithFormat:@"%@%@",[savepath lastaddslash],newname];
+                        if ([Util existfile:saveitem.strFullpath]) {
+                            num++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return YES;
 }
 -(void) resizeWindow:(NSSize)newsz
 {

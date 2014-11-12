@@ -103,7 +103,6 @@
 		F53C9DDB1830878F00A053CD /* NSAlert+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F53C9DDA1830878F00A053CD /* NSAlert+Blocks.m */; };
 		F53EE2C8187AA58E00F1186E /* Window+Event.m in Sources */ = {isa = PBXBuildFile; fileRef = F53EE2C7187AA58E00F1186E /* Window+Event.m */; };
 		F54394D9181622A4002A8789 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54394D8181622A4002A8789 /* JavaScriptCore.framework */; };
-		F58C980E1827B3D500E9C8EA /* LoadProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = F58C980A1827B3D500E9C8EA /* LoadProgress.m */; };
 		F58D192D1871719D009B3310 /* MoveAndPasteWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58D192C1871719D009B3310 /* MoveAndPasteWindowController.m */; };
 		F5A6A3A8183082E400ADBC71 /* GKAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A6A3A7183082E400ADBC71 /* GKAlert.m */; };
 		F5D2D09D185F0C7600E0AF43 /* statusMsgIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F5D2D09C185F0C7600E0AF43 /* statusMsgIcon.tiff */; };
@@ -312,8 +311,6 @@
 		F53EE2C6187AA58E00F1186E /* Window+Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Window+Event.h"; sourceTree = "<group>"; };
 		F53EE2C7187AA58E00F1186E /* Window+Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Window+Event.m"; sourceTree = "<group>"; };
 		F54394D8181622A4002A8789 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F58C98091827B3D500E9C8EA /* LoadProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadProgress.h; sourceTree = "<group>"; };
-		F58C980A1827B3D500E9C8EA /* LoadProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadProgress.m; sourceTree = "<group>"; };
 		F58D192B1871719D009B3310 /* MoveAndPasteWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveAndPasteWindowController.h; sourceTree = "<group>"; };
 		F58D192C1871719D009B3310 /* MoveAndPasteWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveAndPasteWindowController.m; sourceTree = "<group>"; };
 		F5A6A3A6183082E400ADBC71 /* GKAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKAlert.h; sourceTree = "<group>"; };
@@ -740,8 +737,6 @@
 				18258B5E185BF6660034A43D /* ProgressWindowController.h */,
 				18258B5F185BF6660034A43D /* ProgressWindowController.m */,
 				18258B65185C00FE0034A43D /* ProgressWindowController.xib */,
-				F58C98091827B3D500E9C8EA /* LoadProgress.h */,
-				F58C980A1827B3D500E9C8EA /* LoadProgress.m */,
 				F5E9A78E185AAFEA004A75F7 /* CopyProgress.h */,
 				F5E9A78F185AAFEA004A75F7 /* CopyProgress.m */,
 				F5EC6B051831ECA7006961BB /* ProgressManager.h */,
@@ -874,7 +869,6 @@
 				18EFE9BF16D6384D00D46F3B /* JSONKit.m in Sources */,
 				D187F01817029D770027177E /* GKWebViewDelegate.m in Sources */,
 				D11774D7173754AB00679E6B /* AppDelegate.m in Sources */,
-				F58C980E1827B3D500E9C8EA /* LoadProgress.m in Sources */,
 				F5A6A3A8183082E400ADBC71 /* GKAlert.m in Sources */,
 				F53C9DDB1830878F00A053CD /* NSAlert+Blocks.m in Sources */,
 				F5EC6B071831ECA7006961BB /* ProgressManager.m in Sources */,

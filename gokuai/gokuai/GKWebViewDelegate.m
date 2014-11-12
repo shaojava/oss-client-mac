@@ -165,12 +165,12 @@ END:
 
 -(void) saveFile:(NSString*) json cb:(WebScriptObject*)cb
 {
-    NSLog(@"%@",json);
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
     NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :nil];
     [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
+        NSString* retString=[Util errorInfoWithCode:MY_NO_ERROR];
         if (NSOKButton!=result) {
-            return;
+            goto END;
         }
         NSURL *url=[[panel URLs] objectAtIndex:0];
         NSString* path=url.path;
@@ -195,19 +195,22 @@ END:
                         savItem.bDir=YES;
                         temp=[savItem.strObject substringToIndex:savItem.strObject.length-1];
                     }
-                    savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp getFilename]];
+                    savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp lastPathComponent]];
                     if (savItem.strObject.length&&savItem.strBucket.length) {
                         [array addObject:savItem];
                     }
                 }
-          /*      MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
-                if (![moveController pastefilesfrom:array savepath:path]) {
-                    return;
-                }*/
+                MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
+                if (![moveController savefiles:array savepath:path]) {
+                    goto END;
+                }
                 
                 [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
+                return ;
             }
         }
+    END:
+        [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:retString];
     }];
 }
 
@@ -426,18 +429,35 @@ END:
 {
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
     [[OperationManager sharedInstance] pack:@"loginByKey" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
-    /*
-     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
-     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-     [[OperationManager sharedInstance] pack:@"loginByKey" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController];
-     }*/
 }
 
 -(void) loginByFile:(NSString*) json cb:(WebScriptObject*)cb
 {
-    if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
-        BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"loginByFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
+    NSString* strRet=@"";
+    NSOpenPanel* panel=[NSOpenPanel openPanel];
+    [panel setCanChooseDirectories:NO];
+    [panel setCanCreateDirectories:NO];
+    [panel setCanChooseFiles:YES];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setTitle:@"选择授权文件"];
+    [panel setPrompt:@"选择"];
+    [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"key",nil]];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
+    BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
+    [NSApp beginSheet:panel modalForWindow:baseController.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    NSInteger iRet=[panel runModal];
+    [NSApp endSheet:panel];
+    NSString* retString=@"{}";
+    if (NSOKButton==iRet) {
+        NSURL *url=[[panel URLs] objectAtIndex:0];
+        strRet=url.path;
+        NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
+        [array addObject:strRet];
+        [[OperationManager sharedInstance] pack:@"loginByFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
+    }
+    else {
+        retString=[Util errorInfoWithCode:WEB_UNSELECTFILE];
+        [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:retString];
     }
 }
 
@@ -467,10 +487,71 @@ END:
 
 -(void) saveAuthorization:(NSString*) json cb:(WebScriptObject*)cb
 {
-    if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
-        BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-        [[OperationManager sharedInstance] pack:@"saveAuthorization" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:nil];
+    BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
+    NSString* strRet=@"{}";
+    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:json];
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        strRet=[Util errorInfoWithCode:MY_ERROR_JSON];
     }
+    else {
+        NSSavePanel* panel=[NSSavePanel savePanel];
+        [panel setCanCreateDirectories:NO];
+        [panel setNameFieldStringValue:@"oss.key"];
+        [panel setTitle:@"保存授权文件"];
+        [panel setPrompt:@"保存"];
+        [panel setExtensionHidden:NO];
+        [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"key",nil]];
+        [panel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
+        [NSApp beginSheet:panel modalForWindow:baseController.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        NSInteger iRet=[panel runModal];
+        [NSApp endSheet:panel];
+        if (NSOKButton==iRet) {
+            NSURL *url=[panel URL];
+            NSString* strPath=url.path;
+            [Util createfile:strRet];
+            NSString* keyid=[dictionary objectForKey:@"keyid"];
+            NSString* keysecret=[dictionary objectForKey:@"keysecret"];
+            NSString* encoding=[dictionary objectForKey:@"encoding"];
+            OSSRsaItem* ret=[OSSRsa EncryptKey:[keyid dataUsingEncoding:NSUTF8StringEncoding] secret:[keysecret dataUsingEncoding:NSUTF8StringEncoding] device:encoding];
+            if (ret.ret) {
+                BOOL fileret=[Util createfile:strPath];
+                if (fileret) {
+                    NSFileHandle *pFile=[NSFileHandle fileHandleForWritingAtPath:strPath];
+                    if (pFile) {
+                        [pFile seekToFileOffset:0];
+                        [pFile writeData:[OSSRsa GetGuid]];
+                        NSUInteger checklength =ret.check.length;
+                        [pFile writeData:[NSData dataWithBytes:&checklength length:4]];
+                        [pFile writeData:ret.check];
+                        NSUInteger keylength =ret.key.length;
+                        [pFile writeData:[NSData dataWithBytes:&keylength length:4]];
+                        [pFile writeData:ret.key];
+                        NSUInteger secretlength =ret.secret.length;
+                        [pFile writeData:[NSData dataWithBytes:&secretlength length:4]];
+                        [pFile writeData:ret.secret];
+                        [pFile synchronizeFile];
+                        [pFile closeFile];
+                    }
+                    else {
+                        fileret=NO;
+                    }
+                }
+                if (fileret) {
+                    strRet=[Util errorInfoWithCode:MY_NO_ERROR];
+                }
+                else {
+                    strRet=[Util errorInfoWithCode:WEB_FILEOPENERROR];
+                }
+            }
+            else {
+                strRet=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
+            }
+        }
+        else {
+            strRet=[Util errorInfoWithCode:WEB_UNSELECTFILE];
+        }
+    }
+    [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:strRet];
 }
 
 -(NSString*) getDeviceEncoding
@@ -481,18 +562,25 @@ END:
 
 -(void) showLaunchpad
 {
+    NSLog(@"showLaunchpad");
     [[Util getAppDelegate] OpenLaunchpadWindow];
 }
 
 -(void) setClipboardData:(NSString*)json
 {
+    NSString* tempjson=json;
+    if (json.length>2) {
+        NSRange range=NSMakeRange(1, json.length-2);
+        tempjson=[json substringWithRange:range];
+    }
     NSPasteboard *pboard = [NSPasteboard generalPasteboard];
     [pboard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:self];
-    [pboard setString:json forType:NSPasteboardTypeString];
+    [pboard setString:tempjson forType:NSPasteboardTypeString];
 }
 
 -(void) closeWnd
 {
+    NSLog(@"closeWnd");
     [(NSWindowController*)delegateController close];
 }
 
@@ -562,6 +650,63 @@ END:
     }
     return [NSString stringWithFormat:@"\"%@\"",[Util ChangeHost:host]];
 }
+
+-(NSString*)configInfo;
+{
+    NSString* ret=@"";
+    if ([Util getAppDelegate].strConfig) {
+        ret=[Util getAppDelegate].strConfig;
+    }
+    return ret;
+}
+
+-(void)setTransInfo:(NSString*)json
+{
+    NSDictionary* dicInfo=[json objectFromJSONString];
+    if (![dicInfo isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    NSInteger dtm = [[dicInfo objectForKey:@"download_task_max"] intValue];
+    NSInteger utm = [[dicInfo objectForKey:@"upload_task_max"] intValue];
+    NSInteger dpm = [[dicInfo objectForKey:@"download_peer_max"] intValue];
+    NSInteger upm = [[dicInfo objectForKey:@"upload_peer_max"] intValue];
+    if (dtm>0) {
+        [[SettingsDb shareSettingDb] setDMax:dtm];
+        [[Network shareNetwork] SetDTaskMax:dtm];
+    }
+    if (utm>0) {
+        [[SettingsDb shareSettingDb] setUMax:utm];
+        [[Network shareNetwork] SetUTaskMax:utm];
+    }
+    if (dpm>0) {
+        [[SettingsDb shareSettingDb] setDPMax:dpm];
+        [[Network shareNetwork] SetDPeerMax:dpm];
+    }
+    if (upm>0) {
+        [[SettingsDb shareSettingDb] setUPMax:upm];
+        [[Network shareNetwork] SetUPeerMax:upm];
+    }
+}
+
+-(NSString*)getTransInfo
+{
+    NSMutableDictionary* dicRetlist=[NSMutableDictionary dictionary];
+    [dicRetlist setValue:[NSNumber numberWithLongLong:[[SettingsDb shareSettingDb] getDMax]] forKey:@"download_task_max"];
+    [dicRetlist setValue:[NSNumber numberWithLongLong:[[SettingsDb shareSettingDb] getUMax]] forKey:@"upload_task_max"];
+    [dicRetlist setValue:[NSNumber numberWithInteger:[[SettingsDb shareSettingDb] getDPMax]] forKey:@"download_peer_max"];
+    [dicRetlist setValue:[NSNumber numberWithInteger:[[SettingsDb shareSettingDb] getUPMax]] forKey:@"upload_peer_max"];
+    return [dicRetlist JSONString];
+}
+
+-(NSString*)getCurrentLocation
+{
+    NSString* ret=@"";
+    if ([Util getAppDelegate].strArea.length) {
+        ret=[NSString stringWithFormat:@"\"%@\"",[Util getAppDelegate].strArea];
+    }
+    return @"";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
@@ -603,6 +748,10 @@ END:
         ||selector == @selector(openLogFolder)
         ||selector == @selector(deleteBucket:cb:)
         ||selector == @selector(changeHost:)
+        ||selector == @selector(configInfo)
+        ||selector == @selector(setTransInfo:)
+        ||selector == @selector(getTransInfo)
+        ||selector == @selector(getCurrentLocation)
         ) {
         return NO;
     }
@@ -721,6 +870,18 @@ END:
     }
     else if (sel == @selector(changeHost:)) {
         ret=@"changeHost";
+    }
+    else if (sel == @selector(configInfo)) {
+        ret=@"configInfo";
+    }
+    else if (sel == @selector(setTransInfo:)) {
+        ret=@"setTransInfo";
+    }
+    else if (sel == @selector(getTransInfo)) {
+        ret=@"getTransInfo";
+    }
+    else if (sel == @selector(getCurrentLocation)) {
+        ret=@"getCurrentLocation";
     }
     else {
 		ret=nil;

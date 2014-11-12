@@ -137,9 +137,6 @@
         if ([self._operName isEqualToString:@"setServerLocation"]) {
             [OperationManager setServerLocation:self];
         }
-        if ([self._operName isEqualToString:@"saveAuthorization"]) {
-            [OperationManager saveAuthorization:self];
-        }
         if ([self._operName isEqualToString:@"deleteBucket"]) {
             [OperationManager deleteBucket:self];
         }
@@ -489,12 +486,107 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
++(void) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object items:(NSMutableArray*)items
+{
+    NSString* nextmarker=@"";
+    while (YES) {
+        OSSListObjectRet* ret;
+        if ([OSSApi GetBucketObject:host bucetname:bucket ret:&ret prefix:object marker:nextmarker delimiter:@"" maxkeys:@"1000"]) {
+            for (OSSListObject* item in ret.arrayContent) {
+                DeleteFileItem * ditem=[[[DeleteFileItem alloc]init]autorelease];
+                if (item.strPefix.length) {
+                    ditem.strObject=item.strPefix;
+                }
+                else {
+                    ditem.strObject=item.strKey;
+                }
+                ditem.strHost=host;
+                ditem.strBucket=bucket;
+                [items addObject:ditem];
+            }
+            if (ret.strNextMarker.length==0) {
+                break;
+            }
+            nextmarker=ret.strNextMarker;
+        }
+        else {
+            break;
+        }
+    }
+}
+
 +(void) deleteObject:(OperPackage*)tran {
-    //zheng
+    NSString* retString=@"{}";
+    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        goto END;
+    }
+    NSString * bucket=[dictionary objectForKey:@"bucket"];
+    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
+    NSArray* array=[dictionary objectForKey:@"list"];
+    NSMutableArray* items = [NSMutableArray array];
+    if ([array isKindOfClass:[NSArray class]])
+    {
+        for (NSDictionary* itemDictionary in array)
+        {
+            DeleteFileItem * item=[[[DeleteFileItem alloc]init]autorelease];
+            item.strObject = [itemDictionary objectForKey:@"object"];
+            item.strHost=host;
+            item.strBucket=bucket;
+            if (item.strObject.length) {
+                [items addObject:item];
+            }
+            if ([item.strObject hasSuffix:@"/"]) {
+                [self GetFileList:host bucket:bucket object:item.strObject items:items];
+            }
+        }
+    }
+    [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:items waitUntilDone:NO];
+    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+END:
+    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
+
 +(void) copyObject:(OperPackage*)tran {
-    //zheng
+    NSLog(@"%@",tran._jsonInfo);
+    NSString* retString=@"{}";
+    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        goto END;
+    }
+    NSString * dstbucket=[dictionary objectForKey:@"dstbucket"];
+    NSString * dsthost=[Util ChangeHost:[dictionary objectForKey:@"dstlocation"]];
+    NSString * dstobject=[dictionary objectForKey:@"dstobject"];
+    NSString * bucket=[dictionary objectForKey:@"bucket"];
+    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
+    NSArray* array=[dictionary objectForKey:@"list"];
+    NSMutableArray* items = [NSMutableArray array];
+    if ([array isKindOfClass:[NSArray class]])
+    {
+        for (NSDictionary* itemDictionary in array)
+        {
+            CopyFileItem * item=[[[CopyFileItem alloc]init]autorelease];
+            item.strObject = [itemDictionary objectForKey:@"object"];
+            item.ullFilesize=[[itemDictionary objectForKey:@"filesize"] longLongValue];
+            item.strHost=host;
+            item.strBucket=bucket;
+            item.strDstHost=dsthost;
+            item.strDstBucket=dstbucket;
+            [items addObject:item];
+        }
+    }
+    MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
+    if (![moveController copyfiles:items dstobject:dstobject]) {
+        goto END;
+    }
+    [[Util getAppDelegate] performSelectorOnMainThread:@selector(startCopy:) withObject:items waitUntilDone:NO];
+    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+END:
+    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
+
 +(void) loginByKey:(OperPackage*)tran {
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
@@ -509,11 +601,12 @@ END:
     if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret ishost:bHost host:strLocation]) {//zheng
         [Util getAppDelegate].strAccessID=strKeyId;
         [Util getAppDelegate].strAccessKey=strKeySecret;
-        if (bHost) {
-            [Util getAppDelegate].strArea=strLocation;
+        [Util getAppDelegate].strArea=strLocation;
+        if ([Util getAppDelegate].strArea.length==0) {
+            [Util getAppDelegate].strArea=@"";
         }
         NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
-        [Util createfolder:[dbpath getParent]];
+        [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
         [[TransPortDB shareTransPortDB] OpenPath:dbpath];
         [Util getAppDelegate].bLogin=YES;
         retString=[Util errorInfoWithCode:MY_NO_ERROR];
@@ -526,7 +619,106 @@ END:
 }
 
 +(void) loginByFile:(OperPackage*)tran {
-    //zheng
+    NSString* retString=nil;
+    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        goto END;
+    }
+    NSString* path=[tran._array objectAtIndex:0];
+    BOOL bHost=[[dictionary objectForKey:@"ishost"] boolValue];
+    NSString* strLocation=[dictionary objectForKey:@"location"];
+    NSFileHandle * pFile=[NSFileHandle fileHandleForUpdatingAtPath:path];
+    if (pFile) {
+        NSData *data=[pFile readDataToEndOfFile];
+        BOOL bFileError=NO;
+        if (data.length>=20&&data.length<1048576) {
+            NSRange pos = NSMakeRange(0,16);
+            NSData * guid=[data subdataWithRange:pos];
+            NSData * check;
+            NSData * key;
+            NSData * secret;
+            if (![guid isEqualToData:[OSSRsa GetGuid]]) {
+                bFileError=YES;
+            }
+            else {
+                pos.location=16;
+                pos.length=4;
+                int checklength=0;
+                [data getBytes:&checklength range:pos];
+                if (20+checklength>data.length) {
+                    bFileError=YES;
+                }
+                else {
+                    pos.location=20;
+                    pos.length=checklength;
+                    check=[data subdataWithRange:pos];
+                }
+                pos.location=20+checklength;
+                pos.length=4;
+                int keylength=0;
+                [data getBytes:&keylength range:pos];
+                if (24+checklength+keylength>data.length) {
+                    bFileError=YES;
+                }
+                else {
+                    pos.location=24+checklength;
+                    pos.length=keylength;
+                    key=[data subdataWithRange:pos];
+                }
+                pos.location=24+checklength+keylength;
+                pos.length=4;
+                int secretlength=0;
+                [data getBytes:&secretlength range:pos];
+                if (28+checklength+keylength+secretlength>data.length) {
+                    bFileError=YES;
+                }
+                else {
+                    pos.location=28+checklength+keylength;
+                    pos.length=secretlength;
+                    secret=[data subdataWithRange:pos];
+                }
+                if (!bFileError) {
+                    OSSRsaItem *ret=[OSSRsa DecryptKey:check key:key secret:secret];
+                    if (ret.ret) {
+                        NSString *strKeyId=[[[NSString alloc] initWithData:ret.key encoding:NSUTF8StringEncoding] autorelease];
+                        NSString *strKeySecret=[[[NSString alloc] initWithData:ret.secret encoding:NSUTF8StringEncoding] autorelease];
+                        if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret ishost:bHost host:strLocation]) {
+                            [Util getAppDelegate].strAccessID=strKeyId;
+                            [Util getAppDelegate].strAccessKey=strKeySecret;
+                            [Util getAppDelegate].strArea=strLocation;
+                            if ([Util getAppDelegate].strArea.length==0) {
+                                [Util getAppDelegate].strArea=@"";
+                            }
+                            NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
+                            [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
+                            [[TransPortDB shareTransPortDB] OpenPath:dbpath];
+                            [Util getAppDelegate].bLogin=YES;
+                            retString=[Util errorInfoWithCode:MY_NO_ERROR];
+                        }
+                        else {
+                            retString=[Util errorInfoWithCode:WEB_ACCESSKEYERROR];
+                        }
+                    }
+                    else {
+                        retString=[Util errorInfoWithCode:WEB_DECRYPTERROR];
+                    }
+                }
+            }
+        }
+        else {
+            bFileError=YES;
+        }
+        if (bFileError) {
+            retString=[Util errorInfoWithCode:WEB_FILEERROR];
+        }
+    }
+    else {
+        retString=[Util errorInfoWithCode:WEB_FILEOPENERROR];
+    }
+END:
+    NSLog(@"%@",retString);
+    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
 +(void) setPassword:(OperPackage*)tran {
@@ -576,7 +768,7 @@ END:
             [Util getAppDelegate].strHost=user.strHost;
             [Util getAppDelegate].strArea=user.strArea;
             NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[[Util getAppDelegate].strAccessID sha1HexDigest]];
-            [Util createfolder:[dbpath getParent]];
+            [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
             [Util getAppDelegate].bLogin=YES;
             retString=[Util errorInfoWithCode:MY_NO_ERROR];
@@ -586,7 +778,7 @@ END:
         }
     }
     else {
-        retString=[Util errorInfoWithCode:WEB_PASSWORDEROR];
+        retString=[Util errorInfoWithCode:WEB_PASSWORDERROR];
     }
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
@@ -608,11 +800,45 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(void) saveAuthorization:(OperPackage*)tran {
-    //zheng
-}
 +(void) deleteBucket:(OperPackage*)tran {
-    //zheng
+    NSString* retString=@"{}";
+    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        goto END;
+    }
+    NSString * keyid=[dictionary objectForKey:@"keyid"];
+    NSString * keysecret=[dictionary objectForKey:@"keysecret"];
+    NSString * bucket=[dictionary objectForKey:@"bucket"];
+    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
+    if (![[Util getAppDelegate].strAccessID isEqualToString:keyid]||![[Util getAppDelegate].strAccessKey isEqualToString:keysecret]) {
+        retString=[Util errorInfoWithCode:WEB_ACCESSKEYERROR];
+    }
+    NSMutableArray* items = [NSMutableArray array];
+    [self GetFileList:host bucket:bucket object:@"" items:items];
+    if (items.count) {
+        [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:items waitUntilDone:YES];
+    }
+    NSLog(@"delete");
+    OSSListMultipartUploadRet *ret;
+    if([OSSApi ListMultipartUploads:host bucketname:bucket reet:&ret])
+    {
+        for (OSSListMultipartUpload *item in ret.arrayUpload) {
+            if (![OSSApi AbortMultipartUpload:host bucketname:bucket objectname:item.strKey uploadid:item.strUploadId]) {
+                //zheng
+            }
+        }
+    }
+    OSSRet * ossret;
+    if ([OSSApi DeleteBucket:host bucketname:bucket ret:&ossret]) {
+        retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    }
+    else {
+        //zheng
+    }
+    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+END:
+    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
 -(void) pack:(NSString*)name jsoninfo:(NSString*)jsonInfo webframe:(WebFrame*)webframe cb:(WebScriptObject*)cb retController:(NSWindowController*)retController array:(NSArray*)array

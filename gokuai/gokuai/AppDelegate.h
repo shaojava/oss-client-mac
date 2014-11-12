@@ -17,6 +17,7 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     NSString*   strUserDB;
     NSString*   strTransDB;
     NSString*   strLogPath;
+    NSString*   strConfig;
     BOOL        bHttps;
     BOOL        bLogin;
     BOOL        bShowPassword;
@@ -45,6 +46,7 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 @property(nonatomic, retain) NSString* strUserDB;
 @property(nonatomic, retain) NSString* strTransDB;
 @property(nonatomic, retain) NSString* strLogPath;
+@property(nonatomic, retain) NSString* strConfig;
 
 @property(nonatomic)BOOL bHttps;
 @property(nonatomic)BOOL bLogin;
@@ -69,5 +71,8 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 -(void)onOpenMainThreadWebWindowResult:(NSArray*)arrInfo;
 
 -(void)OpenLaunchpadWindow;
+
+-(void)startCopy:(NSArray*)items;
+-(void)startDelete:(NSArray*)items;
 
 @end

@@ -3,6 +3,7 @@
 #import "NetworkDef.h"
 #import "Util.h"
 #import "NSStringExpand.h"
+#import "SettingsDb.h"
 
 @implementation Network
 
@@ -16,6 +17,8 @@
 @synthesize nUploadFinish;
 @synthesize nUploadCount;
 @synthesize nUploadSpeed;
+@synthesize nUPeerMax;
+@synthesize nDPeerMax;
 
 +(Network*)shareNetwork
 {
@@ -43,6 +46,10 @@
         self.nUploadFinish=0;
         self.nUploadCount=0;
         self.nUploadSpeed=0;
+        [self SetDTaskMax:[[SettingsDb shareSettingDb] getDMax]];
+        [self SetUTaskMax:[[SettingsDb shareSettingDb] getUMax]];
+        [self SetDPeerMax:[[SettingsDb shareSettingDb] getDPMax]];
+        [self SetUPeerMax:[[SettingsDb shareSettingDb] getUPMax]];
     }
     return self;
 }
@@ -61,14 +68,25 @@
     
 }
 
--(void)SetTaskMax:(NSInteger)dnum unum:(NSInteger)unum
+-(void)SetDTaskMax:(NSInteger)num
 {
-    if (dnum>0) {
-        [self.dManager SetMax:dnum];
-    }
-    if (unum>0) {
-        [self.uManager SetMax:unum];
-    }
+    [self.dManager SetMax:num];
+}
+
+-(void)SetUTaskMax:(NSInteger)num
+{
+    
+    [self.uManager SetMax:num];
+}
+
+-(void)SetDPeerMax:(NSInteger)num
+{
+    self.nDPeerMax=num;
+}
+
+-(void)SetUPeerMax:(NSInteger)num
+{
+    self.nUPeerMax=num;
 }
 
 -(void)StartDownload:(NSArray*)items
@@ -194,7 +212,7 @@
             TransTaskItem *item=[[TransTaskItem alloc]init];
             item.strHost=host;
             item.strBucket=bucket;
-            item.strObject=[NSString stringWithFormat:@"%@%@/",object,[path getFilename]];
+            item.strObject=[NSString stringWithFormat:@"%@%@/",object,[path lastPathComponent]];
             item.strFullpath=path;
             item.nStatus=TRANSTASK_NORMAL;
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
@@ -206,7 +224,7 @@
             TransTaskItem *item=[[TransTaskItem alloc]init];
             item.strHost=host;
             item.strBucket=bucket;
-            item.strObject=[NSString stringWithFormat:@"%@%@",object,[path getFilename]];
+            item.strObject=[NSString stringWithFormat:@"%@%@",object,[path lastPathComponent]];
             item.strFullpath=path;
             item.ullFilesize=[Util filesize:path];
             item.nStatus=TRANSTASK_NORMAL;

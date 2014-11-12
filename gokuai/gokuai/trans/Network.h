@@ -15,7 +15,8 @@
     NSInteger           nUploadFinish;
     NSInteger           nUploadCount;
     ULONGLONG           nUploadSpeed;
-    
+    NSInteger           nDPeerMax;
+    NSInteger           nUPeerMax;
 }
 
 @property(nonatomic,retain)DownloadManager* dManager;
@@ -28,12 +29,19 @@
 @property(nonatomic)NSInteger nUploadFinish;
 @property(nonatomic)NSInteger nUploadCount;
 @property(nonatomic)ULONGLONG nUploadSpeed;
+@property(nonatomic)NSInteger nDPeerMax;
+@property(nonatomic)NSInteger nUPeerMax;
 
 +(Network*)shareNetwork;
 
 -(id)init;
 -(void)uninit;
--(void)SetTaskMax:(NSInteger)dnum unum:(NSInteger)unum;
+
+-(void)SetDTaskMax:(NSInteger)num;
+-(void)SetUTaskMax:(NSInteger)num;
+-(void)SetDPeerMax:(NSInteger)num;
+-(void)SetUPeerMax:(NSInteger)num;
+
 -(void)StartDownload:(NSArray*)items;
 -(void)StartDownloadAll;
 -(void)StopDownload:(NSArray*)items;

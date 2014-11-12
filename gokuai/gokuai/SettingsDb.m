@@ -75,7 +75,7 @@
     [self.dbQueue inDatabase:^(FMDatabase *db)
     {
          BOOL res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS userinfo(accessid char[1000],accesskey char[1000],area char[1000],host char[1000],password char[40]);"];
-         res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax);"];
+         res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax int,dpmax int,upmax int);"];
          NSInteger count=0;
          NSString *sql =@"select count(*) as cnt from settings";
          FMResultSet *rs = [db executeQuery:sql];
@@ -86,7 +86,7 @@
          }
          [rs close];
          if (count==0) {
-             NSString* sql=@"insert into settings(https,dmax,umax) values('0','5','5');";
+             NSString* sql=@"insert into settings(https,dmax,umax,dpmax,upmax) values('0','5','5','5','5');";
              [db executeUpdate:sql];
          }
      }];
@@ -94,6 +94,19 @@
 
 -(void) addnewrow
 {
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         BOOL res = [db executeUpdate:@"ALTER TABLE settings add dpmax int;"];
+         if (res)
+         {
+             [db executeUpdate:@"update settings set dpmax='5';"];
+         }
+         res = [db executeUpdate:@"ALTER TABLE settings add upmax int;"];
+         if (res)
+         {
+             [db executeUpdate:@"update settings set upmax='5';"];
+         }
+     }];
 }
 
 -(void)close
@@ -265,6 +278,58 @@
          while ([rs next]) 
          {
              ret=[rs intForColumn:@"umax"];
+             break;
+         }
+         [rs close];
+     }];
+    return ret;
+}
+
+-(void)setDPMax:(NSInteger)value
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql=[NSString stringWithFormat:@"update settings set dpmax='%d'",value];
+         [db executeUpdate:sql];
+     }]; 
+}
+
+-(NSInteger)getDPMax
+{
+    __block NSInteger ret=5;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =@"select dpmax from settings";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret=[rs intForColumn:@"dpmax"];
+             break;
+         }
+         [rs close];
+     }];
+    return ret;
+}
+
+-(void)setUPMax:(NSInteger)value
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql=[NSString stringWithFormat:@"update settings set upmax='%d'",value];
+         [db executeUpdate:sql];
+     }]; 
+}
+
+-(NSInteger)getUPMax
+{
+    __block NSInteger ret=5;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =@"select upmax from settings";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret=[rs intForColumn:@"upmax"];
              break;
          }
          [rs close];

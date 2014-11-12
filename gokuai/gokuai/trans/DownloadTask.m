@@ -11,6 +11,14 @@
 @synthesize pIndexFileHandle;
 @synthesize ullWriteTime;
 
+-(id)init:(TransTaskItem*)item
+{
+    if (self=[super init:item]) {
+        self.nMax=[Network shareNetwork].nDPeerMax;
+    }
+    return self;
+}
+
 -(void)dealloc
 {
     pFileHandle=nil;
@@ -20,7 +28,7 @@
 
 -(BOOL)CreateFile
 {
-    NSString *dir=[self.pItem.strFullpath getParent];
+    NSString *dir=[self.pItem.strFullpath stringByDeletingLastPathComponent];
     [Util createfolder:dir];
     NSString * temppath=[NSString stringWithFormat:@"%@%@",self.pItem.strFullpath,OSSEXT];
     BOOL ret=[Util createfile:temppath];
@@ -231,8 +239,8 @@
 
 -(NSString*)GetTmpPath
 {
-    NSString* strDir=[self.pItem.strFullpath getParent];
-    NSString* strFilename=[self.pItem.strFullpath getFilename];
+    NSString* strDir=[self.pItem.strFullpath stringByDeletingLastPathComponent];
+    NSString* strFilename=[self.pItem.strFullpath lastPathComponent];
     if (self.pItem.strPathhash.length) {
         return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,self.pItem.strPathhash];//zheng 删除的问题
     }

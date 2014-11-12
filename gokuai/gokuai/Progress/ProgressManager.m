@@ -1,9 +1,4 @@
-
-
 #import "ProgressManager.h"
-
-
-
 
 @implementation ProgressManager
 
@@ -20,14 +15,12 @@
 {
     [_progressQueue release];
     _progressQueue=nil;
-    
     [super dealloc];
 }
 
 + (ProgressManager*) sharedInstance
 {
     static ProgressManager *sharedInstance = nil;
-	
     static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedInstance = [[ProgressManager alloc] init];

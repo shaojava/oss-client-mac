@@ -23,8 +23,8 @@
     NSInteger _applyflag;
 }
 
--(BOOL) pastefilesfrom:(NSArray*)srcfiles mountid:(NSInteger)mountid overwrite:(id)overwrite;
--(BOOL) pastefilesfrom:(NSArray*)srcfiles savepath:(NSString*)savepath;
+-(BOOL) copyfiles:(NSArray*)srcfiles dstobject:(NSString*)dstobject;
+-(BOOL) savefiles:(NSArray*)srcfiles savepath:(NSString*)savepath;
 -(IBAction) buttonApplyToAllClicked:(id)sender;
 -(IBAction)buttonNotReplaceClicked:(id)sender;
 

@@ -50,7 +50,8 @@
         }
     }
     else {
-        [self.window orderOut:nil];
+        if (self.window==[notification object])
+            [self.window orderOut:nil];
     }
 }
 

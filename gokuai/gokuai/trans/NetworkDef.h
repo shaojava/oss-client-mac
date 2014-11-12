@@ -83,17 +83,36 @@ enum
 
 @interface CopyFileItem : NSObject
 {
+    NSString* strHost;
+    NSString* strBucket;
     NSString* strObject;
     ULONGLONG ullFilesize;
+    NSString* strDstHost;
+    NSString* strDstBucket;
     NSString* strDstObject;
 }
 
+@property(nonatomic,retain)NSString* strHost;
+@property(nonatomic,retain)NSString* strBucket;
 @property(nonatomic,retain)NSString* strObject;
 @property(nonatomic)ULONGLONG ullFilesize;
+@property(nonatomic,retain)NSString* strDstHost;
+@property(nonatomic,retain)NSString* strDstBucket;
 @property(nonatomic,retain)NSString* strDstObject;
 
 @end
 
+@interface DeleteFileItem : NSObject
+{
+    NSString* strHost;
+    NSString* strBucket;
+    NSString* strObject;}
+
+@property(nonatomic,retain)NSString* strHost;
+@property(nonatomic,retain)NSString* strBucket;
+@property(nonatomic,retain)NSString* strObject;
+
+@end
 
 
 
