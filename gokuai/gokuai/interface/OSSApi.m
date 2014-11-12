@@ -266,7 +266,8 @@
     OSSDeleteMultipleBody *ossbody=[[OSSDeleteMultipleBody alloc] init];
     [ossbody addList:objectnamss quiet:quiet];
     NSString* body=[ossbody GetBody];
-    NSString* md5=[body md5HexDigest];
+    NSData *bodydata=[body dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* md5=[bodydata md5base64Encode];
     NSString* method=@"POST";
     NSString* resource=[NSString stringWithFormat:@"/%@/?delete",bucketname];
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];

@@ -114,6 +114,9 @@
     _progressIndicator.doubleValue=0;
     self._cpyprogress=[[[CopyProgress alloc]initWithPaths:items type:pc_copy] autorelease];
     [self._cpyprogress setProgressCallBack:^(NSInteger v) {
+        if (v>items.count) {
+            v=items.count;
+        }
         NSUInteger pos=v*100/items.count;
         [_progressIndicator setHidden:NO];
         [_progressIndicator setDoubleValue:pos];
@@ -154,6 +157,9 @@
     _progressIndicator.doubleValue=0;
     self._cpyprogress=[[[CopyProgress alloc]initWithPaths:items type:pc_delete] autorelease];
     [self._cpyprogress setProgressCallBack:^(NSInteger v) {
+        if (v>items.count) {
+            v=items.count;
+        }
         NSUInteger pos=v*100/items.count;
         [_progressIndicator setHidden:NO];
         [_progressIndicator setDoubleValue:pos];

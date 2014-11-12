@@ -144,7 +144,7 @@ END:
         for (NSString* itemkey in arraykey) {
             OssSignKey *item=[[OssSignKey alloc]init];
             item.key=itemkey;
-            item.value=[dicInfo objectForKey:itemkey];
+            item.value=[dicItems objectForKey:itemkey];
             if (item.key.length&&item.value.length) {
                 [array addObject:item];
             }

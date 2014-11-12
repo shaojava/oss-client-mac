@@ -29,7 +29,7 @@
 
 -(BOOL) isfinished
 {
-    return (cpycount==sumcount);
+    return (sumcount>=cpycount);
 }
 
 @end
@@ -73,7 +73,7 @@
                 for (int i=0; i<_all.array.count;i++) {
                     CopyFileItem* cpyfile=[_all.array objectAtIndex:i];
                     if (cpyfile.ullFilesize<COPY_MAX) {
-                        OSSCopyRet *ret=[[[OSSCopyRet alloc]init]autorelease];
+                        OSSCopyRet *ret;
                         [OSSApi CopyObject:cpyfile.strDstHost dstbucketname:cpyfile.strDstBucket dstobjectname:cpyfile.strDstObject srcbucketname:cpyfile.strBucket srcobjectname:cpyfile.strObject ret:&ret];
                     }
                     else {
@@ -86,14 +86,30 @@
                 }
             }
             else if (self.nType==pc_delete) {
-                for (int i=0; i<_all.array.count;i++) {
-                    DeleteFileItem* item=[_all.array objectAtIndex:i];
+                if (_all.array.count==1) {
+                    DeleteFileItem* item=[_all.array objectAtIndex:0];
                     OSSRet *ret=[[[OSSRet alloc]init]autorelease];
                     [OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectname:item.strObject ret:&ret];
                     _all.sumcount++;
-                    //zheng 
                     if (![self isCancelled]) {
                         progressCallBack(_all.sumcount);
+                    }
+                }
+                else {
+                    for (int i=0; i<(_all.array.count+999)/1000;i++) {
+                        DeleteFileItem* item;
+                        NSMutableArray* array=[NSMutableArray arrayWithCapacity:1000];
+                        for (int j=0; j<1000&&i*1000+j<_all.array.count; j++) {
+                            item=[_all.array objectAtIndex:(i*1000+j)];
+                            [array addObject:item.strObject];
+                        }
+                        OSSRet *ret;
+                        [OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectnames:array quiet:YES ret:&ret];
+                        //zheng
+                        _all.sumcount=i*1000;
+                        if (![self isCancelled]) {
+                            progressCallBack(_all.sumcount);
+                        }
                     }
                 }
             }
