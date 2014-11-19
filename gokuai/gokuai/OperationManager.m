@@ -189,7 +189,7 @@
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* location=[dictionary objectForKey:@"location"];
@@ -209,7 +209,7 @@
         }
     }
     [[Network shareNetwork] AddFileUpload:host bucket:bucket object:prefix array:paths];
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -271,7 +271,7 @@ END:
             [self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
         }
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -280,7 +280,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -306,7 +306,7 @@ END:
     else {
         [[Network shareNetwork] StartUpload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -315,7 +315,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -337,7 +337,7 @@ END:
     else {
         [[Network shareNetwork] StartDownload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -346,7 +346,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -372,7 +372,7 @@ END:
     else {
         [[Network shareNetwork] StopUpload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -381,7 +381,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -403,7 +403,7 @@ END:
     else {
         [[Network shareNetwork] StopDownload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -412,7 +412,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -438,13 +438,13 @@ END:
             [[TransPortDB shareTransPortDB] DeleteUploadAllFinish];
         }
         else {
-            [[Network shareNetwork] StopUploadAll];
+            [[Network shareNetwork] DeleteUploadAll];
         }
     }
     else {
         [[Network shareNetwork] DeleteUpload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -453,7 +453,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     BOOL all=[[dictionary objectForKey:@"all"] boolValue];
@@ -475,13 +475,13 @@ END:
             [[TransPortDB shareTransPortDB] DeleteDownloadAllFinish];
         }
         else {
-            [[Network shareNetwork] StopDownloadAll];
+            [[Network shareNetwork] DeleteDownloadAll];
         }
     }
     else {
         [[Network shareNetwork] DeleteDownload:paths];
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -519,7 +519,7 @@ END:
     NSString* retString=@"{}";
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString * bucket=[dictionary objectForKey:@"bucket"];
@@ -543,7 +543,7 @@ END:
         }
     }
     [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:items waitUntilDone:NO];
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -553,7 +553,7 @@ END:
     NSString* retString=@"{}";
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString * dstbucket=[dictionary objectForKey:@"dstbucket"];
@@ -582,7 +582,7 @@ END:
         goto END;
     }
     [[Util getAppDelegate] performSelectorOnMainThread:@selector(startCopy:) withObject:items waitUntilDone:NO];
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -591,14 +591,14 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* strKeyId=[dictionary objectForKey:@"keyid"];
     NSString* strKeySecret=[dictionary objectForKey:@"keysecret"];
-    BOOL bHost=[[dictionary objectForKey:@"ishost"] boolValue];
     NSString* strLocation=[dictionary objectForKey:@"location"];
-    if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret ishost:bHost host:strLocation]) {//zheng
+    OSSRet* ret;
+    if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:[Util getAppDelegate].strHost ret:&ret]) {
         [Util getAppDelegate].strAccessID=strKeyId;
         [Util getAppDelegate].strAccessKey=strKeySecret;
         [Util getAppDelegate].strArea=strLocation;
@@ -609,7 +609,7 @@ END:
         [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
         [[TransPortDB shareTransPortDB] OpenPath:dbpath];
         [Util getAppDelegate].bLogin=YES;
-        retString=[Util errorInfoWithCode:MY_NO_ERROR];
+        retString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
     else {
         retString=[Util errorInfoWithCode:WEB_ACCESSKEYERROR];
@@ -622,11 +622,10 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* path=[tran._array objectAtIndex:0];
-    BOOL bHost=[[dictionary objectForKey:@"ishost"] boolValue];
     NSString* strLocation=[dictionary objectForKey:@"location"];
     NSFileHandle * pFile=[NSFileHandle fileHandleForUpdatingAtPath:path];
     if (pFile) {
@@ -683,7 +682,8 @@ END:
                     if (ret.ret) {
                         NSString *strKeyId=[[[NSString alloc] initWithData:ret.key encoding:NSUTF8StringEncoding] autorelease];
                         NSString *strKeySecret=[[[NSString alloc] initWithData:ret.secret encoding:NSUTF8StringEncoding] autorelease];
-                        if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret ishost:bHost host:strLocation]) {
+                        OSSRet* keyret;
+                        if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:[Util getAppDelegate].strHost ret:&keyret]) {
                             [Util getAppDelegate].strAccessID=strKeyId;
                             [Util getAppDelegate].strAccessKey=strKeySecret;
                             [Util getAppDelegate].strArea=strLocation;
@@ -694,7 +694,7 @@ END:
                             [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
                             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
                             [Util getAppDelegate].bLogin=YES;
-                            retString=[Util errorInfoWithCode:MY_NO_ERROR];
+                            retString=[Util errorInfoWithCode:WEB_SUCCESS];
                         }
                         else {
                             retString=[Util errorInfoWithCode:WEB_ACCESSKEYERROR];
@@ -725,7 +725,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* password=[dictionary objectForKey:@"password"];
@@ -739,7 +739,7 @@ END:
         NSString * temp=[NSString stringWithFormat:@"%@%@",[OSSRsa getcomputerid],password];
         user.strPassword=[temp md5HexDigest];
         [[SettingsDb shareSettingDb] setuserinfo:user];
-        retString=[Util errorInfoWithCode:MY_NO_ERROR];
+        retString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
     else {
         retString=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
@@ -752,7 +752,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* password=[dictionary objectForKey:@"password"];
@@ -771,7 +771,7 @@ END:
             [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
             [Util getAppDelegate].bLogin=YES;
-            retString=[Util errorInfoWithCode:MY_NO_ERROR];
+            retString=[Util errorInfoWithCode:WEB_SUCCESS];
         }
         else {
             retString=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
@@ -788,7 +788,7 @@ END:
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString* location=[dictionary objectForKey:@"location"];
@@ -804,7 +804,7 @@ END:
     NSString* retString=@"{}";
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:MY_ERROR_JSON];
+        retString=[Util errorInfoWithCode:WEB_JSONERROR];
         goto END;
     }
     NSString * keyid=[dictionary objectForKey:@"keyid"];
@@ -825,18 +825,19 @@ END:
     {
         for (OSSListMultipartUpload *item in ret.arrayUpload) {
             if (![OSSApi AbortMultipartUpload:host bucketname:bucket objectname:item.strKey uploadid:item.strUploadId]) {
-                //zheng
+                
+                goto END;
             }
         }
     }
     OSSRet * ossret;
     if ([OSSApi DeleteBucket:host bucketname:bucket ret:&ossret]) {
-        retString=[Util errorInfoWithCode:MY_NO_ERROR];
+        retString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
     else {
         //zheng
     }
-    retString=[Util errorInfoWithCode:MY_NO_ERROR];
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -876,7 +877,7 @@ END:
     }
     
     if (!_jsonString.length) {
-        _jsonString=[Util errorInfoWithCode:MY_NO_ERROR];
+        _jsonString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
     NSDictionary* info=[NSDictionary dictionaryWithObjectsAndKeys:
                         _webFrame,@"webframe", _obj,@"obj", _jsonString,@"jsonstring", nil];

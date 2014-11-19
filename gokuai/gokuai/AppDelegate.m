@@ -20,6 +20,7 @@
 
 #import "OSSRsa.h"
 
+#import "ASINetworkQueue.h"
 
 @implementation AppDelegate
 
@@ -39,6 +40,7 @@
 @synthesize bHttps;
 @synthesize bLogin;
 @synthesize bShowPassword;
+@synthesize bDebugMenu;
 
 @synthesize loginWebWindowController;
 @synthesize launchpadWindowController;
@@ -68,15 +70,17 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    [[ASIHTTPRequest sharedQueue] setMaxConcurrentOperationCount:100];
     self.strAccessID=@"";
     self.strAccessKey=@"";
     self.strArea=@"";
     self.strHost=@"";
     [self setMainMenu];
-
+    self.bDebugMenu=NO;
     self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
+        self.bDebugMenu=YES;
         NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
         if (filehandle) {
             NSData * filedata=[filehandle readDataToEndOfFile];

@@ -25,7 +25,7 @@
 
 @implementation OSSApi
 
-+(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey ishost:(BOOL)ishost host:(NSString*)host
++(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey host:(NSString*)host ret:(OSSRet**)ret;
 {
     NSString* date=[Util getGMTDate];
     NSString* method=@"GET";
@@ -42,14 +42,22 @@
     item.value=retsign;
     [array addObject:item];
     [item release];
-    NSString* strUrl=[self AddHttpOrHttps:@"oss.aliyuncs.com/"];
+    NSString* strUrl;
+    if (host.length==0) {
+        strUrl=[self AddHttpOrHttps:@"oss.aliyuncs.com/"];
+    }
+    else {
+        strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@/",host]];
+    }
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
                                                         bodyData:nil] autorelease];
     NSHTTPURLResponse* response;
-    [request connectNetSyncWithResponse:&response error:nil];
+    NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     NSInteger status=[response statusCode];
+    *ret =[[[OSSRet alloc]init]autorelease];
+    [(*ret) SetValueWithData:data];
     if (status>=200&&status<400) {
         return YES;
     }

@@ -7,6 +7,7 @@
 #import "OSSApi.h"
 #import "NSDataExpand.h"
 #import "Network.h"
+#import "FileLog.h"
 
 @implementation UploadTask
 
@@ -59,8 +60,6 @@
     [self.pLocksc lock];
     [self.pFinish InsertPart:pos last:pos+size-1];
     [self.pLocksc unlock];
-    self.pItem.ullOffset+=size;
-    self.ullTranssize+=size;
     [[TransPortDB shareTransPortDB] Update_UploadOffset:self.pItem.strPathhash offset:self.pItem.ullOffset];
     [self SaveMultipartFile];
 }
@@ -71,7 +70,7 @@
     [self.pUnFinish InsertPart:pos last:pos+size-1];
     [self.pLocksc unlock];
     NSString * errormsg=[NSString stringWithFormat:@"[ErrorIndex:%@|%@][%ld,%llu,%llu,%ld,%@]",self.pItem.strBucket,self.pItem.strObject,index,pos,size,error,msg];
-    NSLog(@"%@",errormsg);
+    [[FileLog shareFileLog] log:errormsg add:NO];
 }
 
 -(BOOL)CheckMultipart
@@ -223,7 +222,7 @@
     }
     self.bStop=YES;
     NSString * errormsg=[NSString stringWithFormat:@"[TaskError:%@|%@][%ld,%@]",self.pItem.strBucket,self.pItem.strObject,error,msg];
-    NSLog(@"%@",errormsg);
+    [[FileLog shareFileLog] log:errormsg add:YES];
     [[TransPortDB shareTransPortDB] Update_UploadError:self.pItem.strPathhash error:error msg:msg];
     self.pItem.nStatus=TRANSTASK_ERROR;
     [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
@@ -308,7 +307,6 @@
                     [self.listPeer addObject:peer];
                     [self.pLocksc unlock];
                     [peer StartUpload:index pos:pos size:size];
-                    [self.pQueue addOperation:peer];
                 }
                 else {
                     if (self.pItem.strUploadId.length==0) {
@@ -319,23 +317,7 @@
                 }
             }
             [self CheckPeer];
-     /*       BOOL bhave=NO;
-            [self.pLocksc lock];
-            for(UploadPeer* peer in self.listPeer) {
-                if ([peer IsIdle]) {
-                    [self.pFilesc lock];
-                    [self.pUnFinish RemovePairs:pos last:pos+size-1];
-                    [self.pFilesc unlock];
-                    [peer StartUpload:index pos:pos size:size];
-                    [self.pQueue addOperation:peer];
-                    bhave=YES;
-                }
-            }
-            [self.pLocksc unlock];
-            if (!bhave) */
-            {
-                [NSThread sleepForTimeInterval:1];
-            }
+            [NSThread sleepForTimeInterval:1];
         }
     }
     @catch (NSException *exception) {

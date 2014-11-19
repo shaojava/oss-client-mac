@@ -88,7 +88,7 @@
             else if (self.nType==pc_delete) {
                 if (_all.array.count==1) {
                     DeleteFileItem* item=[_all.array objectAtIndex:0];
-                    OSSRet *ret=[[[OSSRet alloc]init]autorelease];
+                    OSSRet *ret;
                     [OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectname:item.strObject ret:&ret];
                     _all.sumcount++;
                     if (![self isCancelled]) {

@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>gokuaiapp</string>
 	<key>CFBundleIdentifier</key>
-	<string>cn.goukuai.goukuai</string>
+	<string>cn.goukuai.oss</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

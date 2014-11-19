@@ -15,10 +15,8 @@
 
 @interface BaseWebWindowController : NSWindowController {
     IBOutlet GKWebview* baseWebview;
-    
     GKWebViewDelegate *delegate;
     NSString* strUrl;
-    
     BOOL alreadyload;
 }
 
@@ -28,9 +26,7 @@
 -(WebFrame*) mainframe;
 -(NSString*) dragInformation;
 -(WebScriptObject*) windowscriptobj;
-
 -(void) makeAble:(BOOL)ableornot;
-
 -(void) reload:(BOOL)must;
 
 @end

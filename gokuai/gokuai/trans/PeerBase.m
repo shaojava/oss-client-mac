@@ -12,6 +12,7 @@
 @synthesize nIndex;
 @synthesize ullPos;
 @synthesize ullSize;
+@synthesize pRequest;
 
 -(void)dealloc
 {
@@ -20,6 +21,7 @@
     strBucket=nil;
     strObject=nil;
     strHeader=nil;
+    pRequest=nil;
     [super dealloc];
 }
 

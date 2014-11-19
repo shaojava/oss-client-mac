@@ -8,7 +8,6 @@
     NSMutableArray* listPeer;
     NSLock*         pLocksc;
     NSLock*         pFilesc;
-    NSOperationQueue*   pQueue;
     DataLocator*    pFinish;
     DataLocator*    pUnFinish;
     NSInteger       nMax;
@@ -25,7 +24,6 @@
 @property(nonatomic,retain)NSMutableArray* listPeer;
 @property(nonatomic,retain)NSLock* pLocksc;
 @property(nonatomic,retain)NSLock* pFilesc;
-@property(nonatomic,retain)NSOperationQueue* pQueue;
 @property(nonatomic,retain)DataLocator* pFinish;
 @property(nonatomic,retain)DataLocator* pUnFinish;
 @property(nonatomic)NSInteger nMax;

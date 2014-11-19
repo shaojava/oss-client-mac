@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1801838A18753267005FCDCD /* MoveItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1801838918753267005FCDCD /* MoveItem.m */; };
+		1812C6741A1C2FE300CFB758 /* FileLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1812C6731A1C2FE300CFB758 /* FileLog.m */; };
 		181BDB79186025110094FBE7 /* NSAlert+SynchronousSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 181BDB78186025110094FBE7 /* NSAlert+SynchronousSheet.m */; };
 		18258B60185BF6660034A43D /* ProgressWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18258B5F185BF6660034A43D /* ProgressWindowController.m */; };
 		18258B66185C00FE0034A43D /* ProgressWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18258B65185C00FE0034A43D /* ProgressWindowController.xib */; };
@@ -143,6 +144,8 @@
 /* Begin PBXFileReference section */
 		1801838818753267005FCDCD /* MoveItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveItem.h; sourceTree = "<group>"; };
 		1801838918753267005FCDCD /* MoveItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveItem.m; sourceTree = "<group>"; };
+		1812C6721A1C2FE300CFB758 /* FileLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLog.h; sourceTree = "<group>"; };
+		1812C6731A1C2FE300CFB758 /* FileLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLog.m; sourceTree = "<group>"; };
 		181BDB77186025110094FBE7 /* NSAlert+SynchronousSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert+SynchronousSheet.h"; sourceTree = "<group>"; };
 		181BDB78186025110094FBE7 /* NSAlert+SynchronousSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert+SynchronousSheet.m"; sourceTree = "<group>"; };
 		18258B5E185BF6660034A43D /* ProgressWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressWindowController.h; sourceTree = "<group>"; };
@@ -501,6 +504,8 @@
 				188C6DC615E5F63C00394CF8 /* interface */,
 				18FC3FE015E5C950007927F8 /* AppDelegate.h */,
 				D11774D6173754AB00679E6B /* AppDelegate.m */,
+				1812C6721A1C2FE300CFB758 /* FileLog.h */,
+				1812C6731A1C2FE300CFB758 /* FileLog.m */,
 				18FC3FD515E5C950007927F8 /* Supporting Files */,
 			);
 			name = GoKuai;
@@ -906,6 +911,7 @@
 				18BBF0EA1A0B1A1C0067E395 /* CallbackThread.m in Sources */,
 				18BBF0EE1A0B22B70067E395 /* DownloadCallbackThread.m in Sources */,
 				18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */,
+				1812C6741A1C2FE300CFB758 /* FileLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,7 +1010,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../Framework/Legacy\"",
 					"\"$(SRCROOT)/../Framework\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);
@@ -1033,7 +1038,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../Framework/Legacy\"",
 					"\"$(SRCROOT)/../Framework\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);

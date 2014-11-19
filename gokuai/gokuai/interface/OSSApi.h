@@ -14,7 +14,7 @@
 
 @interface OSSApi : NSObject
 
-+(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey ishost:(BOOL)ishost host:(NSString*)host;
++(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey host:(NSString*)host ret:(OSSRet**)ret;
 +(BOOL)DeleteBucket:(NSString*)host bucketname:(NSString*)bucketname ret:(OSSRet**)ret;
 +(BOOL)GetBucketObject:(NSString*)host bucetname:(NSString*)bucketname ret:(OSSListObjectRet**)ret prefix:(NSString*)prefix marker:(NSString*)marker delimiter:(NSString*)delimiter maxkeys:(NSString*)maxkeys;
 

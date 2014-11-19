@@ -24,7 +24,7 @@
 #import "OSSApi.h"
 #import "Network.h"
 #import "OSSRsa.h"
-
+#import "FileLog.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ END:
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
     NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :nil];
     [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
-        NSString* retString=[Util errorInfoWithCode:MY_NO_ERROR];
+        NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
         if (NSOKButton!=result) {
             goto END;
         }
@@ -421,8 +421,7 @@ END:
 
 -(NSString*) getErrorLog
 {
-    //zheng
-    return nil;
+    return [[FileLog shareFileLog] GetLog];
 }
 
 -(void) loginByKey:(NSString*) json cb:(WebScriptObject*)cb
@@ -491,7 +490,7 @@ END:
     NSString* strRet=@"{}";
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:json];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        strRet=[Util errorInfoWithCode:MY_ERROR_JSON];
+        strRet=[Util errorInfoWithCode:WEB_JSONERROR];
     }
     else {
         NSSavePanel* panel=[NSSavePanel savePanel];
@@ -537,7 +536,7 @@ END:
                     }
                 }
                 if (fileret) {
-                    strRet=[Util errorInfoWithCode:MY_NO_ERROR];
+                    strRet=[Util errorInfoWithCode:WEB_SUCCESS];
                 }
                 else {
                     strRet=[Util errorInfoWithCode:WEB_FILEOPENERROR];
@@ -562,7 +561,6 @@ END:
 
 -(void) showLaunchpad
 {
-    NSLog(@"showLaunchpad");
     [[Util getAppDelegate] OpenLaunchpadWindow];
 }
 
@@ -580,7 +578,6 @@ END:
 
 -(void) closeWnd
 {
-    NSLog(@"closeWnd");
     [(NSWindowController*)delegateController close];
 }
 
@@ -759,134 +756,130 @@ END:
 }
 
 + (NSString *) webScriptNameForSelector:(SEL)sel {
-    NSString* ret=nil;
     if (sel == @selector(getAccessID)) {
-		ret=@"getAccessID";
+		return @"getAccessID";
     }
-    else if (sel == @selector(getSignature:)) {
-        ret=@"getSignature";
+    if (sel == @selector(getSignature:)) {
+        return @"getSignature";
     }
-    else if (sel == @selector(addFile:cb:)) {
-        ret=@"addFile";
+    if (sel == @selector(addFile:cb:)) {
+        return @"addFile";
     }
-    else if (sel == @selector(saveFile:cb:)) {
-        ret=@"saveFile";
+    if (sel == @selector(saveFile:cb:)) {
+        return @"saveFile";
     }
-    else if (sel == @selector(selectFileDlg:cb:)) {
-		ret=@"selectFileDlg";
+    if (sel == @selector(selectFileDlg:cb:)) {
+		return @"selectFileDlg";
     }
-    else if (sel == @selector(getUpload:)) {
-		ret=@"getUpload";
+    if (sel == @selector(getUpload:)) {
+		return @"getUpload";
     }
-    else if (sel == @selector(getDownload:)) {
-		ret=@"getDownload";
+    if (sel == @selector(getDownload:)) {
+		return @"getDownload";
     }
-    else if (sel == @selector(startUpload:cb:)) {
-        ret=@"startUpload";
+    if (sel == @selector(startUpload:cb:)) {
+        return @"startUpload";
     }
-    else if (sel == @selector(startDownload:cb:)) {
-        ret=@"startDownload";
+    if (sel == @selector(startDownload:cb:)) {
+        return @"startDownload";
     }
-    else if (sel == @selector(stopUpload:cb:)) {
-		ret=@"stopUpload";
+    if (sel == @selector(stopUpload:cb:)) {
+		return @"stopUpload";
     }
-    else if (sel == @selector(stopDownload:cb:)) {
-		ret=@"stopDownload";
+    if (sel == @selector(stopDownload:cb:)) {
+		return @"stopDownload";
     }
-    else if (sel == @selector(deleteUpload:cb:)) {
-		ret=@"deleteUpload";
+    if (sel == @selector(deleteUpload:cb:)) {
+		return @"deleteUpload";
     }
-    else if (sel == @selector(deleteDownload:cb:)) {
-        ret=@"deleteDownload";
+    if (sel == @selector(deleteDownload:cb:)) {
+        return @"deleteDownload";
     }
-    else if (sel == @selector(getClipboardData)) {
-        ret=@"getClipboardData";
+    if (sel == @selector(getClipboardData)) {
+        return @"getClipboardData";
     }
-    else if (sel == @selector(getDragFiles)) {
-        ret=@"getDragFiles";
+    if (sel == @selector(getDragFiles)) {
+        return @"getDragFiles";
     }
-    else if (sel == @selector(deleteObject:cb:)) {
-        ret=@"deleteObject";
+    if (sel == @selector(deleteObject:cb:)) {
+        return @"deleteObject";
     }
-    else if (sel == @selector(copyObject:cb:)) {
-		ret=@"copyObject";
+    if (sel == @selector(copyObject:cb:)) {
+		return @"copyObject";
     }
-    else if (sel == @selector(changeUpload:cb:)) {
-        ret=@"changeUpload";
+    if (sel == @selector(changeUpload:cb:)) {
+        return @"changeUpload";
     }
-    else if (sel == @selector(changeDownload:cb:)) {
-        ret=@"changeDownload";
+    if (sel == @selector(changeDownload:cb:)) {
+        return @"changeDownload";
     }
-    else if (sel == @selector(getErrorLog)) {
-        ret=@"getErrorLog";
+    if (sel == @selector(getErrorLog)) {
+        return @"getErrorLog";
     }
-    else if (sel == @selector(loginByKey:cb:)) {
-		ret=@"loginByKey";
+    if (sel == @selector(loginByKey:cb:)) {
+		return @"loginByKey";
     }
-    else if (sel == @selector(loginByFile:cb:)) {
-		ret=@"loginByFile";
+    if (sel == @selector(loginByFile:cb:)) {
+		return @"loginByFile";
     }
-    else if (sel == @selector(setPassword:cb:)) {
-		ret=@"setPassword";
+    if (sel == @selector(setPassword:cb:)) {
+		return @"setPassword";
     }
-    else if (sel == @selector(loginPassword:cb:)) {
-		ret=@"loginPassword";
+    if (sel == @selector(loginPassword:cb:)) {
+		return @"loginPassword";
     }
-    else if (sel == @selector(setServerLocation:cb:)) {
-		ret=@"setServerLocation";
+    if (sel == @selector(setServerLocation:cb:)) {
+		return @"setServerLocation";
     }
-    else if (sel == @selector(saveAuthorization:cb:)) {
-		ret=@"saveAuthorization";
+    if (sel == @selector(saveAuthorization:cb:)) {
+		return @"saveAuthorization";
     }
-    else if (sel == @selector(getDeviceEncoding)) {
-		ret=@"getDeviceEncoding";
+    if (sel == @selector(getDeviceEncoding)) {
+		return @"getDeviceEncoding";
     }
-    else if (sel == @selector(showLaunchpad)) {
-		ret=@"showLaunchpad";
+    if (sel == @selector(showLaunchpad)) {
+		return @"showLaunchpad";
     }
-    else if (sel == @selector(setClipboardData:)) {
-        ret=@"setClipboardData";
+    if (sel == @selector(setClipboardData:)) {
+        return @"setClipboardData";
     }
-    else if (sel == @selector(closeWnd)) {
-        ret=@"closeWnd";
+    if (sel == @selector(closeWnd)) {
+        return @"closeWnd";
     }
-    else if (sel == @selector(showWnd:)) {
-        ret=@"showWnd";
+    if (sel == @selector(showWnd:)) {
+        return @"showWnd";
     }
-    else if (sel == @selector(clearPassword)) {
-        ret=@"clearPassword";
+    if (sel == @selector(clearPassword)) {
+        return @"clearPassword";
     }
-    else if (sel == @selector(showAuthorizationDlg)) {
-        ret=@"showAuthorizationDlg";
+    if (sel == @selector(showAuthorizationDlg)) {
+        return @"showAuthorizationDlg";
     }
-    else if (sel == @selector(getUIPath)) {
-        ret=@"getUIPath";
+    if (sel == @selector(getUIPath)) {
+        return @"getUIPath";
     }
-    else if (sel == @selector(openLogFolder)) {
-        ret=@"openLogFolder";
+    if (sel == @selector(openLogFolder)) {
+        return @"openLogFolder";
     }
-    else if (sel == @selector(deleteBucket:cb:)) {
-        ret=@"deleteBucket";
+    if (sel == @selector(deleteBucket:cb:)) {
+        return @"deleteBucket";
     }
-    else if (sel == @selector(changeHost:)) {
-        ret=@"changeHost";
+    if (sel == @selector(changeHost:)) {
+        return @"changeHost";
     }
-    else if (sel == @selector(configInfo)) {
-        ret=@"configInfo";
+    if (sel == @selector(configInfo)) {
+        return @"configInfo";
     }
-    else if (sel == @selector(setTransInfo:)) {
-        ret=@"setTransInfo";
+    if (sel == @selector(setTransInfo:)) {
+        return @"setTransInfo";
     }
-    else if (sel == @selector(getTransInfo)) {
-        ret=@"getTransInfo";
+    if (sel == @selector(getTransInfo)) {
+        return @"getTransInfo";
     }
-    else if (sel == @selector(getCurrentLocation)) {
-        ret=@"getCurrentLocation";
+    if (sel == @selector(getCurrentLocation)) {
+        return @"getCurrentLocation";
     }
-    else {
-		ret=nil;
-	}
-    return ret;
+    return nil;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -937,8 +930,12 @@ END:
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
-    return defaultMenuItems;
-    //return nil; zheng
+    if ([Util getAppDelegate].bDebugMenu) {
+        return defaultMenuItems;
+    }
+    else {
+        return nil;
+    }
 }
 
 - (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame

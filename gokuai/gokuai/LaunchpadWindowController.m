@@ -65,8 +65,10 @@
     
     [self reload:NO];
     
-    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([Util getAppDelegate].bDebugMenu) {
+        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     NSRect screenRect = [[NSScreen mainScreen] frame];
     CGFloat width=screenRect.size.width*2/3;
     if (width<1000.0) {

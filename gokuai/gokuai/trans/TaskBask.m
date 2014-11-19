@@ -2,13 +2,14 @@
 #import "TaskBask.h"
 #import "PeerBase.h"
 
+#define PIECESIZE   1048576
+
 @implementation TaskBask
 
 @synthesize pItem;
 @synthesize listPeer;
 @synthesize pLocksc;
 @synthesize pFilesc;
-@synthesize pQueue;
 @synthesize pFinish;
 @synthesize pUnFinish;
 @synthesize nMax;
@@ -20,19 +21,19 @@
 @synthesize ullPiecesize;
 @synthesize ullSpeed;
 
+
 -(id)init:(TransTaskItem*)item
 {
     if (self=[super init]) {
         self.pItem=item;
         self.nMax=5;
-        self.ullPiecesize=1048576;
+        ULONGLONG piecesize=(item.ullFilesize+9999)/10000;
+        self.ullPiecesize=piecesize>PIECESIZE?piecesize:PIECESIZE;
         self.listPeer = [[[NSMutableArray alloc]init] autorelease];
         self.pLocksc = [[[NSLock alloc]init]autorelease];
         self.pFilesc = [[[NSLock alloc]init]autorelease];
         self.pFinish=[[[DataLocator alloc]init]autorelease];
         self.pUnFinish=[[[DataLocator alloc]init]autorelease];
-        self.pQueue=[[NSOperationQueue alloc] init];
-        [self.pQueue setMaxConcurrentOperationCount:nMax];
         self.bStop=NO;
         self.bDelete=NO;
         self.ullTranssize=0;
@@ -50,7 +51,6 @@
     [listPeer release];
     [pLocksc release];
     [pFilesc release];
-    [pQueue release];
     [pFinish release];
     [pUnFinish release];
     [super dealloc];

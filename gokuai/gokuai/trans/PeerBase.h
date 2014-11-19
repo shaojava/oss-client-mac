@@ -1,8 +1,9 @@
 #import <Foundation/Foundation.h>
 #import "TaskBask.h"
 #import "Common.h"
+#import "ASIHTTPRequest.h"
 
-@interface PeerBase : NSOperation
+@interface PeerBase : NSObject
 {
     id          pTask;
     NSString*   strHost;
@@ -14,6 +15,7 @@
     NSInteger   nIndex;
     ULONGLONG   ullPos;
     ULONGLONG   ullSize;
+    ASIHTTPRequest* pRequest;
 }
 @property(nonatomic,retain)id pTask;
 @property(nonatomic,retain)NSString* strHost;
@@ -25,6 +27,7 @@
 @property(nonatomic,assign)NSInteger nIndex;
 @property(nonatomic,assign)ULONGLONG ullPos;
 @property(nonatomic,assign)ULONGLONG ullSize;
+@property(nonatomic,retain)ASIHTTPRequest* pRequest;
 
 -(void)Stop;
 -(BOOL)IsIdle;

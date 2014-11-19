@@ -75,8 +75,10 @@
 {
     [super windowDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(window_closed:) name:NSWindowWillCloseNotification object:nil];
-    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([Util getAppDelegate].bDebugMenu) {
+        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     [self reload:NO];
 }
  

@@ -4,6 +4,7 @@
 #import "TransPortDB.h"
 #import "DownloadPeer.h"
 #import "Network.h"
+#import "FileLog.h"
 
 @implementation DownloadTask
 
@@ -207,7 +208,7 @@
         return;
     }
     NSString * errormsg=[NSString stringWithFormat:@"[TaskError:%@|%@][%ld,%@]",self.pItem.strBucket,self.pItem.strObject,error,msg];
-    NSLog(@"%@",errormsg);
+    [[FileLog shareFileLog] log:errormsg add:YES];
     [[TransPortDB shareTransPortDB] Update_DownloadError:self.pItem.strFullpath error:error msg:msg];
     self.pItem.nStatus=TRANSTASK_ERROR;
     [[Network shareNetwork].dCallback SendCallbackInfo:self.pItem];
@@ -216,7 +217,7 @@
 -(void)ErrorIndex:(ULONGLONG)pos size:(ULONGLONG)size error:(NSInteger)error msg:(NSString*)msg
 {
     NSString * errormsg=[NSString stringWithFormat:@"[ErrorIndex:%@|%@][%llu,%llu,%ld,%@]",self.pItem.strBucket,self.pItem.strObject,pos,size,error,msg];
-    NSLog(@"%@",errormsg);
+    [[FileLog shareFileLog] log:errormsg add:NO];
     [self.pLocksc lock];
     NSArray * ret=[self.pFinish GetInPairs:pos last:pos+size-1];
     [self.pUnFinish InsertParts:ret];
@@ -306,26 +307,8 @@
                     [self.listPeer addObject:peer];
                     [self.pLocksc unlock];
                     [peer StartDownload:pos size:size];
-                    [self.pQueue addOperation:peer];
                 }
                 [self CheckPeer];
-                /*
-                else {
-                    BOOL bhave=NO;
-                    [self.pLocksc lock];
-                    for(DownloadPeer * peer in self.listPeer) {
-                        if ([peer IsIdle]) {
-                            [self.pFilesc lock];
-                            [self.pUnFinish RemovePairs:pos last:pos+size-1];
-                            [self.pFilesc unlock];
-                            [peer StartDownload:pos size:size];
-                            [self.pQueue addOperation:peer];
-                            bhave=YES;
-                            break;
-                        }
-                    }
-                    [self.pLocksc unlock];
-                }*/
             }
             else {
                 [NSThread sleepForTimeInterval:2];

@@ -18,7 +18,10 @@
 -(void)Run
 {
     while (!self.bOut) {
-        //zheng
+        if (![Util getAppDelegate].bLogin) {
+            [NSThread sleepForTimeInterval:2];
+            continue;
+        }
         [self CheckFinishorError];
         if (self.bFinish) {
             [NSThread sleepForTimeInterval:2];
