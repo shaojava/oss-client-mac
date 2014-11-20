@@ -2,7 +2,6 @@
 #import "Util.h"
 #import "JSONKit.h"
 #import "NSStringExpand.h"
-#import "MyTask.h"
 #import "Common.h"
 #import "NSAlert+Blocks.h"
 #import "AboutWindowController.h"
@@ -20,7 +19,7 @@
 
 #import "OSSRsa.h"
 
-#import "ASINetworkQueue.h"
+#import "ASIHTTPRequest.h"
 
 @implementation AppDelegate
 
@@ -260,21 +259,21 @@
 -(void)startCopy:(OperPackage*)item
 {
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
-    progressWindowController._package = [[[ProgressPackage alloc] initCopy:item] autorelease];
+    [progressWindowController setprogresstype:item type:pc_copy];
     [progressWindowController displayex];
 }
 
 -(void)startDelete:(OperPackage*)item
 {
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
-    progressWindowController._package = [[[ProgressPackage alloc] initDelete:item] autorelease];
+    [progressWindowController setprogresstype:item type:pc_delete];
     [progressWindowController displayex];
 }
 
 -(void)startDeleteBucket:(OperPackage*)item
 {
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
-    progressWindowController._package = [[[ProgressPackage alloc] initDelete:item] autorelease];
+    [progressWindowController setprogresstype:item type:pc_bucket];
     [progressWindowController displayex];
 }
 

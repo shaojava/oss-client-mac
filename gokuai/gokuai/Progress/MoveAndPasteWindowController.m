@@ -12,8 +12,8 @@
 #import "Util.h"
 #import "MoveItem.h"
 #import "NSStringExpand.h"
-#import "MyTask.h"
 #import "OSSApi.h"
+#import "NetworkDef.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -186,9 +186,10 @@
 
 -(BOOL) copyfiles:(NSArray*)srcfiles dstobject:(NSString*)dstobject;
 {
+    NSArray* temp=[[NSArray alloc]initWithArray:srcfiles];
     BOOL bAll = NO;
     BOOL bKeepBoth = NO;
-    for (CopyFileItem* copyitem in srcfiles) {
+    for (CopyFileItem* copyitem in temp) {
         BOOL bDir=NO;
         NSString* temp=copyitem.strObject;
         if ([copyitem.strObject hasSuffix:@"/"]) {

@@ -3,7 +3,9 @@
 @implementation ProgressManager
 
 @synthesize strRet;
+@synthesize strFilename;
 @synthesize bProgressClose;
+@synthesize nCount;
 
 -(id) init
 {
@@ -21,6 +23,7 @@
     [_progressQueue release];
     _progressQueue=nil;
     strRet=nil;
+    strFilename=nil;
     [super dealloc];
 }
 
@@ -36,7 +39,9 @@
 
 -(void) addProgress:(NSOperation*)progress
 {
-    self.strRet=@"";
+    self.strRet=@"{}";
+    self.nCount=0;
+    self.strFilename=@"";
     [_progressQueue addOperation:progress];
 }
 

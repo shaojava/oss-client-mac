@@ -33,7 +33,6 @@
 		188DBC0C19F6788A00369079 /* UploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DBC0B19F6788A00369079 /* UploadManager.m */; };
 		188DBC0F19F6791F00369079 /* TaskBask.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DBC0E19F6791F00369079 /* TaskBask.m */; };
 		1892BDC415F8414300488E70 /* SettingsDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 1892BDC315F8414300488E70 /* SettingsDb.m */; };
-		18933586162E4F3A004B5A85 /* MyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 18933585162E4F3A004B5A85 /* MyTask.m */; };
 		1894BCE2162C0C1200995C15 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1894BCE1162C0C1100995C15 /* IOKit.framework */; };
 		18B1B55718D83D930013B2F0 /* statusSyncBg.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */; };
 		18B1B55818D83D930013B2F0 /* statusSyncMv.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */; };
@@ -193,8 +192,6 @@
 		188DBC0E19F6791F00369079 /* TaskBask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskBask.m; sourceTree = "<group>"; };
 		1892BDC215F8414300488E70 /* SettingsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDb.h; sourceTree = "<group>"; };
 		1892BDC315F8414300488E70 /* SettingsDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDb.m; sourceTree = "<group>"; };
-		18933584162E4F3A004B5A85 /* MyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyTask.h; path = gokuai/MyTask.h; sourceTree = SOURCE_ROOT; };
-		18933585162E4F3A004B5A85 /* MyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyTask.m; path = gokuai/MyTask.m; sourceTree = SOURCE_ROOT; };
 		1894BCE1162C0C1100995C15 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncBg.tiff; sourceTree = "<group>"; };
 		18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncMv.tiff; sourceTree = "<group>"; };
@@ -546,8 +543,6 @@
 			children = (
 				188C6E0115E5F63C00394CF8 /* trans */,
 				188C6E0015E5F63C00394CF8 /* sync */,
-				18933584162E4F3A004B5A85 /* MyTask.h */,
-				18933585162E4F3A004B5A85 /* MyTask.m */,
 				1892BDC215F8414300488E70 /* SettingsDb.h */,
 				1892BDC315F8414300488E70 /* SettingsDb.m */,
 				18D1039216A64B3B00E92DAF /* MyTimer.h */,
@@ -845,7 +840,6 @@
 				188C6E1D15E5F63C00394CF8 /* GKHTTPRequest.m in Sources */,
 				18F13B2C15E89C99003E321B /* Util.m in Sources */,
 				1892BDC415F8414300488E70 /* SettingsDb.m in Sources */,
-				18933586162E4F3A004B5A85 /* MyTask.m in Sources */,
 				D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */,
 				D114017816966FD800552FEC /* LaunchpadWindowController.m in Sources */,
 				D11E8F831697D00600909E48 /* BrowserWebWindowController.m in Sources */,
