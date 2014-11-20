@@ -94,8 +94,11 @@
 
 -(void)request:(ASIHTTPRequest *)request didSendBytes:(long long)bytes
 {
+    [((UploadTask*)self.pTask).pFilesc lock];
     ((UploadTask*)self.pTask).ullTranssize+=bytes;
     ((UploadTask*)self.pTask).pItem.ullOffset+=bytes;
+    self.ullRead+=bytes;
+    [((UploadTask*)self.pTask).pFilesc unlock];
 }
 
 -(void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
@@ -105,10 +108,14 @@
 
 -(void)requestFinished:(ASIHTTPRequest *)request
 {
+    [((UploadTask*)self.pTask).pFilesc lock];
+    ((UploadTask*)self.pTask).ullTranssize+=self.ullSize-self.ullRead;
+    ((UploadTask*)self.pTask).pItem.ullOffset+=self.ullSize-self.ullRead;
+    [((UploadTask*)self.pTask).pFilesc unlock];
     OSSAddObject *ret =[[[OSSAddObject alloc]init]autorelease];
-    ret.nCode=request.responseStatusCode;
+    ret.nHttpCode=request.responseStatusCode;
     [ret SetValueWithData:self.retData];
-    if (ret.nCode==200) {
+    if (ret.nHttpCode==200) {
         NSDictionary* retheader=[request responseHeaders];
         if ([retheader isKindOfClass:[NSDictionary class]]) {
             NSString * etag=[retheader valueForKey:@"ETag"];
@@ -142,13 +149,13 @@
     }
     else {
         if (self.strUploadID.length==0) {
-            [((UploadTask*)self.pTask) TaskError:ret.nCode msg:@"http code"];
+            [((UploadTask*)self.pTask) TaskError:ret.nHttpCode msg:@"http code"];
         }
         else {
             if ([ret.strCode isEqualToString:@"NoSuchUpload"]) {
                 [((UploadTask*)self.pTask) ResetUploadId];
             }
-            [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:ret.nCode msg:@"http code"];
+            [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:ret.nHttpCode msg:@"http code"];
         }
     }
     self.bStart=NO;
@@ -157,16 +164,16 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     OSSAddObject *ret =[[[OSSAddObject alloc]init]autorelease];
-    ret.nCode=request.responseStatusCode;
+    ret.nHttpCode=request.responseStatusCode;
     [ret SetValueWithData:self.retData];
     if (self.strUploadID.length==0) {
-        [((UploadTask*)self.pTask) TaskError:ret.nCode msg:@"http code"];
+        [((UploadTask*)self.pTask) TaskError:ret.nHttpCode msg:@"http code"];
     }
     else {
         if ([ret.strCode isEqualToString:@"NoSuchUpload"]) {
             [((UploadTask*)self.pTask) ResetUploadId];
         }
-        [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:ret.nCode msg:@"http code"];
+        [((UploadTask*)self.pTask) ErrorIndex:self.nIndex pos:self.ullPos size:self.ullSize error:ret.nHttpCode msg:@"http code"];
     }
     self.bStart=NO;
 }

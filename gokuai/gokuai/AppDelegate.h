@@ -2,6 +2,7 @@
 #import <WebKit/WebKit.h>
 #import <QuartzCore/CoreAnimation.h>
 #import <WebKit/WebKit.h>
+#import "OperationManager.h"
 
 @class HTTPEngine,LoginWebWindowController,
 LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowController,MyTimer,MoveAndPasteWindowController;
@@ -73,7 +74,8 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 
 -(void)OpenLaunchpadWindow;
 
--(void)startCopy:(NSArray*)items;
--(void)startDelete:(NSArray*)items;
+-(void)startCopy:(OperPackage*)item;
+-(void)startDelete:(OperPackage*)item;
+-(void)startDeleteBucket:(OperPackage*)item;
 
 @end

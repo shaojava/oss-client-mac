@@ -67,7 +67,6 @@
     }
     [super dealloc];
 }
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     [[ASIHTTPRequest sharedQueue] setMaxConcurrentOperationCount:100];
@@ -258,17 +257,25 @@
     [NSApp setWindowsMenu: [itemWd submenu]];
 }
 
--(void)startCopy:(NSArray*)items
+-(void)startCopy:(OperPackage*)item
 {
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
-    progressWindowController._package = [[[ProgressPackage alloc] initCopy:items] autorelease];
+    progressWindowController._package = [[[ProgressPackage alloc] initCopy:item] autorelease];
     [progressWindowController displayex];
 }
 
--(void)startDelete:(NSArray*)items
+-(void)startDelete:(OperPackage*)item
 {
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
-    progressWindowController._package = [[[ProgressPackage alloc] initDelete:items] autorelease];
+    progressWindowController._package = [[[ProgressPackage alloc] initDelete:item] autorelease];
     [progressWindowController displayex];
 }
+
+-(void)startDeleteBucket:(OperPackage*)item
+{
+    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    progressWindowController._package = [[[ProgressPackage alloc] initDelete:item] autorelease];
+    [progressWindowController displayex];
+}
+
 @end

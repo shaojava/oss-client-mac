@@ -117,10 +117,10 @@
             [OperationManager deleteDownload:self];
         }
         if ([self._operName isEqualToString:@"deleteObject"]) {
-            [OperationManager deleteObject:self];
+            [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:self waitUntilDone:NO];
         }
         if ([self._operName isEqualToString:@"copyObject"]) {
-            [OperationManager copyObject:self];
+            [[Util getAppDelegate] performSelectorOnMainThread:@selector(startCopy:) withObject:self waitUntilDone:NO];
         }
         if ([self._operName isEqualToString:@"loginByKey"]) {
             [OperationManager loginByKey:self];
@@ -138,7 +138,7 @@
             [OperationManager setServerLocation:self];
         }
         if ([self._operName isEqualToString:@"deleteBucket"]) {
-            [OperationManager deleteBucket:self];
+            [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDeleteBucket:) withObject:self waitUntilDone:NO];
         }
     }
     @catch (NSException *exception) {
@@ -214,8 +214,9 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(void) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath
++(NSString *) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath
 {
+    NSString* strRet=@"";
     NSString* tempobject=@"";
     NSString* tempparent=object;
     NSString* nextmarker=@"";
@@ -250,9 +251,12 @@ END:
             nextmarker=ret.strNextMarker;
         }
         else {
+            NSString *msg=[NSString stringWithFormat:@"%@,%@,%@",bucket,object,nextmarker];
+            strRet=[Util errorInfoWithCode:@"保存文件夹获取列表失败" message:msg ret:ret];
             break;
         }
     }
+    return strRet;
 }
 
 +(void) saveFile:(OperPackage*)tran {
@@ -268,7 +272,11 @@ END:
         tranitem.nStatus=TRANSTASK_NORMAL;
         [[TransPortDB shareTransPortDB] Add_Download:tranitem];
         if (item.bDir) {
-            [self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
+            NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
+            if (ret.length>0) {
+                retString=ret;
+                goto END;
+            }
         }
     }
     retString=[Util errorInfoWithCode:WEB_SUCCESS];
@@ -486,107 +494,6 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(void) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object items:(NSMutableArray*)items
-{
-    NSString* nextmarker=@"";
-    while (YES) {
-        OSSListObjectRet* ret;
-        if ([OSSApi GetBucketObject:host bucetname:bucket ret:&ret prefix:object marker:nextmarker delimiter:@"" maxkeys:@"1000"]) {
-            for (OSSListObject* item in ret.arrayContent) {
-                DeleteFileItem * ditem=[[[DeleteFileItem alloc]init]autorelease];
-                if (item.strPefix.length) {
-                    ditem.strObject=item.strPefix;
-                }
-                else {
-                    ditem.strObject=item.strKey;
-                }
-                ditem.strHost=host;
-                ditem.strBucket=bucket;
-                [items addObject:ditem];
-            }
-            if (ret.strNextMarker.length==0) {
-                break;
-            }
-            nextmarker=ret.strNextMarker;
-        }
-        else {
-            break;
-        }
-    }
-}
-
-+(void) deleteObject:(OperPackage*)tran {
-    NSString* retString=@"{}";
-    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
-    if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:WEB_JSONERROR];
-        goto END;
-    }
-    NSString * bucket=[dictionary objectForKey:@"bucket"];
-    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
-    NSArray* array=[dictionary objectForKey:@"list"];
-    NSMutableArray* items = [NSMutableArray array];
-    if ([array isKindOfClass:[NSArray class]])
-    {
-        for (NSDictionary* itemDictionary in array)
-        {
-            DeleteFileItem * item=[[[DeleteFileItem alloc]init]autorelease];
-            item.strObject = [itemDictionary objectForKey:@"object"];
-            item.strHost=host;
-            item.strBucket=bucket;
-            if (item.strObject.length) {
-                [items addObject:item];
-            }
-            if ([item.strObject hasSuffix:@"/"]) {
-                [self GetFileList:host bucket:bucket object:item.strObject items:items];
-            }
-        }
-    }
-    [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:items waitUntilDone:NO];
-    retString=[Util errorInfoWithCode:WEB_SUCCESS];
-END:
-    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
-}
-
-+(void) copyObject:(OperPackage*)tran {
-    NSLog(@"%@",tran._jsonInfo);
-    NSString* retString=@"{}";
-    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
-    if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:WEB_JSONERROR];
-        goto END;
-    }
-    NSString * dstbucket=[dictionary objectForKey:@"dstbucket"];
-    NSString * dsthost=[Util ChangeHost:[dictionary objectForKey:@"dstlocation"]];
-    NSString * dstobject=[dictionary objectForKey:@"dstobject"];
-    NSString * bucket=[dictionary objectForKey:@"bucket"];
-    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
-    NSArray* array=[dictionary objectForKey:@"list"];
-    NSMutableArray* items = [NSMutableArray array];
-    if ([array isKindOfClass:[NSArray class]])
-    {
-        for (NSDictionary* itemDictionary in array)
-        {
-            CopyFileItem * item=[[[CopyFileItem alloc]init]autorelease];
-            item.strObject = [itemDictionary objectForKey:@"object"];
-            item.ullFilesize=[[itemDictionary objectForKey:@"filesize"] longLongValue];
-            item.strHost=host;
-            item.strBucket=bucket;
-            item.strDstHost=dsthost;
-            item.strDstBucket=dstbucket;
-            [items addObject:item];
-        }
-    }
-    MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
-    if (![moveController copyfiles:items dstobject:dstobject]) {
-        goto END;
-    }
-    [[Util getAppDelegate] performSelectorOnMainThread:@selector(startCopy:) withObject:items waitUntilDone:NO];
-    retString=[Util errorInfoWithCode:WEB_SUCCESS];
-END:
-    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
-}
-
 +(void) loginByKey:(OperPackage*)tran {
     NSString* retString=nil;
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
@@ -717,7 +624,6 @@ END:
         retString=[Util errorInfoWithCode:WEB_FILEOPENERROR];
     }
 END:
-    NSLog(@"%@",retString);
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
@@ -739,11 +645,8 @@ END:
         NSString * temp=[NSString stringWithFormat:@"%@%@",[OSSRsa getcomputerid],password];
         user.strPassword=[temp md5HexDigest];
         [[SettingsDb shareSettingDb] setuserinfo:user];
-        retString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
-    else {
-        retString=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
-    }
+    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
@@ -771,11 +674,8 @@ END:
             [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
             [Util getAppDelegate].bLogin=YES;
-            retString=[Util errorInfoWithCode:WEB_SUCCESS];
         }
-        else {
-            retString=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
-        }
+        retString=[Util errorInfoWithCode:WEB_SUCCESS];
     }
     else {
         retString=[Util errorInfoWithCode:WEB_PASSWORDERROR];
@@ -796,48 +696,6 @@ END:
         [[SettingsDb shareSettingDb] setHost:location];
         [Util getAppDelegate].strHost=location;
     }
-END:
-    [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
-}
-
-+(void) deleteBucket:(OperPackage*)tran {
-    NSString* retString=@"{}";
-    NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
-    if (![dictionary isKindOfClass:[NSDictionary class]]) {
-        retString=[Util errorInfoWithCode:WEB_JSONERROR];
-        goto END;
-    }
-    NSString * keyid=[dictionary objectForKey:@"keyid"];
-    NSString * keysecret=[dictionary objectForKey:@"keysecret"];
-    NSString * bucket=[dictionary objectForKey:@"bucket"];
-    NSString * host=[Util ChangeHost:[dictionary objectForKey:@"location"]];
-    if (![[Util getAppDelegate].strAccessID isEqualToString:keyid]||![[Util getAppDelegate].strAccessKey isEqualToString:keysecret]) {
-        retString=[Util errorInfoWithCode:WEB_ACCESSKEYERROR];
-    }
-    NSMutableArray* items = [NSMutableArray array];
-    [self GetFileList:host bucket:bucket object:@"" items:items];
-    if (items.count) {
-        [[Util getAppDelegate] performSelectorOnMainThread:@selector(startDelete:) withObject:items waitUntilDone:YES];
-    }
-    NSLog(@"delete");
-    OSSListMultipartUploadRet *ret;
-    if([OSSApi ListMultipartUploads:host bucketname:bucket reet:&ret])
-    {
-        for (OSSListMultipartUpload *item in ret.arrayUpload) {
-            if (![OSSApi AbortMultipartUpload:host bucketname:bucket objectname:item.strKey uploadid:item.strUploadId]) {
-                
-                goto END;
-            }
-        }
-    }
-    OSSRet * ossret;
-    if ([OSSApi DeleteBucket:host bucketname:bucket ret:&ossret]) {
-        retString=[Util errorInfoWithCode:WEB_SUCCESS];
-    }
-    else {
-        //zheng
-    }
-    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }

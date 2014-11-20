@@ -61,14 +61,11 @@
 +(void) stopDownload:(OperPackage*)tran;
 +(void) deleteUpload:(OperPackage*)tran;
 +(void) deleteDownload:(OperPackage*)tran;
-+(void) deleteObject:(OperPackage*)tran;
-+(void) copyObject:(OperPackage*)tran;
 +(void) loginByKey:(OperPackage*)tran;
 +(void) loginByFile:(OperPackage*)tran;
 +(void) setPassword:(OperPackage*)tran;
 +(void) loginPassword:(OperPackage*)tran;
 +(void) setServerLocation:(OperPackage*)tran;
-+(void) deleteBucket:(OperPackage*)tran;
 
 - (void) pack:(NSString*)name
      jsoninfo:(NSString*)jsonInfo
@@ -76,7 +73,8 @@
            cb:(WebScriptObject*)cb
 retController:(NSWindowController*)retController
         array:(NSArray*)array;
-
++(void) callbackonmain:(id)info;
++(void) operateCallback:(WebScriptObject*)_obj webFrame:(WebFrame*)_webFrame jsonString:(NSString*)_jsonString;
 
 @end
 ////////////////////////////////////////////////////////////////////////////////////////////////

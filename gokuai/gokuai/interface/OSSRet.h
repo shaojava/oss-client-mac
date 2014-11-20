@@ -4,6 +4,7 @@
 @interface OSSRet : NSObject
 {
     GDataXMLElement *rootElement;
+    NSInteger nHttpCode;
     NSString* strCode;
     NSString* strMessage;
     NSString* strRequestId;
@@ -11,6 +12,7 @@
     NSString* strBucketName;
 }
 
+@property(nonatomic)NSInteger nHttpCode;
 @property(nonatomic,retain)NSString* strCode;
 @property(nonatomic,retain)NSString* strMessage;
 @property(nonatomic,retain)NSString* strRequestId;
@@ -210,11 +212,9 @@
 
 @interface OSSAddObject : OSSRet
 {
-    NSInteger nCode;
     NSString* strEtag;
 }
 
-@property(nonatomic)NSInteger nCode;
 @property(nonatomic,retain)NSString* strEtag;
 
 @end

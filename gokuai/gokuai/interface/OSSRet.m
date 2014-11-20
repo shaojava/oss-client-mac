@@ -2,6 +2,7 @@
 
 @implementation OSSRet
 
+@synthesize nHttpCode;
 @synthesize strCode;
 @synthesize strMessage;
 @synthesize strRequestId;
@@ -11,6 +12,7 @@
 -(id)init
 {
     if (self =[super init]) {
+        self.nHttpCode=0;
         self.strCode =@"";
         self.strMessage =@"";
         self.strRequestId =@"";
@@ -761,13 +763,11 @@
 
 @implementation OSSAddObject
 
-@synthesize nCode;
 @synthesize strEtag;
 
 -(id)init
 {
     if (self=[super init]) {
-        self.nCode=0;
         self.strEtag=@"";
     }
     return self;
@@ -776,7 +776,6 @@
 -(void)dealloc
 {
     strEtag=nil;
-    strRequestId=nil;
     [super dealloc];
 }
 

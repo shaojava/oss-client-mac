@@ -55,10 +55,10 @@
                                                         bodyData:nil] autorelease];
     NSHTTPURLResponse* response;
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
-    NSInteger status=[response statusCode];
     *ret =[[[OSSRet alloc]init]autorelease];
+    (*ret).nHttpCode=[response statusCode];
     [(*ret) SetValueWithData:data];
-    if (status>=200&&status<400) {
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -92,8 +92,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -184,8 +184,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSListObjectRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -224,8 +224,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSCopyRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -259,8 +259,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -310,8 +310,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -383,9 +383,9 @@
     NSHTTPURLResponse* response;
     NSData* data =[request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSAddObject alloc]init]autorelease];
-    (*ret).nCode=[response statusCode];
+    (*ret).nHttpCode=[response statusCode];
     [(*ret) SetValueWithData:data];
-    if ((*ret).nCode==200) {
+    if ((*ret).nHttpCode==200) {
         NSDictionary* retheader=[response allHeaderFields];
         if ([retheader isKindOfClass:[NSDictionary class]]) {
             NSString * etag=[retheader valueForKey:@"ETag"];
@@ -430,8 +430,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSInitiateMultipartUploadRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -470,9 +470,9 @@
     NSHTTPURLResponse* response;
     NSData* data =[request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSAddObject alloc]init]autorelease];
-    (*ret).nCode=[response statusCode];
+    (*ret).nHttpCode=[response statusCode];
     [(*ret) SetValueWithData:data];
-    if ((*ret).nCode==200) {
+    if ((*ret).nHttpCode==200) {
         NSDictionary* retheader=[response allHeaderFields];
         if ([retheader isKindOfClass:[NSDictionary class]]) {
             NSString * etag=[retheader valueForKey:@"ETag"];
@@ -491,7 +491,7 @@
     }
 }
 
-+(BOOL)UploadPartCopy:(NSString*)host dstbucketname:(NSString*)dstbucketname dstobjectname:(NSString*)dstobjectname srcbucketname:(NSString*)srcbucketname srcobjectname:(NSString*)srcobjectname uploadid:(NSString*)uploadid partnumber:(NSInteger)partnumber pos:(ULONGLONG)pos size:(ULONGLONG)size ret:(OSSAddObject**)ret
++(BOOL)UploadPartCopy:(NSString*)host dstbucketname:(NSString*)dstbucketname dstobjectname:(NSString*)dstobjectname srcbucketname:(NSString*)srcbucketname srcobjectname:(NSString*)srcobjectname uploadid:(NSString*)uploadid partnumber:(NSInteger)partnumber pos:(ULONGLONG)pos size:(ULONGLONG)size ret:(OSSRet**)ret
 {
     NSString* date=[Util getGMTDate];
     NSString* method=@"PUT";
@@ -533,8 +533,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSAddObject alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -551,7 +551,6 @@
     NSString* body=[ossbody GetBody];
     NSData *bodydata=[body dataUsingEncoding:NSUTF8StringEncoding];
     NSString* md5=[bodydata md5base64Encode];
-    NSLog(@"bodydata length:%ld",bodydata.length);
     NSString* method=@"POST";
     NSString* resource=[NSString stringWithFormat:@"/%@/%@?uploadId=%@",bucketname,objectname,uploadid];
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
@@ -586,8 +585,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -620,8 +619,8 @@
     NSData* data = [request connectNetSyncWithResponse:&response error:nil];
     *ret =[[[OSSListMultipartUploadRet alloc]init]autorelease];
     [(*ret) SetValueWithData:data];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {
@@ -629,7 +628,7 @@
     }
 }
     
-+(BOOL)AbortMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid
++(BOOL)AbortMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid ret:(OSSRet**)ret
 {
     NSString* date=[Util getGMTDate];
     NSString* method=@"DELETE";
@@ -652,9 +651,11 @@
                                                           header:[self GetHeader:array]
                                                         bodyData:nil] autorelease];
     NSHTTPURLResponse* response;
-    [request connectNetSyncWithResponse:&response error:nil];
-    NSInteger status=[response statusCode];
-    if (status>=200&&status<400) {
+    NSData* data = [request connectNetSyncWithResponse:&response error:nil];
+    *ret =[[[OSSListMultipartUploadRet alloc]init]autorelease];
+    [(*ret) SetValueWithData:data];
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
         return YES;
     }
     else {

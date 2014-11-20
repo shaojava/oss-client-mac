@@ -50,7 +50,6 @@
     if (self.bStop) {
         return;
     }
-    NSLog(@"FinishIndex:%ld,%llu,%llu,%@",index,pos,size,etag);
     OSSUploadPart* item=[[[OSSUploadPart alloc]init]autorelease];
     item.nIndex=index;
     item.ullPos=pos;
@@ -69,6 +68,7 @@
     [self.pLocksc lock];
     [self.pUnFinish InsertPart:pos last:pos+size-1];
     [self.pLocksc unlock];
+    self.pItem.ullOffset-=size;
     NSString * errormsg=[NSString stringWithFormat:@"[ErrorIndex:%@|%@][%ld,%llu,%llu,%ld,%@]",self.pItem.strBucket,self.pItem.strObject,index,pos,size,error,msg];
     [[FileLog shareFileLog] log:errormsg add:NO];
 }
@@ -239,7 +239,7 @@
                 [self Finish];
             }
             else {
-                [self TaskError:ret.nCode msg:@""];
+                [self TaskError:ret.nHttpCode msg:@""];
             }
             return;
         }
@@ -263,9 +263,7 @@
         self.ullStarttime=CFAbsoluteTimeGetCurrent();
         self.ullRuntime=self.ullStarttime;
         while (YES) {
-            if (self.bStop)
-            {
-                NSLog(@"1");
+            if (self.bStop) {
                 return;
             }
             if ([self CheckFinish]) {
@@ -277,11 +275,9 @@
                     }
                 }
                 [self Finish];
-                NSLog(@"2");
                 return;
             }
             NSInteger num=[self GetPeerNum];
-            NSLog(@"%ld,%ld",num,self.nMax);
             if (num>=self.nMax) {
                 [NSThread sleepForTimeInterval:0.1];
                 continue;
@@ -289,7 +285,6 @@
             ULONGLONG pos;
             ULONGLONG size;
             NSInteger index=[self GetUploadIndex:&pos size:&size];
-            NSLog(@"%ld,%llu,%llu",index,pos,size);
             if (index<0) {
                 [NSThread sleepForTimeInterval:1];
                 continue;
@@ -311,7 +306,6 @@
                 else {
                     if (self.pItem.strUploadId.length==0) {
                         [self TaskError:TRANSERROR_OPENFILE msg:@"文件打开失败"];
-                        NSLog(@"3");
                         return;
                     }
                 }
@@ -322,7 +316,6 @@
     }
     @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSLog(@"4");
     }
     @finally {
         [pool release];

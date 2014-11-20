@@ -204,7 +204,6 @@ END:
                 if (![moveController savefiles:array savepath:path]) {
                     goto END;
                 }
-                
                 [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
                 return ;
             }
@@ -539,11 +538,13 @@ END:
                     strRet=[Util errorInfoWithCode:WEB_SUCCESS];
                 }
                 else {
-                    strRet=[Util errorInfoWithCode:WEB_FILEOPENERROR];
+                    strRet=[Util errorInfoWithCode:WEB_FILESAVEERROR];
+                    NSString * msg=[NSString stringWithFormat:@"[创建授权文件失败][%@]",strPath];
+                    [[FileLog shareFileLog] log:msg add:NO];
                 }
             }
             else {
-                strRet=[Util errorInfoWithCode:WEB_PASSWORDENCRYPTERROR];
+                strRet=[Util errorInfoWithCode:WEB_ENCRYPTERROR];
             }
         }
         else {

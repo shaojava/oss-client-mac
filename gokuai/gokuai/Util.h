@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "AppDelegate.h"
+#import "OSSRet.h"
 
 @interface Util : NSObject
 
@@ -30,10 +31,13 @@
 + (NSString*)getGMTDate;
 +(void) webScriptObjectCallback:(JSObjectRef)_objRef contextRef:(JSContextRef)_ctx args:(JSValueRef*)_args argCnt:(NSInteger)_argCnt;
 +(void) webScriptObjectCallback:(WebScriptObject*)obj webFrame:(WebFrame*)frame jsonString:(NSString*)string;
-+(NSString*) GetMyErrorMessage:(NSInteger)err;
-+(NSString*) errorInfoWithCode:(NSInteger)err;
-+(NSString*) errorInfoWithCode:(NSInteger)err
-                     anderrmsg:(NSString*)errmsg;
++(NSString*)GetErrorMessage:(NSInteger)error;
++(NSString*)GetOssErrorMessage:(NSString*)error;
++(NSString*)GetHttpErrorMessage:(NSInteger)error;
++(NSString*)errorInfoWithCode:(NSInteger)err;
++(NSString*)errorInfoWithCode:(NSString*)action message:(NSString*)message ret:(OSSRet*)ret;
+
+
 +(NSDictionary*) dictionaryWithJsonInfo:(NSString*) jsonInfo;
 +(NSOpenPanel*) OpenPanelAddFiles:(NSWindow*)parentWindow :(NSString*)dstpath;
 +(NSOpenPanel*) OpenPanelSelectPath:(NSWindow*)parentWindow :(NSString*)dstpath;

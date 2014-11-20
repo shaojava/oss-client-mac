@@ -177,7 +177,7 @@
     for(int i = 0; i < [dirArray count];i++)  
     {
         NSString *filename=[dirArray objectAtIndex:i];
-        NSString *temppath=[NSString stringWithFormat:@"%@%@",fullpath,filename];
+        NSString *temppath=[NSString stringWithFormat:@"%@/%@",fullpath,filename];
         if([Util isdir:temppath]){
             TransTaskItem *item=[[TransTaskItem alloc]init];
             item.strHost=host;
@@ -196,6 +196,7 @@
             item.strBucket=bucket;
             item.strObject=[NSString stringWithFormat:@"%@%@",object,filename];
             item.strFullpath=temppath;
+            item.ullFilesize=[Util filesize:temppath];
             item.nStatus=TRANSTASK_NORMAL;
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];

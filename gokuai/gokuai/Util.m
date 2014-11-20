@@ -4,6 +4,7 @@
 #import "JSONKit.h"
 #import "Common.h"
 #import "AppDelegate.h"
+#import "FileLog.h"
 
 @implementation Util
 
@@ -312,34 +313,106 @@
     JSObjectCallAsFunction(ctx, func, NULL, 1, &valref, NULL);
 }
 
-+(NSString*) GetMyErrorMessage:(NSInteger)err
++(NSString*)GetErrorMessage:(NSInteger)error
 {
     NSString *ret=@"";
-    switch (err) {
-        case WEB_SUCCESS:
-            return @"";
+    switch (error) {
         case WEB_JSONERROR:
-            return [Util localizedStringForKey:@"参数格式不正确" alternate:nil];
+            ret=@"json不正确";
+            break;
+        case WEB_FILEOPENERROR:
+            ret=@"授权文件打开失败";
+            break;
+        case WEB_FILESAVEERROR:
+            ret=@"授权文件保存失败";
+            break;
+        case WEB_ENCRYPTERROR:
+            ret=@"导出授权文件失败";
+            break;
+        case WEB_ACCESSKEYERROR:
+            ret=@"AccessKey不正确";
+            break;
+        case WEB_DECRYPTERROR:
+            ret=@"导入授权文件失败";
+            break;
+        case WEB_FILEERROR:
+            ret=@"该文件不为授权文件";
+            break;
+        case WEB_PASSWORDERROR:
+            ret=@"安全密码不正确";
+            break;
         default:
             break;
     }
     return ret;
 }
 
-+(NSString*) errorInfoWithCode:(NSInteger)err
++(NSString*)GetOssErrorMessage:(NSString*)error
+{
+    if ([error isEqualToString:@"AccessDenied"])                    return @"拒绝访问";
+	if ([error isEqualToString:@"BucketAlreadyExists"])             return @"Bucket已经存在";
+	if ([error isEqualToString:@"BucketNotEmpty"])                  return @"Bucket不为空";
+	if ([error isEqualToString:@"EntityTooLarge"])                  return @"实体过大";
+	if ([error isEqualToString:@"EntityTooSmall"])                  return @"实体过小";
+	if ([error isEqualToString:@"FileGroupTooLarge"])               return @"文件组过大";
+	if ([error isEqualToString:@"FilePartNotExist"])                return @"文件Part不存在";
+	if ([error isEqualToString:@"FilePartStale"])                   return @"文件Part过时";
+	if ([error isEqualToString:@"InvalidArgument"])                 return @"参数格式错误";
+	if ([error isEqualToString:@"InvalidAccessKeyId"])              return @"Access Key ID不存在";
+	if ([error isEqualToString:@"InvalidBucketName"])               return @"无效的Bucket名字";
+	if ([error isEqualToString:@"InvalidDigest"])                   return @"无效的摘要";
+	if ([error isEqualToString:@"InvalidObjectName"])               return @"无效的Object名字";
+	if ([error isEqualToString:@"InvalidPart"])                     return @"无效的Part";
+	if ([error isEqualToString:@"InvalidPartOrder"])                return @"无效的part顺序";
+	if ([error isEqualToString:@"InvalidTargetBucketForLogging"])   return @"Logging操作中有无效的目标bucket";
+	if ([error isEqualToString:@"InternalError"])                   return @"OSS内部发生错误";
+	if ([error isEqualToString:@"MalformedXML"])                    return @"XML格式非法";
+	if ([error isEqualToString:@"MethodNotAllowed"])                return @"不支持的方法";
+	if ([error isEqualToString:@"MissingArgument"])                 return @"缺少参数";
+	if ([error isEqualToString:@"MissingContentLength"])            return @"缺少内容长度";
+	if ([error isEqualToString:@"NoSuchBucket"])                    return @"Bucket不存在";
+	if ([error isEqualToString:@"NoSuchKey"])                       return @"文件不存在";
+	if ([error isEqualToString:@"NoSuchUpload"])                    return @"Multipart Upload ID不存在";
+	if ([error isEqualToString:@"NotImplemented"])                  return @"无法处理的方法";
+	if ([error isEqualToString:@"PreconditionFailed"])              return @"预处理错误";
+	if ([error isEqualToString:@"RequestTimeTooSkewed"])            return @"发起请求的时间和服务器时间超出15分钟";
+	if ([error isEqualToString:@"RequestTimeout"])                  return @"请求超时";
+	if ([error isEqualToString:@"SignatureDoesNotMatch"])           return @"签名错误";
+	if ([error isEqualToString:@"TooManyBuckets"])                  return @"Bucket数目超过限制";
+	return error;
+}
+
++(NSString*)GetHttpErrorMessage:(NSInteger)error
+{
+    return [NSString stringWithFormat:@"curl error:%d",error];
+}
+
++(NSString*)errorInfoWithCode:(NSInteger)err
 {
     NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithInteger:err],@"error",
-                          [Util GetMyErrorMessage:err],@"message",nil];
+                          [Util GetErrorMessage:err],@"message",nil];
     return [dicRet JSONString];
 }
 
-+(NSString*) errorInfoWithCode:(NSInteger)err anderrmsg:(NSString*)errmsg
++(NSString*)errorInfoWithCode:(NSString*)action message:(NSString*)message ret:(OSSRet*)ret
 {
-    NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSNumber numberWithInteger:err],@"error",
-                          errmsg,@"message",nil];
-    return [dicRet JSONString];
+    if (ret.nHttpCode!=0) {
+        NSString* msg=[NSString stringWithFormat:@"[%@][%@][%d,%@]",action,message,ret.nHttpCode,[Util GetHttpErrorMessage:ret.nHttpCode]];
+        [[FileLog shareFileLog] log:msg add:NO];
+        NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInteger:WEB_CURLERROR],@"error",
+                              [Util GetHttpErrorMessage:ret.nHttpCode],@"message",nil];
+        return [dicRet JSONString];
+    }
+    else {
+        NSString* msg=[NSString stringWithFormat:@"[%@][%@][%@,%@]",action,message,ret.strCode,ret.strMessage];
+        [[FileLog shareFileLog] log:msg add:NO];
+        NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInteger:WEB_OSSERROR],@"error",
+                              [Util GetOssErrorMessage:ret.strCode],@"message",nil];
+        return [dicRet JSONString];
+    }
 }
 
 +(NSDictionary*) dictionaryWithJsonInfo:(NSString*) jsonInfo

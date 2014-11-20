@@ -170,7 +170,7 @@
                 copyitem.strBucket=bucket;
                 copyitem.strDstHost=dsthost;
                 copyitem.strDstBucket=dstbucket;
-                copyitem.strDstObject=[copyitem.strObject stringByReplacingOccurrencesOfString:object withString:dstobject];
+                copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",dstobject,[copyitem.strObject substringFromIndex:object.length]];
                 [array addObject:copyitem];
             }
             if (ret.strNextMarker.length==0) {
@@ -200,7 +200,7 @@
             copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",dstobject,copyitem.strObject];
         }
         else {
-            copyitem.strDstObject=[copyitem.strObject stringByReplacingOccurrencesOfString:parent withString:dstobject];
+            copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",dstobject,[copyitem.strObject substringFromIndex:parent.length+1]];
         }
         if ([OSSApi HeadObject:copyitem.strDstHost bucketname:copyitem.strDstBucket objectname:copyitem.strDstObject]) {
             NSString* filename=[copyitem.strObject lastPathComponent];
