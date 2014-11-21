@@ -85,7 +85,7 @@
 
 -(BOOL)CreateMultipartFile
 {
-    NSString * path=[NSString stringWithFormat:@"%@%@",[Util getAppDelegate].strTransCachePath,self.pItem.strUploadId];
+    NSString * path=[NSString stringWithFormat:@"%@/%@",[Util getAppDelegate].strTransCachePath,self.pItem.strUploadId];
     if (![Util existfile:path]) {
         [Util createfile:path];
     }
@@ -131,9 +131,11 @@
 -(BOOL)DeleteMultipartFile
 {
     self.pIndexFileHandle=nil;
-    NSString * path=[NSString stringWithFormat:@"%@%@",[Util getAppDelegate].strTransCachePath,self.pItem.strUploadId];
-    if ([Util existfile:path])
-        [Util deletefile:path];
+    if (self.pItem.strUploadId.length) {
+        NSString * path=[NSString stringWithFormat:@"%@/%@",[Util getAppDelegate].strTransCachePath,self.pItem.strUploadId];
+        if ([Util existfile:path])
+            [Util deletefile:path];
+    }
     return YES;
 }
 
@@ -160,6 +162,7 @@
         }
         if (self.pIndexFileHandle) {
             NSData * data=[[NSData alloc]initWithBytes:pPartBuffer length:length];
+            [self.pIndexFileHandle seekToFileOffset:0];
             [self.pIndexFileHandle writeData:data];
             [data release];
         }
@@ -223,7 +226,7 @@
     self.bStop=YES;
     NSString * errormsg=[NSString stringWithFormat:@"[TaskError:%@|%@][%ld,%@]",self.pItem.strBucket,self.pItem.strObject,error,msg];
     [[FileLog shareFileLog] log:errormsg add:YES];
-    [[TransPortDB shareTransPortDB] Update_UploadError:self.pItem.strPathhash error:error msg:msg];
+    [[TransPortDB shareTransPortDB] Update_UploadError:self.pItem.strPathhash error:error msg:[Util GetOssErrorMessage:msg]];
     self.pItem.nStatus=TRANSTASK_ERROR;
     [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
 }
@@ -270,6 +273,9 @@
                 if (self.pItem.strUploadId.length>0) {
                     OSSRet * ret=[[[OSSRet alloc] init] autorelease];
                     if (![OSSApi CompleteMultipartUpload:self.pItem.strHost bucketname:self.pItem.strBucket objectname:self.pItem.strObject uploadid:self.pItem.strUploadId parts:self.pPartList ret:&ret]) {
+                        if ([ret.strCode isEqualToString:@"InvalidPartOrder"]) {
+                            [self DeleteMultipartFile];
+                        }
                         [self TaskError:TRANSERROR_OSSERROR msg:ret.strCode];
                         return;
                     }

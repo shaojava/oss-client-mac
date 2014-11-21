@@ -91,7 +91,7 @@
             }
         }
     }
-    self.strTransCachePath=[NSString stringWithFormat:@"%@/transcache/",[[NSBundle mainBundle] bundlePath]];
+    self.strTransCachePath=[NSString stringWithFormat:@"%@/transcache",[[NSBundle mainBundle] bundlePath]];
     [Util createfolder:self.strTransCachePath];
     self.strUserDB=[NSString stringWithFormat:@"%@/user/ossuser.db",[[NSBundle mainBundle] bundlePath]];
     [Util createfolder:[self.strUserDB stringByDeletingLastPathComponent]];
