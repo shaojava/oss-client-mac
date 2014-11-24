@@ -499,7 +499,7 @@
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
     OssSignKey *item=[[OssSignKey alloc]init];
     item.key=@"x-oss-copy-source";
-    item.value=[NSString stringWithFormat:@"/%@/%@",srcbucketname,srcobjectname];
+    item.value=[NSString stringWithFormat:@"/%@/%@",srcbucketname,[srcobjectname urlEncoded]];
     [array addObject:item];
     [item release];
     item=[[OssSignKey alloc]init];
@@ -680,7 +680,7 @@
         OssSignKey* sk=[sortedArray objectAtIndex:i];
         [signString appendFormat:@"%@:%@\n",sk.key,sk.value];
     }
-    [signString appendFormat:resource];
+    [signString appendString:resource];
     const char * secretStr = [[Util getAppDelegate].strAccessKey UTF8String];
     const char * signStr = [signString UTF8String];
     unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
@@ -706,7 +706,7 @@
         OssSignKey* sk=[sortedArray objectAtIndex:i];
         [signString appendFormat:@"%@:%@\n",sk.key,sk.value];
     }
-    [signString appendFormat:resource];
+    [signString appendString:resource];
     const char * secretStr = [accesskey UTF8String];
     const char * signStr = [signString UTF8String];
     unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];

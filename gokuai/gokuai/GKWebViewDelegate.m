@@ -60,7 +60,7 @@
         browserController=[[Util getAppDelegate] getBrowserWebWindowController:solestr];
     }
 
-    browserController.strUrl=url;
+    browserController.strUrl=[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     browserController.solestr=solestr;
 
     if (resize) {
@@ -587,13 +587,11 @@ END:
     if (![dicInfo isKindOfClass:[NSDictionary class]]) {
         return;
     }
-    
     NSString* type = [dicInfo objectForKey:@"type"];
     NSString* url = [dicInfo objectForKey:@"url"];
     NSInteger width = [[dicInfo objectForKey:@"width"] intValue];
     NSInteger height = [[dicInfo objectForKey:@"height"] intValue];
     BOOL resize=[[dicInfo objectForKey:@"resize"] boolValue];
-    
     if ([@"child" isEqualToString:type]) {
         [self BrowserWebWindowController:url resizable:resize sole:NO  solestr:type size:NSMakeSize(width, height)];
     }
