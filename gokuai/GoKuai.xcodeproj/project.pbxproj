@@ -34,8 +34,6 @@
 		188DBC0F19F6791F00369079 /* TaskBask.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DBC0E19F6791F00369079 /* TaskBask.m */; };
 		1892BDC415F8414300488E70 /* SettingsDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 1892BDC315F8414300488E70 /* SettingsDb.m */; };
 		1894BCE2162C0C1200995C15 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1894BCE1162C0C1100995C15 /* IOKit.framework */; };
-		18B1B55718D83D930013B2F0 /* statusSyncBg.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */; };
-		18B1B55818D83D930013B2F0 /* statusSyncMv.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */; };
 		18BBF0EA1A0B1A1C0067E395 /* CallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0E91A0B1A1C0067E395 /* CallbackThread.m */; };
 		18BBF0EE1A0B22B70067E395 /* DownloadCallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0ED1A0B22B70067E395 /* DownloadCallbackThread.m */; };
 		18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0F01A0B22CD0067E395 /* UploadCallbackThread.m */; };
@@ -54,7 +52,6 @@
 		18FC3FF615E5CA05007927F8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF515E5CA05007927F8 /* WebKit.framework */; };
 		18FC3FF815E5CA15007927F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */; };
 		18FC3FFC15E5CA27007927F8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FFB15E5CA27007927F8 /* libz.dylib */; };
-		18FD3AC518CD675300BC21C4 /* statusLink.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 18FD3ABC18CD675200BC21C4 /* statusLink.tiff */; };
 		7916292B18F3EEDA00988DE1 /* SyncTransCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7916292A18F3EEDA00988DE1 /* SyncTransCache.m */; };
 		D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10ED7E21688191F008984B4 /* LoginWebWindowController.m */; };
 		D10ED7E51688191F008984B4 /* LoginWebWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D10ED7E31688191F008984B4 /* LoginWebWindowController.xib */; };
@@ -89,9 +86,6 @@
 		D187F01817029D770027177E /* GKWebViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D187F01717029D770027177E /* GKWebViewDelegate.m */; };
 		D19D1185169AC42E002FC4FD /* WebLogin.html in Resources */ = {isa = PBXBuildFile; fileRef = D19D1184169AC42E002FC4FD /* WebLogin.html */; };
 		D19D1187169AC4CB002FC4FD /* gokuaiapp.icns in Resources */ = {isa = PBXBuildFile; fileRef = D19D1186169AC4CB002FC4FD /* gokuaiapp.icns */; };
-		F5079922175F05AB0019B0C5 /* statusFinishIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F5079918175F05AB0019B0C5 /* statusFinishIcon.tiff */; };
-		F5079923175F05AB0019B0C5 /* statusNoneIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F5079919175F05AB0019B0C5 /* statusNoneIcon.tiff */; };
-		F5079924175F05AB0019B0C5 /* statusStopIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F507991A175F05AB0019B0C5 /* statusStopIcon.tiff */; };
 		F52DF01D1839E0A900451BC4 /* bc_hover.png in Resources */ = {isa = PBXBuildFile; fileRef = F52DF0171839E0A900451BC4 /* bc_hover.png */; };
 		F52DF01E1839E0A900451BC4 /* bc_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = F52DF0181839E0A900451BC4 /* bc_normal.png */; };
 		F52DF01F1839E0A900451BC4 /* bg_hover.png in Resources */ = {isa = PBXBuildFile; fileRef = F52DF0191839E0A900451BC4 /* bg_hover.png */; };
@@ -105,7 +99,6 @@
 		F54394D9181622A4002A8789 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54394D8181622A4002A8789 /* JavaScriptCore.framework */; };
 		F58D192D1871719D009B3310 /* MoveAndPasteWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58D192C1871719D009B3310 /* MoveAndPasteWindowController.m */; };
 		F5A6A3A8183082E400ADBC71 /* GKAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A6A3A7183082E400ADBC71 /* GKAlert.m */; };
-		F5D2D09D185F0C7600E0AF43 /* statusMsgIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F5D2D09C185F0C7600E0AF43 /* statusMsgIcon.tiff */; };
 		F5E77E4D18728DCC00FF71EF /* aboutbkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E77E4C18728DCC00FF71EF /* aboutbkg.png */; };
 		F5E82532183CB2430060B73D /* OperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E82531183CB2430060B73D /* OperationManager.m */; };
 		F5E8FECC18502AA900D95136 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F5E8FECE18502AA900D95136 /* InfoPlist.strings */; };
@@ -193,8 +186,6 @@
 		1892BDC215F8414300488E70 /* SettingsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDb.h; sourceTree = "<group>"; };
 		1892BDC315F8414300488E70 /* SettingsDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDb.m; sourceTree = "<group>"; };
 		1894BCE1162C0C1100995C15 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncBg.tiff; sourceTree = "<group>"; };
-		18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusSyncMv.tiff; sourceTree = "<group>"; };
 		18BBF0E81A0B1A1C0067E395 /* CallbackThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallbackThread.h; sourceTree = "<group>"; };
 		18BBF0E91A0B1A1C0067E395 /* CallbackThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallbackThread.m; sourceTree = "<group>"; };
 		18BBF0EC1A0B22B70067E395 /* DownloadCallbackThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCallbackThread.h; sourceTree = "<group>"; };
@@ -229,7 +220,6 @@
 		18FC3FF515E5CA05007927F8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		18FC3FFB15E5CA27007927F8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		18FD3ABC18CD675200BC21C4 /* statusLink.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusLink.tiff; sourceTree = "<group>"; };
 		7916292918F3EEDA00988DE1 /* SyncTransCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncTransCache.h; sourceTree = "<group>"; };
 		7916292A18F3EEDA00988DE1 /* SyncTransCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncTransCache.m; sourceTree = "<group>"; };
 		D10ED7E11688191F008984B4 /* LoginWebWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWebWindowController.h; sourceTree = "<group>"; };
@@ -293,9 +283,6 @@
 		D187F01917029D890027177E /* GKWebViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKWebViewDelegate.h; sourceTree = "<group>"; };
 		D19D1184169AC42E002FC4FD /* WebLogin.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = WebLogin.html; sourceTree = "<group>"; };
 		D19D1186169AC4CB002FC4FD /* gokuaiapp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = gokuaiapp.icns; path = ../Image/gokuaiapp.icns; sourceTree = "<group>"; };
-		F5079918175F05AB0019B0C5 /* statusFinishIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusFinishIcon.tiff; sourceTree = "<group>"; };
-		F5079919175F05AB0019B0C5 /* statusNoneIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusNoneIcon.tiff; sourceTree = "<group>"; };
-		F507991A175F05AB0019B0C5 /* statusStopIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusStopIcon.tiff; sourceTree = "<group>"; };
 		F52DF0171839E0A900451BC4 /* bc_hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bc_hover.png; sourceTree = "<group>"; };
 		F52DF0181839E0A900451BC4 /* bc_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bc_normal.png; sourceTree = "<group>"; };
 		F52DF0191839E0A900451BC4 /* bg_hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_hover.png; sourceTree = "<group>"; };
@@ -315,7 +302,6 @@
 		F58D192C1871719D009B3310 /* MoveAndPasteWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveAndPasteWindowController.m; sourceTree = "<group>"; };
 		F5A6A3A6183082E400ADBC71 /* GKAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKAlert.h; sourceTree = "<group>"; };
 		F5A6A3A7183082E400ADBC71 /* GKAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKAlert.m; sourceTree = "<group>"; };
-		F5D2D09C185F0C7600E0AF43 /* statusMsgIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusMsgIcon.tiff; sourceTree = "<group>"; };
 		F5E77E4C18728DCC00FF71EF /* aboutbkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aboutbkg.png; sourceTree = "<group>"; };
 		F5E82530183CB2430060B73D /* OperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationManager.h; sourceTree = "<group>"; };
 		F5E82531183CB2430060B73D /* OperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationManager.m; sourceTree = "<group>"; };
@@ -428,7 +414,6 @@
 				F5E77E4C18728DCC00FF71EF /* aboutbkg.png */,
 				D19D1186169AC4CB002FC4FD /* gokuaiapp.icns */,
 				F52DF0161839E0A900451BC4 /* Progress */,
-				F5079912175F05A90019B0C5 /* StatusIcon */,
 			);
 			name = image;
 			path = ..;
@@ -700,21 +685,6 @@
 			path = ../../Framework/ASIHTTP;
 			sourceTree = "<group>";
 		};
-		F5079912175F05A90019B0C5 /* StatusIcon */ = {
-			isa = PBXGroup;
-			children = (
-				18B1B55518D83D930013B2F0 /* statusSyncBg.tiff */,
-				18B1B55618D83D930013B2F0 /* statusSyncMv.tiff */,
-				18FD3ABC18CD675200BC21C4 /* statusLink.tiff */,
-				F5D2D09C185F0C7600E0AF43 /* statusMsgIcon.tiff */,
-				F5079918175F05AB0019B0C5 /* statusFinishIcon.tiff */,
-				F5079919175F05AB0019B0C5 /* statusNoneIcon.tiff */,
-				F507991A175F05AB0019B0C5 /* statusStopIcon.tiff */,
-			);
-			name = StatusIcon;
-			path = ../Image/StatusIcon;
-			sourceTree = "<group>";
-		};
 		F52DF0161839E0A900451BC4 /* Progress */ = {
 			isa = PBXGroup;
 			children = (
@@ -807,10 +777,6 @@
 				D19D1187169AC4CB002FC4FD /* gokuaiapp.icns in Resources */,
 				D115259C16A0010100F516E4 /* AboutWindowController.xib in Resources */,
 				D115744116A8F4C100EFCE03 /* Growl Registration Ticket.growlRegDick in Resources */,
-				F5D2D09D185F0C7600E0AF43 /* statusMsgIcon.tiff in Resources */,
-				F5079922175F05AB0019B0C5 /* statusFinishIcon.tiff in Resources */,
-				F5079923175F05AB0019B0C5 /* statusNoneIcon.tiff in Resources */,
-				F5079924175F05AB0019B0C5 /* statusStopIcon.tiff in Resources */,
 				F5EA5D4E17D735B1001CB837 /* MainMenu.xib in Resources */,
 				F5E8FECC18502AA900D95136 /* InfoPlist.strings in Resources */,
 				F5E77E4D18728DCC00FF71EF /* aboutbkg.png in Resources */,
@@ -823,9 +789,6 @@
 				F52DF0211839E0A900451BC4 /* bo_hover.png in Resources */,
 				F52DF0221839E0A900451BC4 /* bo_normal.png in Resources */,
 				18258B66185C00FE0034A43D /* ProgressWindowController.xib in Resources */,
-				18FD3AC518CD675300BC21C4 /* statusLink.tiff in Resources */,
-				18B1B55718D83D930013B2F0 /* statusSyncBg.tiff in Resources */,
-				18B1B55818D83D930013B2F0 /* statusSyncMv.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
