@@ -40,6 +40,7 @@
 @synthesize bLogin;
 @synthesize bShowPassword;
 @synthesize bDebugMenu;
+@synthesize bFinishCallback;
 
 @synthesize loginWebWindowController;
 @synthesize launchpadWindowController;
@@ -75,6 +76,7 @@
     self.strHost=@"";
     [self setMainMenu];
     self.bDebugMenu=NO;
+    self.bFinishCallback=NO;
     self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
@@ -91,11 +93,11 @@
             }
         }
     }
-    self.strTransCachePath=[NSString stringWithFormat:@"%@/transcache",[[NSBundle mainBundle] bundlePath]];
+    self.strTransCachePath=[NSString stringWithFormat:@"%@/.oss/transcache",NSHomeDirectory()];
     [Util createfolder:self.strTransCachePath];
-    self.strUserDB=[NSString stringWithFormat:@"%@/user/ossuser.db",[[NSBundle mainBundle] bundlePath]];
+    self.strUserDB=[NSString stringWithFormat:@"%@/.oss/user/ossuser.db",NSHomeDirectory()];
     [Util createfolder:[self.strUserDB stringByDeletingLastPathComponent]];
-    self.strLogPath=[NSString stringWithFormat:@"%@/log",[[NSBundle mainBundle] bundlePath]];
+    self.strLogPath=[NSString stringWithFormat:@"%@/.oss/log",NSHomeDirectory()];
     [Util createfolder:self.strLogPath];
     self.browserWindowControllers=[NSMutableArray array];
     self.progressWindowControllers=[NSMutableDictionary dictionary];
@@ -234,11 +236,39 @@
     [launchpadWindowController becomeFirstResponder];
 }
 
+-(IBAction)onMenuQuitAppClicked:(id)sender
+{
+    NSString *msg=[Util localizedStringForKey:@"是否确定退出?" alternate:nil];
+    NSInteger ret=[NSAlert showGKSheetModalForWindow:nil
+                                             message:msg
+                                                text:@""
+                                        buttonTitles:[NSArray arrayWithObjects:
+                                                      [Util localizedStringForKey:@"确定" alternate:nil],
+                                                      [Util localizedStringForKey:@"取消" alternate:nil],nil]];
+    if (NSAlertFirstButtonReturn == ret) {
+        [NSApp terminate:sender];
+    }
+}
+
 -(void) setMainMenu
 {
     NSMenu* mainMenu = [NSApp mainMenu];
+    
+    NSMenuItem* itemGK = [mainMenu addItemWithTitle:@"" action:nil keyEquivalent:@""];
+    
+    NSMenu *subMenu =[[NSMenu alloc]initWithTitle:[Util localizedStringForKey:@"" alternate:nil]];
+    
+    [subMenu addItemWithTitle:[Util localizedStringForKey:@"隐藏 OSS" alternate:nil] action:@selector(hide:) keyEquivalent:@"h"];
+    [[subMenu addItemWithTitle:[Util localizedStringForKey:@"隐藏 其他" alternate:nil] action:@selector(hideOtherApplications:) keyEquivalent:@"h"] setKeyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask];
+    [subMenu addItem:[NSMenuItem separatorItem]];
+    
+    [subMenu addItemWithTitle:[Util localizedStringForKey:@"退出OSS" alternate:nil] action:@selector(onMenuQuitAppClicked:) keyEquivalent:@"q"];
+    
+    [itemGK setSubmenu:subMenu];
+    [subMenu release];
+    
     NSMenuItem* itemEt = [mainMenu addItemWithTitle:@"" action:nil keyEquivalent:@""];
-    NSMenu *subMenu  =[[NSMenu alloc]initWithTitle:[Util localizedStringForKey:@"编辑" alternate:nil]];
+    subMenu  =[[NSMenu alloc]initWithTitle:[Util localizedStringForKey:@"编辑" alternate:nil]];
     [subMenu addItemWithTitle:[Util localizedStringForKey:@"剪切" alternate:nil] action:@selector(cut:) keyEquivalent:@"x"];
     [subMenu addItemWithTitle:[Util localizedStringForKey:@"复制" alternate:nil] action:@selector(copy:) keyEquivalent:@"c"];
     [subMenu addItemWithTitle:[Util localizedStringForKey:@"粘贴" alternate:nil] action:@selector(paste:) keyEquivalent:@"v"];

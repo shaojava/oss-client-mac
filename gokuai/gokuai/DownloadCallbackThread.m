@@ -63,7 +63,7 @@
     [arrayRet addObject:dicRet];
     [dicRetlist setValue:arrayRet forKey:@"list"];
     NSString * json=[dicRetlist JSONString];
-    if (self.pWebFrame!=nil&&self.pWebScriptOjbect!=nil) {
+    if ([Util getAppDelegate].bFinishCallback&&self.pWebFrame!=nil&&self.pWebScriptOjbect!=nil) {
         [CallbackThread operateCallback:self.pWebScriptOjbect webFrame:self.pWebFrame jsonString:json];
     }
 }
@@ -94,7 +94,7 @@
     }
     [dicRetlist setValue:arrayRet forKey:@"list"];
     NSString * json=[dicRetlist JSONString];
-    if (self.pWebFrame!=nil&&self.pWebScriptOjbect!=nil) {
+    if ([Util getAppDelegate].bFinishCallback&&self.pWebFrame!=nil&&self.pWebScriptOjbect!=nil) {
         [CallbackThread operateCallback:self.pWebScriptOjbect webFrame:self.pWebFrame jsonString:json];
     }
 }

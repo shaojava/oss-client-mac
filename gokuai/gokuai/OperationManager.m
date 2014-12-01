@@ -511,7 +511,7 @@ END:
         if ([Util getAppDelegate].strArea.length==0) {
             [Util getAppDelegate].strArea=@"";
         }
-        NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
+        NSString * dbpath=[NSString stringWithFormat:@"%@/.oss/user/%@/transdb.db",NSHomeDirectory(),[strKeyId sha1HexDigest]];
         [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
         [[TransPortDB shareTransPortDB] OpenPath:dbpath];
         [Util getAppDelegate].bLogin=YES;
@@ -596,7 +596,7 @@ END:
                             if ([Util getAppDelegate].strArea.length==0) {
                                 [Util getAppDelegate].strArea=@"";
                             }
-                            NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[strKeyId sha1HexDigest]];
+                            NSString * dbpath=[NSString stringWithFormat:@"%@/.oss/user/%@/transdb.db",NSHomeDirectory(),[strKeyId sha1HexDigest]];
                             [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
                             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
                             [Util getAppDelegate].bLogin=YES;
@@ -669,7 +669,7 @@ END:
             [Util getAppDelegate].strAccessKey=[[[NSString alloc] initWithData:ret.secret encoding:NSUTF8StringEncoding] autorelease];
             [Util getAppDelegate].strHost=user.strHost;
             [Util getAppDelegate].strArea=user.strArea;
-            NSString * dbpath=[NSString stringWithFormat:@"%@/user/%@/transdb.db",[[NSBundle mainBundle] bundlePath],[[Util getAppDelegate].strAccessID sha1HexDigest]];
+            NSString * dbpath=[NSString stringWithFormat:@"%@/.oss/user/%@/transdb.db",NSHomeDirectory(),[[Util getAppDelegate].strAccessID sha1HexDigest]];
             [Util createfolder:[dbpath stringByDeletingLastPathComponent]];
             [[TransPortDB shareTransPortDB] OpenPath:dbpath];
             [Util getAppDelegate].bLogin=YES;

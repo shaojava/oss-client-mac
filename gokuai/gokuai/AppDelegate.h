@@ -23,6 +23,7 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     BOOL        bLogin;
     BOOL        bShowPassword;
     BOOL        bDebugMenu;
+    BOOL        bFinishCallback;
     
     NSString*   appversion;
     
@@ -53,6 +54,7 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 @property(nonatomic)BOOL bLogin;
 @property(nonatomic)BOOL bShowPassword;
 @property(nonatomic) BOOL bDebugMenu;
+@property(nonatomic)BOOL bFinishCallback;
 
 @property(nonatomic, retain) NSString* appversion;
 

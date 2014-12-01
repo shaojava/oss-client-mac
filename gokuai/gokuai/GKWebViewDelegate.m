@@ -906,6 +906,7 @@ END:
 //            [(LoginWebWindowController*)delegateController onJudgeDealArray];
         }
         if ([NSStringFromClass([delegateController class]) isEqualToString:@"LaunchpadWindowController"]) {
+            [Util getAppDelegate].bFinishCallback=YES;
             if (![[frame name] length]) {
                 [[(NSWindowController*)delegateController window] setTitle:[sender stringByEvaluatingJavaScriptFromString:@"document.title"]];
             }

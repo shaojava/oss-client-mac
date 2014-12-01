@@ -12,7 +12,6 @@
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSMenu</string>
-			<string>NSMenuItem</string>
 			<string>NSCustomObject</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
@@ -45,70 +44,7 @@
 			</object>
 			<object class="NSMenu" id="687339743">
 				<string key="NSTitle"/>
-				<array class="NSMutableArray" key="NSMenuItems">
-					<object class="NSMenuItem" id="20313152">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<object class="NSCustomResource" key="NSOnImage" id="363675358">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">NSMenuCheckmark</string>
-						</object>
-						<object class="NSCustomResource" key="NSMixedImage" id="594451240">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">NSMenuMixedState</string>
-						</object>
-					</object>
-					<object class="NSMenuItem" id="185041272">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-					<object class="NSMenuItem" id="642024895">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-					<object class="NSMenuItem" id="870078736">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-					<object class="NSMenuItem" id="514996065">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-					<object class="NSMenuItem" id="423972464">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-					<object class="NSMenuItem" id="399997619">
-						<reference key="NSMenu" ref="687339743"/>
-						<string key="NSTitle">Item</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="363675358"/>
-						<reference key="NSMixedImage" ref="594451240"/>
-					</object>
-				</array>
+				<array class="NSMutableArray" key="NSMenuItems"/>
 			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -169,15 +105,7 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">8709</int>
 						<reference key="object" ref="687339743"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="20313152"/>
-							<reference ref="185041272"/>
-							<reference ref="642024895"/>
-							<reference ref="870078736"/>
-							<reference ref="514996065"/>
-							<reference ref="423972464"/>
-							<reference ref="399997619"/>
-						</array>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -186,41 +114,6 @@
 						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">MainMenu</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8826</int>
-						<reference key="object" ref="20313152"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8827</int>
-						<reference key="object" ref="185041272"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8828</int>
-						<reference key="object" ref="642024895"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8829</int>
-						<reference key="object" ref="870078736"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8830</int>
-						<reference key="object" ref="514996065"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8831</int>
-						<reference key="object" ref="423972464"/>
-						<reference key="parent" ref="687339743"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8832</int>
-						<reference key="object" ref="399997619"/>
-						<reference key="parent" ref="687339743"/>
 					</object>
 				</array>
 			</object>
@@ -232,13 +125,6 @@
 				<string key="494.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="8709.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="8778.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8826.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8827.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8828.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8829.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8830.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8831.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="8832.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
@@ -246,7 +132,18 @@
 			<nil key="sourceID"/>
 			<int key="maxID">8832</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">AppDelegate</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/AppDelegate.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
@@ -255,9 +152,5 @@
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NSMenuCheckmark">{11, 11}</string>
-			<string key="NSMenuMixedState">{10, 3}</string>
-		</dictionary>
 	</data>
 </archive>
