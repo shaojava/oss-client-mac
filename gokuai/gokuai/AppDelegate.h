@@ -3,6 +3,8 @@
 #import <QuartzCore/CoreAnimation.h>
 #import <WebKit/WebKit.h>
 #import "OperationManager.h"
+#import "AppUpdateWindowController.h"
+#import "MyTask.h"
 
 @class HTTPEngine,LoginWebWindowController,
 LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowController,MyTimer,MoveAndPasteWindowController;
@@ -26,7 +28,11 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     BOOL        bFinishCallback;
     
     NSString*   appversion;
+    NSString*   serversion;
+    NSOperationQueue*  taskqueue;
+    BOOL        bIsUpdate;
     
+    DownloadDmgTask*   _downloadtask;
     
     MyTimer*         mytimer;
     
@@ -34,6 +40,7 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     LoginWebWindowController  *loginWebWindowController;
     AboutWindowController     *aboutWindowController;
     MoveAndPasteWindowController* moveAndPasteWindowController;
+    AppUpdateWindowController *appUpdateWindowController;
     
     NSMutableArray* browserWindowControllers;//BrowserWebWindowController
     NSMutableDictionary* progressWindowControllers;//ProgressWindowControllers
@@ -55,13 +62,18 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 @property(nonatomic)BOOL bShowPassword;
 @property(nonatomic) BOOL bDebugMenu;
 @property(nonatomic)BOOL bFinishCallback;
+@property(nonatomic)BOOL bIsUpdate;
 
 @property(nonatomic, retain) NSString* appversion;
+@property(nonatomic, retain) NSString* serversion;
+@property(nonatomic, retain) NSOperationQueue *  taskqueue;
+@property(nonatomic, retain) DownloadDmgTask* _downloadtask;
 
 
 @property(nonatomic,retain) LoginWebWindowController  *loginWebWindowController;
 @property(nonatomic,retain) LaunchpadWindowController *launchpadWindowController;
 @property(nonatomic,retain) MoveAndPasteWindowController* moveAndPasteWindowController;
+@property(nonatomic,retain) AppUpdateWindowController *appUpdateWindowController;
 @property(nonatomic,retain) NSMutableArray* browserWindowControllers;
 @property(nonatomic,retain) NSMutableDictionary* progressWindowControllers;
 
@@ -79,5 +91,8 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 -(void)startCopy:(OperPackage*)item;
 -(void)startDelete:(OperPackage*)item;
 -(void)startDeleteBucket:(OperPackage*)item;
+
+-(void)showupdate;
+-(void)openUpdateDmg;
 
 @end

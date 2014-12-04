@@ -39,6 +39,9 @@
 		18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BBF0F01A0B22CD0067E395 /* UploadCallbackThread.m */; };
 		18CF331A19FF71F60083C5F1 /* OSSRsa.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CF331919FF71F60083C5F1 /* OSSRsa.m */; };
 		18D1039416A64B3B00E92DAF /* MyTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D1039316A64B3B00E92DAF /* MyTimer.m */; };
+		18E5DDE81A302D2400555DA4 /* AppUpdateWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E5DDE61A302D2400555DA4 /* AppUpdateWindowController.m */; };
+		18E5DDE91A302D2400555DA4 /* AppUpdateWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E5DDE71A302D2400555DA4 /* AppUpdateWindowController.xib */; };
+		18E5DDED1A302F6800555DA4 /* MyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E5DDEC1A302F6800555DA4 /* MyTask.m */; };
 		18E8F61D15F9EE6100A3AE81 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8F61C15F9EE6100A3AE81 /* QuartzCore.framework */; };
 		18EFE9BF16D6384D00D46F3B /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EFE9BE16D6384D00D46F3B /* JSONKit.m */; };
 		18F0B69A15E76134003FF6D6 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F0B69915E76134003FF6D6 /* libsqlite3.dylib */; };
@@ -196,6 +199,11 @@
 		18CF331919FF71F60083C5F1 /* OSSRsa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSRsa.m; sourceTree = "<group>"; };
 		18D1039216A64B3B00E92DAF /* MyTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTimer.h; sourceTree = "<group>"; };
 		18D1039316A64B3B00E92DAF /* MyTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTimer.m; sourceTree = "<group>"; };
+		18E5DDE51A302D2400555DA4 /* AppUpdateWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppUpdateWindowController.h; sourceTree = "<group>"; };
+		18E5DDE61A302D2400555DA4 /* AppUpdateWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUpdateWindowController.m; sourceTree = "<group>"; };
+		18E5DDE71A302D2400555DA4 /* AppUpdateWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppUpdateWindowController.xib; sourceTree = "<group>"; };
+		18E5DDEB1A302F6700555DA4 /* MyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTask.h; sourceTree = "<group>"; };
+		18E5DDEC1A302F6800555DA4 /* MyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTask.m; sourceTree = "<group>"; };
 		18E8F61C15F9EE6100A3AE81 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		18EFE9BD16D6384D00D46F3B /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		18EFE9BE16D6384D00D46F3B /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
@@ -532,6 +540,8 @@
 				1892BDC315F8414300488E70 /* SettingsDb.m */,
 				18D1039216A64B3B00E92DAF /* MyTimer.h */,
 				18D1039316A64B3B00E92DAF /* MyTimer.m */,
+				18E5DDEB1A302F6700555DA4 /* MyTask.h */,
+				18E5DDEC1A302F6800555DA4 /* MyTask.m */,
 				18F13B2A15E89C99003E321B /* Util.h */,
 				18F13B2B15E89C99003E321B /* Util.m */,
 				D167A66A164A354400AEEC62 /* Common.h */,
@@ -579,6 +589,9 @@
 		D1102601168BDD9C00BC47DE /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				18E5DDE51A302D2400555DA4 /* AppUpdateWindowController.h */,
+				18E5DDE61A302D2400555DA4 /* AppUpdateWindowController.m */,
+				18E5DDE71A302D2400555DA4 /* AppUpdateWindowController.xib */,
 				D115259816A0010100F516E4 /* AboutWindowController.h */,
 				D115259916A0010100F516E4 /* AboutWindowController.m */,
 				D115259A16A0010100F516E4 /* AboutWindowController.xib */,
@@ -789,6 +802,7 @@
 				F52DF0211839E0A900451BC4 /* bo_hover.png in Resources */,
 				F52DF0221839E0A900451BC4 /* bo_normal.png in Resources */,
 				18258B66185C00FE0034A43D /* ProgressWindowController.xib in Resources */,
+				18E5DDE91A302D2400555DA4 /* AppUpdateWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,6 +883,8 @@
 				18BBF0EE1A0B22B70067E395 /* DownloadCallbackThread.m in Sources */,
 				18BBF0F11A0B22CD0067E395 /* UploadCallbackThread.m in Sources */,
 				1812C6741A1C2FE300CFB758 /* FileLog.m in Sources */,
+				18E5DDE81A302D2400555DA4 /* AppUpdateWindowController.m in Sources */,
+				18E5DDED1A302F6800555DA4 /* MyTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

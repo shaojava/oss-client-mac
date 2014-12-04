@@ -20,6 +20,7 @@
 #import "OSSRsa.h"
 
 #import "ASIHTTPRequest.h"
+#import "GKHTTPRequest.h"
 
 @implementation AppDelegate
 
@@ -35,6 +36,10 @@
 @synthesize strConfig;
 
 @synthesize appversion;
+@synthesize serversion;
+@synthesize taskqueue;
+@synthesize _downloadtask;
+@synthesize bIsUpdate;
 
 @synthesize bHttps;
 @synthesize bLogin;
@@ -47,6 +52,7 @@
 @synthesize moveAndPasteWindowController;
 @synthesize browserWindowControllers;
 @synthesize progressWindowControllers;
+@synthesize appUpdateWindowController;
 
 - (void)dealloc
 {
@@ -56,6 +62,7 @@
     [mytimer release];
     
     
+    [taskqueue release];
     [appversion release];
     
     if (launchpadWindowController != nil)
@@ -65,6 +72,8 @@
     if (loginWebWindowController) {
         [loginWebWindowController release];
     }
+    if (appUpdateWindowController!=nil) 
+        [appUpdateWindowController release];
     [super dealloc];
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -74,9 +83,12 @@
     self.strAccessKey=@"";
     self.strArea=@"";
     self.strHost=@"";
+    self.serversion=@"0.0.0.0";
     [self setMainMenu];
     self.bDebugMenu=NO;
     self.bFinishCallback=NO;
+    self._downloadtask=nil;
+    self.bIsUpdate=NO;
     self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
@@ -106,7 +118,10 @@
  //   int cacheSizeDisk = 32*1024*1024; // 32MB
  //   NSURLCache *sharedCache = [[[NSURLCache alloc] initWithMemoryCapacity:cacheSizeMemory diskCapacity:cacheSizeDisk diskPath:[UserData shareUserData].configPath] autorelease];
  //   [NSURLCache setSharedURLCache:sharedCache];
-
+    taskqueue=[[NSOperationQueue alloc] init];
+    GetUpdateXML *task=[[GetUpdateXML alloc]init:YES];
+    [taskqueue addOperation:task];
+    [task release];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowClosed:) name:NSWindowWillCloseNotification object:nil];
     self.bHttps = [[SettingsDb shareSettingDb] gethttps];
@@ -119,6 +134,8 @@
     }
     [self getLoginWebWindowController];
 //    [self OpenLaunchpadWindow];
+    
+    mytimer=[[MyTimer alloc]init];
 }
 
 #pragma mark-
@@ -305,6 +322,68 @@
     ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
     [progressWindowController setprogresstype:item type:pc_bucket];
     [progressWindowController displayex];
+}
+
+-(void)showupdate
+{
+    if (self.bIsUpdate) {
+        return;
+    }
+    self.bIsUpdate=YES;
+    NSString* message=[NSString stringWithFormat:@"软件最新版本已经更新到[%@]版本，是否立即更新?",[Util getAppDelegate].serversion];
+    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:@"是" alternateButton:@"否"otherButton:nil informativeTextWithFormat:@""];
+    if ([alert runModal]==NSAlertDefaultReturn) {
+        if (!self._downloadtask) {
+            NSString* strUrl;
+            if ([Util getAppDelegate].bHttps)
+            {
+                strUrl =[NSString stringWithFormat:
+                         @"https://client.gokuai.com/interface/check_version?n=mac&v=%@",
+                         [Util getAppDelegate].appversion];
+            }
+            else
+            {
+                strUrl =[NSString stringWithFormat:
+                         @"http://client.gokuai.com/interface/check_version?n=mac&v=%@",
+                         [Util getAppDelegate].appversion];;
+            }
+            GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl method:@"GET" header:nil bodyData:nil] autorelease];
+            NSHTTPURLResponse* response;
+            NSData* jsonData = [request connectNetSyncWithResponse:&response error:nil];
+            if (jsonData!=nil) {
+                NSString *jsonInfo = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                NSDictionary* dictionary=[jsonInfo objectFromJSONString];
+                if ([dictionary isKindOfClass:[NSDictionary class]]) {
+                    NSString * downloadurl=[dictionary objectForKey:@"path"];
+                    NSInteger filesize=[[dictionary objectForKey:@"size"] intValue];
+                    NSString * path=[NSString stringWithFormat:@"%@/ossupdate.dmg",NSTemporaryDirectory()];
+                    self._downloadtask=[[[DownloadDmgTask alloc]init:downloadurl savepath:path size:filesize]autorelease];
+                    [taskqueue addOperation:self._downloadtask];
+                    if (appUpdateWindowController == nil) {
+                        appUpdateWindowController = [[AppUpdateWindowController alloc]initWithWindowNibName:@"AppUpdateWindowController"];
+                    }
+                    [appUpdateWindowController showWindow:self];
+                    appUpdateWindowController.serVersion = self.serversion;
+                    appUpdateWindowController.appVersion = self.appversion;
+                }
+            }
+        }
+    }
+    self.bIsUpdate=NO;
+}
+
+-(void)openUpdateDmg
+{
+    NSString* message=[NSString stringWithFormat:@"软件已经升级到最新的[%@]版本，立即安装？",[Util getAppDelegate].serversion];
+    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:@"确定" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+    if ([alert runModal]==NSAlertDefaultReturn) {
+        NSString * path=[NSString stringWithFormat:@"%@/ossupdate.dmg",NSTemporaryDirectory()];
+        NSTask *  theProcess = [[[NSTask alloc] init] autorelease];
+        [theProcess setLaunchPath:@"/usr/bin/open"];
+        [theProcess setArguments:[NSArray arrayWithObject:path]];
+        [theProcess launch];
+        [NSApp terminate:nil];
+    }
 }
 
 @end

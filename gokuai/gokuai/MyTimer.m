@@ -31,28 +31,16 @@
 
 -(void)run
 {
-    CFAbsoluteTime timericonrun = CFAbsoluteTimeGetCurrent();
-    CFAbsoluteTime timerspeed = CFAbsoluteTimeGetCurrent();
-    CFAbsoluteTime timercount = CFAbsoluteTimeGetCurrent();
     CFAbsoluteTime timerupdate = CFAbsoluteTimeGetCurrent();
     while (TRUE) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         @try {
             CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
-            if (now-timericonrun>1) {
-              
-                timericonrun=now;
-            }
-            if (now-timerspeed>2) {
-                
-                timerspeed=now;
-            }
-            if (now-timercount>4) {
-                
-                timercount=now;
-            }
             if (now-timerupdate>3600) {
-                
+                [Util getAppDelegate].taskqueue=[[NSOperationQueue alloc] init];
+                GetUpdateXML *task=[[GetUpdateXML alloc]init:YES];
+                [[Util getAppDelegate].taskqueue addOperation:task];
+                [task release];
                 timerupdate=now;
             }
         }
