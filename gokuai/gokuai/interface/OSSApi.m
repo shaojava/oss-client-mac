@@ -715,6 +715,26 @@
     return [NSString stringWithFormat:@"OSS %@:%@",accessid,[HMAC base64Encoded]];
 }
 
++(NSString*)Authorization:(NSArray*)keys
+{
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"key" ascending:YES];
+    NSArray *sortedArray = [keys sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSMutableString *signString = [[[NSMutableString alloc] init] autorelease];
+    for (int i=0;i<[sortedArray count];i++) {
+        if (i!=0) {
+            [signString appendString:@"\n"];
+        }
+        OssSignKey* sk=[sortedArray objectAtIndex:i];
+        [signString appendString:sk.value];
+    }
+    NSString * strKey=@"staycloud";
+    const char * secretStr = [strKey UTF8String];
+    const char * signStr = [signString UTF8String];
+    unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, secretStr, [strKey lengthOfBytesUsingEncoding:NSUTF8StringEncoding], signStr, [signString lengthOfBytesUsingEncoding:NSUTF8StringEncoding], cHMAC);
+    NSData *HMAC = [[[NSData alloc] initWithBytes:cHMAC length:CC_SHA1_DIGEST_LENGTH] autorelease];
+    return [HMAC base64Encoded]; 
+}
 +(NSString*)Signature:(NSString*)method contentmd5:(NSString*)contentmd5 contenttype:(NSString*)contenttype date:(ULONGLONG)date keys:(NSArray*)keys resource:(NSString*)resource
 {
     
@@ -1153,4 +1173,124 @@
     return [NSString stringWithFormat:@"http://%@",url];
 }
 
++(BOOL)ReportServer:(NSString*)hash resouce:(NSString*)resouce version:(NSString*)version app:(NSString*)app
+{
+    if (resouce.length==0) {
+        resouce=@"aliyun";
+    }
+    ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+    NSString* date=[NSString stringWithFormat:@"%llu",time];
+    NSString* method=@"GET";
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"uuid";
+    item.value=hash;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"res";
+    item.value=resouce;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"ver";
+    item.value=version;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"app";
+    item.value=app;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"timespan";
+    item.value=date;
+    [array addObject:item];
+    [item release];
+    NSString * retsign=[self Authorization:array];
+    item=[[OssSignKey alloc]init];
+    item.key=@"sign";
+    item.value=retsign;
+    [array addObject:item];
+    [item release];
+    
+    NSString* strUrl=[NSString stringWithFormat:@"http://ossupdate.jiagouyun.com/Interface/report%@",[self get_postdata:array]];
+    NSLog(@"%@",strUrl);
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:nil
+                                                        bodyData:nil] autorelease];
+    NSHTTPURLResponse* response;
+    [request connectNetSyncWithResponse:&response error:nil];
+    NSInteger status=[response statusCode];
+    if (status>=200&&status<400) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
++(NSData*)CheckServer:(NSString*)resouce version:(NSString*)version app:(NSString*)app
+{
+    if (resouce.length==0) {
+        resouce=@"aliyun";
+    }
+    ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+    NSString* date=[NSString stringWithFormat:@"%llu",time];
+    NSString* method=@"GET";
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"res";
+    item.value=resouce;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"ver";
+    item.value=version;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"app";
+    item.value=app;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"timespan";
+    item.value=date;
+    [array addObject:item];
+    [item release];
+    NSString * retsign=[self Authorization:array];
+    item=[[OssSignKey alloc]init];
+    item.key=@"sign";
+    item.value=retsign;
+    [array addObject:item];
+    [item release];
+    
+    NSString* strUrl=[NSString stringWithFormat:@"http://ossupdate.jiagouyun.com/Interface/check_version%@",[self get_postdata:array]];
+    NSLog(@"%@",strUrl);
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:nil
+                                                        bodyData:nil] autorelease];
+    NSHTTPURLResponse* response;
+    NSData* data=[request connectNetSyncWithResponse:&response error:nil];
+    NSInteger status=[response statusCode];
+    if (status==200) {
+        return data;
+    }
+    else {
+        return nil;
+    }
+}
+
++(NSString*)get_postdata:(NSArray*)keys
+{
+    NSMutableString *signString = [[[NSMutableString alloc] init] autorelease];
+    for (int i=0;i<[keys count];i++) {
+        OssSignKey* sk=[keys objectAtIndex:i];
+        [signString appendFormat:@"/%@/%@",sk.key,[sk.value urlEncoded]];
+    }
+    return [NSString stringWithFormat:@"%@",signString];
+}
 @end

@@ -38,8 +38,7 @@
             TransTaskItem *item=[[TransPortDB shareTransPortDB] Get_Upload];
             if (item.strBucket.length) {
                 UploadTask *pTask=[[[UploadTask alloc] init:item]autorelease];
-                [[TransPortDB shareTransPortDB] Update_UploadStatus:item.strPathhash status:TRANSTASK_START];
-                [[TransPortDB shareTransPortDB] Update_UploadActlast:item.strPathhash];
+                [[TransPortDB shareTransPortDB] Update_UploadStartActlast:item.strPathhash];
                 [self.pLock lock];
                 [self.pQueue addOperation:pTask];
                 [self.pArray addObject:pTask];

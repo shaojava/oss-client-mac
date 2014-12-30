@@ -110,15 +110,13 @@
     NSString *temppath=[NSString stringWithFormat:@"%@%@",self.pItem.strFullpath,OSSEXT];
     if (self.pItem.ullFilesize!=0) {
         if ([Util movefile:temppath newfile:self.pItem.strFullpath]) {
-            [[TransPortDB shareTransPortDB] Update_DownloadOffset:self.pItem.strFullpath offset:self.pItem.ullFilesize];
-            [[TransPortDB shareTransPortDB] Update_DownloadStatus:self.pItem.strFullpath status:TRANSTASK_FINISH];
+            [[TransPortDB shareTransPortDB] Update_DownloadOffsetFinish:self.pItem.strFullpath offset:self.pItem.ullFilesize];
             [self DeleteTmpFile];
             self.pItem.nStatus=TRANSTASK_FINISH;
         }
     }
     else {
-        [[TransPortDB shareTransPortDB] Update_DownloadOffset:self.pItem.strFullpath offset:self.pItem.ullFilesize];
-        [[TransPortDB shareTransPortDB] Update_DownloadStatus:self.pItem.strFullpath status:TRANSTASK_FINISH];
+        [[TransPortDB shareTransPortDB] Update_DownloadOffsetFinish:self.pItem.strFullpath offset:self.pItem.ullFilesize];
         [self DeleteTmpFile];
         self.pItem.nStatus=TRANSTASK_FINISH;
     }

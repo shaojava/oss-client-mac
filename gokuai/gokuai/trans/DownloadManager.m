@@ -38,8 +38,7 @@
             TransTaskItem *item=[[TransPortDB shareTransPortDB] Get_Download];
             if (item.strBucket.length) {
                 DownloadTask *pTask=[[[DownloadTask alloc] init:item]autorelease];
-                [[TransPortDB shareTransPortDB] Update_DownloadStatus:item.strFullpath status:TRANSTASK_START];
-                [[TransPortDB shareTransPortDB] Update_DownloadActlast:item.strFullpath];
+                [[TransPortDB shareTransPortDB] Update_DownloadStartActlast:item.strFullpath];
                 [self.pLock lock];
                 [self.pQueue addOperation:pTask];
                 [self.pArray addObject:pTask];

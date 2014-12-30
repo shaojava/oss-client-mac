@@ -699,7 +699,7 @@ END:
     if ([Util getAppDelegate].strArea.length) {
         ret=[NSString stringWithFormat:@"\"%@\"",[Util getAppDelegate].strArea];
     }
-    return @"";
+    return ret;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

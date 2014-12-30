@@ -34,9 +34,17 @@
 
 +(NSString*)Authorization:(NSString*)method contentmd5:(NSString*)contentmd5 contenttype:(NSString*)contenttype date:(NSString*)date keys:(NSArray*)keys resource:(NSString*)resource;
 +(NSString*)Authorization:(NSString *)method contentmd5:(NSString *)contentmd5 contenttype:(NSString *)contenttype date:(NSString *)date keys:(NSArray *)keys resource:(NSString *)resource accessid:(NSString*)accessid accesskey:(NSString*)accesskey;
++(NSString*)Authorization:(NSArray*)keys;
+
 +(NSString*)Signature:(NSString*)method contentmd5:(NSString*)contentmd5 contenttype:(NSString*)contenttype date:(ULONGLONG)date keys:(NSArray*)keys resource:(NSString*)resource;
 +(NSString*)GetContentType:(NSString*)objectname;
 +(NSDictionary*)GetHeader:(NSArray*)keys;
 +(NSString*)AddHttpOrHttps:(NSString*)url;
+
+
+
++(BOOL)ReportServer:(NSString*)hash resouce:(NSString*)resouce version:(NSString*)version app:(NSString*)app;
++(NSData*)CheckServer:(NSString*)resouce version:(NSString*)version app:(NSString*)app;
++(NSString*)get_postdata:(NSArray*)keys;
 
 @end

@@ -2,7 +2,7 @@
 #import "TaskBask.h"
 #import "PeerBase.h"
 
-#define PIECESIZE   1048576
+#define PIECESIZE   5242880
 
 @implementation TaskBask
 
@@ -27,7 +27,7 @@
     if (self=[super init]) {
         self.pItem=item;
         self.nMax=5;
-        ULONGLONG piecesize=(item.ullFilesize+9999)/10000;
+        ULONGLONG piecesize=(item.ullFilesize+4999)/5000;
         self.ullPiecesize=piecesize>PIECESIZE?piecesize:PIECESIZE;
         self.listPeer = [[[NSMutableArray alloc]init] autorelease];
         self.pLocksc = [[[NSLock alloc]init]autorelease];

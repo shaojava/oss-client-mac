@@ -4,6 +4,7 @@
 #import "GKHTTPRequest.h"
 #import "AppUpdateWindowController.h"
 #import "JSONKit.h"
+#import "OSSApi.h"
 
 @implementation MyTask
 
@@ -34,22 +35,7 @@
 - (void)main{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     @try {
-        NSString *strUrl;
-        if ([Util getAppDelegate].bHttps)
-        {
-            strUrl =[NSString stringWithFormat:
-                     @"https://client.gokuai.com/interface/check_version?n=mac&v=%@",
-                     [Util getAppDelegate].appversion];
-        }
-        else
-        {
-            strUrl =[NSString stringWithFormat:
-                     @"http://client.gokuai.com/interface/check_version?n=mac&v=%@",
-                     [Util getAppDelegate].appversion];;
-        }
-        GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl method:@"GET" header:nil bodyData:nil] autorelease];
-        NSHTTPURLResponse* response;
-        NSData* jsonData = [request connectNetSyncWithResponse:&response error:nil];
+        NSData* jsonData = [OSSApi CheckServer:[Util getAppDelegate].strSource version:[Util getAppDelegate].appversion app:@"mac"];
         if (jsonData!=nil) {
             NSString *jsonInfo = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             NSDictionary* dictionary=[jsonInfo objectFromJSONString];

@@ -18,6 +18,7 @@
 #import "ProgressWindowController.h"
 
 #import "OSSRsa.h"
+#import "OSSApi.h"
 
 #import "ASIHTTPRequest.h"
 #import "GKHTTPRequest.h"
@@ -34,6 +35,7 @@
 @synthesize strTransDB;
 @synthesize strLogPath;
 @synthesize strConfig;
+@synthesize strSource;
 
 @synthesize appversion;
 @synthesize serversion;
@@ -111,6 +113,10 @@
         if (filehandle) {
             NSData * filedata=[filehandle readDataToEndOfFile];
             self.strConfig=[[NSString alloc] initWithData:filedata encoding:NSUTF8StringEncoding];
+            NSDictionary* dictionary=[self.strConfig objectFromJSONString];
+            if ([dictionary isKindOfClass:[NSDictionary class]]) {
+                self.strSource=[dictionary objectForKey:@"source"];
+            }
         }
     }
     self.strTransCachePath=[NSString stringWithFormat:@"%@/.oss/transcache",NSHomeDirectory()];
@@ -122,6 +128,9 @@
     self.browserWindowControllers=[NSMutableArray array];
     self.progressWindowControllers=[NSMutableDictionary dictionary];
     self.appversion=[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    NSString* device=[OSSRsa getcomputerid];
+    [OSSApi ReportServer:[device sha1HexDigest] resouce:self.strSource version:self.appversion app:@"mac"];
  //   int cacheSizeMemory = 4*1024*1024; // 4MB
  //   int cacheSizeDisk = 32*1024*1024; // 32MB
  //   NSURLCache *sharedCache = [[[NSURLCache alloc] initWithMemoryCapacity:cacheSizeMemory diskCapacity:cacheSizeDisk diskPath:[UserData shareUserData].configPath] autorelease];

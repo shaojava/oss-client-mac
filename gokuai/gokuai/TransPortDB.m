@@ -117,6 +117,19 @@
     return ret;
 }
 
+-(BOOL)Update_DownloadStartActlast:(NSString*)fullpath
+{
+    __block BOOL ret=NO;
+    NSString *rfullpath=[fullpath stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+         NSString *sql =[NSString stringWithFormat:@"update Download set status='%d',actlast='%llu',errornum='0',errormsg='' where fullpath='%@';",TRANSTASK_START,time,rfullpath];
+         ret=[db executeUpdate:sql];
+     }];
+    return ret;
+}
+
 -(BOOL)Update_DownloadStatus:(NSString*)fullpath status:(NSInteger)status
 {
     __block BOOL ret=NO;
@@ -136,6 +149,18 @@
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
          NSString *sql =[NSString stringWithFormat:@"update Download set offset='%llu' where fullpath='%@';",offset,rfullpath];
+         ret=[db executeUpdate:sql];
+     }];
+    return ret;
+}
+
+-(BOOL)Update_DownloadOffsetFinish:(NSString *)fullpath offset:(unsigned long long)offset
+{
+    __block BOOL ret=NO;
+    NSString *rfullpath=[fullpath stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"update Download set offset='%llu',status='%d' where fullpath='%@';",offset,TRANSTASK_FINISH,rfullpath];
          ret=[db executeUpdate:sql];
      }];
     return ret;
@@ -332,6 +357,18 @@
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
          NSString *sql =[NSString stringWithFormat:@"update Upload set status='%d',actlast='0',errornum='0',errormsg='' where bucket='%@' and object='%@';",TRANSTASK_NORMAL,bucket,robject];
+         ret=[db executeUpdate:sql];
+     }];
+    return ret;
+}
+
+-(BOOL)Update_UploadStartActlast:(NSString*)pathhash
+{
+    __block BOOL ret=NO;
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+         NSString *sql =[NSString stringWithFormat:@"update Upload set status='%d',actlast='%llu',errornum='0',errormsg='' where pathhash='%@';",TRANSTASK_START,time,pathhash];
          ret=[db executeUpdate:sql];
      }];
     return ret;

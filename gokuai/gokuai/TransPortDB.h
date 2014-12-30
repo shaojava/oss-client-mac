@@ -21,8 +21,11 @@
 #pragma mark- 传输表的操作
 -(BOOL)Add_Download:(TransTaskItem*)item;
 -(BOOL)Update_DownloadStart:(NSString*)fullpath;
+-(BOOL)Update_DownloadStartActlast:(NSString*)fullpath;
+
 -(BOOL)Update_DownloadStatus:(NSString*)fullpath status:(NSInteger)status;
 -(BOOL)Update_DownloadOffset:(NSString*)fullpath offset:(ULONGLONG)offset;
+-(BOOL)Update_DownloadOffsetFinish:(NSString *)fullpath offset:(unsigned long long)offset;
 -(BOOL)Update_DownloadActlast:(NSString*)fullpath;
 -(BOOL)Update_DownloadActlast:(NSString *)fullpath time:(ULONGLONG)time;
 -(BOOL)Update_DownloadError:(NSString*)fullpath error:(NSInteger)error msg:(NSString*)msg;
@@ -37,6 +40,7 @@
 
 -(BOOL)Add_Upload:(TransTaskItem*)item;
 -(BOOL)Update_UploadStart:(NSString*)bucket object:(NSString*)object;
+-(BOOL)Update_UploadStartActlast:(NSString*)pathhash;
 -(BOOL)Update_UploadStatus:(NSString*)pathhash status:(NSInteger)status;
 -(BOOL)Update_UploadStatus:(NSString*)bucket object:(NSString*)object status:(NSInteger)status;
 -(BOOL)Update_UploadOffset:(NSString*)pathhash offset:(ULONGLONG)offset;
