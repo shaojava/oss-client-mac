@@ -37,7 +37,6 @@
         @try {
             CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
             if (now-timerupdate>3600) {
-                [Util getAppDelegate].taskqueue=[[NSOperationQueue alloc] init];
                 GetUpdateXML *task=[[GetUpdateXML alloc]init:YES];
                 [[Util getAppDelegate].taskqueue addOperation:task];
                 [task release];

@@ -105,6 +105,14 @@
             }
         }
     }
+    debugpath =[NSString stringWithFormat:@"%@/config/config.json",[[NSBundle mainBundle] bundlePath]];
+    if ([Util existfile:debugpath]) {
+        NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
+        if (filehandle) {
+            NSData * filedata=[filehandle readDataToEndOfFile];
+            self.strConfig=[[NSString alloc] initWithData:filedata encoding:NSUTF8StringEncoding];
+        }
+    }
     self.strTransCachePath=[NSString stringWithFormat:@"%@/.oss/transcache",NSHomeDirectory()];
     [Util createfolder:self.strTransCachePath];
     self.strUserDB=[NSString stringWithFormat:@"%@/.oss/user/ossuser.db",NSHomeDirectory()];
