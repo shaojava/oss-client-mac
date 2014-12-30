@@ -1215,7 +1215,6 @@
     [item release];
     
     NSString* strUrl=[NSString stringWithFormat:@"http://ossupdate.jiagouyun.com/Interface/report%@",[self get_postdata:array]];
-    NSLog(@"%@",strUrl);
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:nil
@@ -1268,7 +1267,6 @@
     [item release];
     
     NSString* strUrl=[NSString stringWithFormat:@"http://ossupdate.jiagouyun.com/Interface/check_version%@",[self get_postdata:array]];
-    NSLog(@"%@",strUrl);
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:nil
