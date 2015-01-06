@@ -194,6 +194,10 @@ END:
                         savItem.bDir=YES;
                         temp=[savItem.strObject substringToIndex:savItem.strObject.length-1];
                     }
+                    if (savItem.strObject.length==0) {
+                        savItem.bDir=YES;
+                        temp=savItem.strBucket;
+                    }
                     savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp lastPathComponent]];
                     if (savItem.strObject.length&&savItem.strBucket.length) {
                         [array addObject:savItem];

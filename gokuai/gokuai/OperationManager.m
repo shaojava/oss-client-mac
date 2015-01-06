@@ -269,7 +269,9 @@ END:
         tranitem.ullFilesize=item.ullFilesize;
         tranitem.strPathhash=item.strEtag;
         tranitem.nStatus=TRANSTASK_NORMAL;
-        [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+        if (tranitem.strObject.length>0) {
+            [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+        }
         if (item.bDir) {
             NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
             if (ret.length>0) {
