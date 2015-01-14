@@ -9,10 +9,10 @@
     NSMutableArray*     pArray;
     NSOperationQueue*   pQueue;
     NSThread*           pThread;
-    NSInteger           nSpeed;
     ULONGLONG           ullSize;
     ULONGLONG           ullSizeTime;
     NSInteger           nMax;
+    NSInteger           nAdding;
 }
 
 @property(nonatomic)BOOL bOut;
@@ -21,10 +21,10 @@
 @property(nonatomic,retain)NSMutableArray* pArray;
 @property(nonatomic,retain)NSOperationQueue* pQueue;
 @property(nonatomic,retain)NSThread* pThread;
-@property(nonatomic,assign)NSInteger nSpeed;
 @property(nonatomic,assign)ULONGLONG ullSize;
 @property(nonatomic,assign)ULONGLONG ullSizeTime;
 @property(nonatomic,assign)NSInteger nMax;
+@property(nonatomic)NSInteger nAdding;
 
 -(id)init;
 -(void)uninit;
@@ -34,5 +34,7 @@
 -(ULONGLONG)GetSpeed;
 -(ULONGLONG)GetSpeed:(NSString*)bucket object:(NSString*)object;
 -(NSMutableArray*)GetAll;
+-(void)startAdding;
+-(void)finishAdding;
 
 @end

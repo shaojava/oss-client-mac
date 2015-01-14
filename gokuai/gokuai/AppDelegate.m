@@ -112,7 +112,7 @@
         NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
         if (filehandle) {
             NSData * filedata=[filehandle readDataToEndOfFile];
-            self.strConfig=[[NSString alloc] initWithData:filedata encoding:NSUTF8StringEncoding];
+            self.strConfig=[[[NSString alloc] initWithData:filedata encoding:NSUTF8StringEncoding] autorelease];
             NSDictionary* dictionary=[self.strConfig objectFromJSONString];
             if ([dictionary isKindOfClass:[NSDictionary class]]) {
                 self.strSource=[dictionary objectForKey:@"source"];
@@ -191,7 +191,7 @@
     }
     
     if (nil==retBrowserController) {
-        retBrowserController=[[BrowserWebWindowController alloc]initWithWindowNibName:@"BrowserWebWindowController"];
+        retBrowserController=[[[BrowserWebWindowController alloc]initWithWindowNibName:@"BrowserWebWindowController"] autorelease];
         [browserWindowControllers addObject:retBrowserController];
     }
     
@@ -322,21 +322,21 @@
 
 -(void)startCopy:(OperPackage*)item
 {
-    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    ProgressWindowController* progressWindowController=[[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"] autorelease];
     [progressWindowController setprogresstype:item type:pc_copy];
     [progressWindowController displayex];
 }
 
 -(void)startDelete:(OperPackage*)item
 {
-    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    ProgressWindowController* progressWindowController=[[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"]autorelease];
     [progressWindowController setprogresstype:item type:pc_delete];
     [progressWindowController displayex];
 }
 
 -(void)startDeleteBucket:(OperPackage*)item
 {
-    ProgressWindowController* progressWindowController=[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"];
+    ProgressWindowController* progressWindowController=[[[ProgressWindowController alloc] initWithWindowNibName:@"ProgressWindowController"]autorelease];
     [progressWindowController setprogresstype:item type:pc_bucket];
     [progressWindowController displayex];
 }
@@ -368,7 +368,7 @@
             NSHTTPURLResponse* response;
             NSData* jsonData = [request connectNetSyncWithResponse:&response error:nil];
             if (jsonData!=nil) {
-                NSString *jsonInfo = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                NSString *jsonInfo = [[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] autorelease];
                 NSDictionary* dictionary=[jsonInfo objectFromJSONString];
                 if ([dictionary isKindOfClass:[NSDictionary class]]) {
                     NSString * downloadurl=[dictionary objectForKey:@"path"];

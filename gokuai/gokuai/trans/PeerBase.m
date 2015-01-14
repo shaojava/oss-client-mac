@@ -16,12 +16,12 @@
 
 -(void)dealloc
 {
-    pTask=nil;
-    strHost=nil;
-    strBucket=nil;
-    strObject=nil;
-    strHeader=nil;
-    pRequest=nil;
+    self.pTask=nil;
+    self.strHost=nil;
+    self.strBucket=nil;
+    self.strObject=nil;
+    self.strHeader=nil;
+    self.pRequest=nil;
     [super dealloc];
 }
 

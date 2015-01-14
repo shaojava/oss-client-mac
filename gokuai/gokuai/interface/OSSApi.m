@@ -159,7 +159,6 @@
             [resource appendString:maxkeys];
             [resource1 appendString:@"?max-keys="];
             [resource1 appendString:[maxkeys urlEncoded]];
-            bHave=YES;
         }
     }
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
@@ -271,7 +270,7 @@
 +(BOOL)DeleteObject:(NSString*)host bucketname:(NSString*)bucketname objectnames:(NSArray*)objectnamss quiet:(BOOL)quiet ret:(OSSRet**)ret
 {
     NSString* date=[Util getGMTDate];
-    OSSDeleteMultipleBody *ossbody=[[OSSDeleteMultipleBody alloc] init];
+    OSSDeleteMultipleBody *ossbody=[[[OSSDeleteMultipleBody alloc] init] autorelease];
     [ossbody addList:objectnamss quiet:quiet];
     NSString* body=[ossbody GetBody];
     NSData *bodydata=[body dataUsingEncoding:NSUTF8StringEncoding];
@@ -546,7 +545,7 @@
 +(BOOL)CompleteMultipartUpload:(NSString*)host bucketname:(NSString*)bucketname objectname:(NSString*)objectname uploadid:(NSString*)uploadid parts:(NSArray*)parts ret:(OSSRet**)ret
 {
     NSString* date=[Util getGMTDate];
-    OSSCompleteMultipartUploadBody *ossbody=[[OSSCompleteMultipartUploadBody alloc] init];
+    OSSCompleteMultipartUploadBody *ossbody=[[[OSSCompleteMultipartUploadBody alloc] init] autorelease];
     [ossbody setParts:parts];
     NSString* body=[ossbody GetBody];
     NSData *bodydata=[body dataUsingEncoding:NSUTF8StringEncoding];

@@ -70,12 +70,13 @@
 
 -(void)SetDTaskMax:(NSInteger)num
 {
+    num=99;
     [self.dManager SetMax:num];
 }
 
 -(void)SetUTaskMax:(NSInteger)num
 {
-    
+    num=99;
     [self.uManager SetMax:num];
 }
 
@@ -178,6 +179,9 @@
     {
         NSString *filename=[dirArray objectAtIndex:i];
         NSString *temppath=[NSString stringWithFormat:@"%@/%@",fullpath,filename];
+        if ([Util islinkfile:temppath]) {
+            continue;
+        }
         if([Util isdir:temppath]){
             TransTaskItem *item=[[TransTaskItem alloc]init];
             item.strHost=host;
@@ -208,6 +212,8 @@
 
 -(void)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array
 {
+    [self.uManager startAdding];
+    [[TransPortDB shareTransPortDB] begin];
     for (NSString* path in array) {
         if ([Util isdir:path]) {
             TransTaskItem *item=[[TransTaskItem alloc]init];
@@ -234,6 +240,8 @@
             [item release];
         }
     }
+    [[TransPortDB shareTransPortDB] end];
+    [self.uManager finishAdding];
 }
 
 @end

@@ -52,4 +52,6 @@
         dst:(NSString*)dstpath;
 +(NSString*)ChangeHost:(NSString*)host;
 
++(BOOL)islinkfile:(NSString*)path;
+
 @end

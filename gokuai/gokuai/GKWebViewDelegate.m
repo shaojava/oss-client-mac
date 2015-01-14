@@ -54,7 +54,7 @@
 {
     BrowserWebWindowController* browserController=nil;
     if (!sole) {
-        browserController=[[BrowserWebWindowController alloc]initWithWindowNibName:@"BrowserWebWindowController"];
+        browserController=[[[BrowserWebWindowController alloc]initWithWindowNibName:@"BrowserWebWindowController"] autorelease];
     }
     else {
         browserController=[[Util getAppDelegate] getBrowserWebWindowController:solestr];

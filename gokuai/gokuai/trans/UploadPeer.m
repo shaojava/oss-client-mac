@@ -36,10 +36,10 @@
 
 -(void)dealloc
 {
-    pFileHandle=nil;
-    strUploadID=nil;
-    retData=nil;
-    strDateMd5=nil;
+    self.pFileHandle=nil;
+    self.strUploadID=nil;
+    self.retData=nil;
+    self.strDateMd5=nil;
     [super dealloc];
 }
 

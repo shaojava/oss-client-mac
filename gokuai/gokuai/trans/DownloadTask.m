@@ -22,8 +22,8 @@
 
 -(void)dealloc
 {
-    pFileHandle=nil;
-    pIndexFileHandle=nil;
+    self.pFileHandle=nil;
+    self.pIndexFileHandle=nil;
     [super dealloc];
 }
 

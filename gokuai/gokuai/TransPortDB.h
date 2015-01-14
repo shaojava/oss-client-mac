@@ -64,5 +64,7 @@
 -(void)ResetError;
 -(void)ResetErrorTime;
 -(void)ResetStart;
+-(void)begin;
+-(void)end;
 
 @end

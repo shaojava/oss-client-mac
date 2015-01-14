@@ -36,7 +36,7 @@
 {
     if (data==nil)
         return NO;
-    NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *jsonString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     if (jsonString==nil)
         return NO;
     return [self Load:jsonString];
@@ -45,7 +45,7 @@
 -(BOOL) Load:(NSString*)content
 {
     BOOL ret=NO;
-    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithXMLString:content options:0 error:nil];
+    GDataXMLDocument *doc = [[[GDataXMLDocument alloc] initWithXMLString:content options:0 error:nil] autorelease];
     if (doc!=nil) {
         rootElement = [doc rootElement];
         ret=[self Parse];

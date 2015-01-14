@@ -172,6 +172,7 @@
                 copyitem.strDstBucket=dstbucket;
                 copyitem.strDstObject=[NSString stringWithFormat:@"%@%@",dstobject,[copyitem.strObject substringFromIndex:object.length]];
                 [array addObject:copyitem];
+                [copyitem release];
             }
             if (ret.strNextMarker.length==0) {
                 break;
@@ -186,7 +187,7 @@
 
 -(BOOL) copyfiles:(NSArray*)srcfiles dstobject:(NSString*)dstobject;
 {
-    NSArray* temp=[[NSArray alloc]initWithArray:srcfiles];
+    NSArray* temp=[[[NSArray alloc]initWithArray:srcfiles] autorelease];
     BOOL bAll = NO;
     BOOL bKeepBoth = NO;
     for (CopyFileItem* copyitem in temp) {

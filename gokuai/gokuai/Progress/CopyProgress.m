@@ -216,13 +216,10 @@
     }
     [ProgressManager sharedInstance].nCount=items.count;
     if (items.count==1) {
-        CopyFileItem* cpyfile=[items objectAtIndex:0];
-        [ProgressManager sharedInstance].strFilename=[cpyfile.strObject lastPathComponent];
-    }
-    if (items.count==1) {
         DeleteFileItem* item=[items objectAtIndex:0];
+        [ProgressManager sharedInstance].strFilename=[item.strObject lastPathComponent];
         OSSRet *ret;
-        if (![OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectname:item.strObject ret:&ret]) {
+        if (![OSSApi DeleteObject:host bucketname:bucket objectname:item.strObject ret:&ret]) {
             NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
             [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
         }
@@ -242,9 +239,8 @@
                 [array addObject:item.strObject];
             }
             OSSRet *ret;
-            if (![OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectnames:array quiet:YES ret:&ret]) {
-                NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
+            if (![OSSApi DeleteObject:host bucketname:bucket objectnames:array quiet:YES ret:&ret]) {
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:@"" ret:ret];
                 self.bTimer=NO;
                 if (![self isCancelled]) {
                     progressCallBack(0);
@@ -298,13 +294,10 @@
     }
     [ProgressManager sharedInstance].nCount=items.count;
     if (items.count==1) {
-        CopyFileItem* cpyfile=[items objectAtIndex:0];
-        [ProgressManager sharedInstance].strFilename=[cpyfile.strObject lastPathComponent];
-    }
-    if (items.count==1) {
         DeleteFileItem* item=[items objectAtIndex:0];
+        [ProgressManager sharedInstance].strFilename=[item.strObject lastPathComponent];
         OSSRet *ret;
-        if (![OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectname:item.strObject ret:&ret]) {
+        if (![OSSApi DeleteObject:host bucketname:bucket objectname:item.strObject ret:&ret]) {
             NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
             [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
         }
@@ -324,9 +317,8 @@
                 [array addObject:item.strObject];
             }
             OSSRet *ret;
-            if (![OSSApi DeleteObject:item.strHost bucketname:item.strBucket objectnames:array quiet:YES ret:&ret]) {
-                NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
+            if (![OSSApi DeleteObject:host bucketname:bucket objectnames:array quiet:YES ret:&ret]) {
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:@"" ret:ret];
                 self.bTimer=NO;
                 if (![self isCancelled]) {
                     progressCallBack(0);

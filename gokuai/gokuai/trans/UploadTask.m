@@ -27,8 +27,8 @@
 
 -(void)dealloc
 {
-    pIndexFileHandle=nil;
-    pPartList=nil;
+    self.pIndexFileHandle=nil;
+    self.pPartList=nil;
     free(pPartBuffer);
     [super dealloc]; 
 }
@@ -292,7 +292,7 @@
             ULONGLONG size;
             NSInteger index=[self GetUploadIndex:&pos size:&size];
             if (index<0) {
-                [NSThread sleepForTimeInterval:1];
+                [NSThread sleepForTimeInterval:2];
                 continue;
             }
             [self.pLocksc lock];

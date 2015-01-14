@@ -243,6 +243,7 @@ END:
                 tranitem.strPathhash=item.strEtag;
                 tranitem.nStatus=TRANSTASK_NORMAL;
                 [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+                [tranitem release];
             }
             if (ret.strNextMarker.length==0) {
                 break;
@@ -260,8 +261,9 @@ END:
 
 +(void) saveFile:(OperPackage*)tran {
     NSString* retString=nil;
+    [[Network shareNetwork].dManager startAdding];
     for (SaveFileItem *item in tran._array) {
-        TransTaskItem * tranitem=[[TransTaskItem alloc] init];
+        TransTaskItem * tranitem=[[[TransTaskItem alloc] init] autorelease];
         tranitem.strHost=item.strHost;
         tranitem.strBucket=item.strBucket;
         tranitem.strObject=item.strObject;
@@ -282,6 +284,7 @@ END:
     }
     retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
+    [[Network shareNetwork].dManager finishAdding];
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 

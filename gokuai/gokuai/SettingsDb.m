@@ -74,8 +74,8 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db)
     {
-         BOOL res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS userinfo(accessid char[1000],accesskey char[1000],area char[1000],host char[1000],password char[40]);"];
-         res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax int,dpmax int,upmax int);"];
+         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS userinfo(accessid char[1000],accesskey char[1000],area char[1000],host char[1000],password char[40]);"];
+         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax int,dpmax int,upmax int);"];
          NSInteger count=0;
          NSString *sql =@"select count(*) as cnt from settings";
          FMResultSet *rs = [db executeQuery:sql];

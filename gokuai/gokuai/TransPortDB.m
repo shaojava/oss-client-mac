@@ -670,4 +670,19 @@
      }];
 }
 
+-(void)begin
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         [db executeUpdate:@"begin transaction;"];
+     }];
+
+}
+-(void)end
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         [db executeUpdate:@"commit transaction;end transaction;"];
+     }];
+}
 @end

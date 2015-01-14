@@ -58,7 +58,7 @@
     [super windowDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI:) name:KeyDidLoginNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(window_closed:) name:NSWindowWillCloseNotification object:nil];
-    [self.window setTitle:[Util localizedStringForKey:@"够快云库" alternate:nil]];
+    [self.window setTitle:[Util localizedStringForKey:@"OSS" alternate:nil]];
     [baseWebview setDragfinishEvent:^{
         [self dragfinish];
     }];

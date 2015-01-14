@@ -9,10 +9,10 @@
 @synthesize pArray;
 @synthesize pQueue;
 @synthesize pThread;
-@synthesize nSpeed;
 @synthesize ullSize;
 @synthesize ullSizeTime;
 @synthesize nMax;
+@synthesize nAdding;
 
 -(id)init
 {
@@ -21,12 +21,12 @@
         self.bFinish = NO;
         self.pLock = [[[NSLock alloc]init]autorelease];
         self.pArray = [[[NSMutableArray alloc]init] autorelease];
-        self.pQueue=[[NSOperationQueue alloc] init];
+        self.pQueue=[[[NSOperationQueue alloc] init] autorelease];
         
-        self.nSpeed=0;
         self.ullSize=0;
         self.ullSizeTime=0;
         self.nMax=5;
+        self.nAdding=0;
         [self.pQueue setMaxConcurrentOperationCount:nMax];
     }
     return self;
@@ -60,6 +60,7 @@
     for (int i=0;i<self.pArray.count;i++) {
         TaskBask*item = [self.pArray objectAtIndex:i];
         if (item.pItem.nStatus==TRANSTASK_REMOVE) {
+            item.listPeer=nil;
             [self.pArray removeObjectAtIndex:i];
         }
         else {
@@ -120,4 +121,17 @@
     return all;
 }
 
+-(void)startAdding
+{
+    [self.pLock lock];
+    self.nAdding++;
+    [self.pLock unlock];
+}
+
+-(void)finishAdding
+{
+    [self.pLock lock];
+    self.nAdding--;
+    [self.pLock unlock];
+}
 @end

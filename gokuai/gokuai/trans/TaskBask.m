@@ -47,12 +47,12 @@
 
 -(void)dealloc
 {
-    pItem=nil;
-    [listPeer release];
-    [pLocksc release];
-    [pFilesc release];
-    [pFinish release];
-    [pUnFinish release];
+    self.pItem=nil;
+    self.listPeer=nil;
+    self.pLocksc=nil;
+    self.pFilesc=nil;
+    self.pFinish=nil;
+    self.pUnFinish=nil;
     [super dealloc];
 }
 

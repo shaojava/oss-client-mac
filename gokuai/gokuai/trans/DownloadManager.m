@@ -18,39 +18,55 @@
 -(void)Run
 {
     while (!self.bOut) {
-        if (![Util getAppDelegate].bLogin) {
-            [NSThread sleepForTimeInterval:2];
-            continue;
-        }
-        [self CheckFinishorError];
-        if (self.bFinish) {
-            [NSThread sleepForTimeInterval:2];
-            [self CheckFinish];
-            continue;
-        }
-        [self.pLock lock];
-        NSInteger num=[self.pArray count];
-        [self.pLock unlock];
-        while (num<self.nMax) {
-            if (self.bOut) {
-                return;
+        
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        @try {
+            if (![Util getAppDelegate].bLogin) {
+                [NSThread sleepForTimeInterval:2];
+                continue;
             }
-            TransTaskItem *item=[[TransPortDB shareTransPortDB] Get_Download];
-            if (item.strBucket.length) {
-                DownloadTask *pTask=[[[DownloadTask alloc] init:item]autorelease];
-                [[TransPortDB shareTransPortDB] Update_DownloadStartActlast:item.strFullpath];
-                [self.pLock lock];
-                [self.pQueue addOperation:pTask];
-                [self.pArray addObject:pTask];
-                num=[self.pArray count];
-                [self.pLock unlock];
-            }
-            else {
+            [self CheckFinishorError];
+            if (self.bFinish) {
+                [NSThread sleepForTimeInterval:2];
                 [self CheckFinish];
-                [NSThread sleepForTimeInterval:0.1];
-                break;
+                continue;
             }
+            if (self.nAdding>0) {
+                [NSThread sleepForTimeInterval:1];
+                continue;
+            }
+            [self.pLock lock];
+            NSInteger num=[self.pArray count];
+            [self.pLock unlock];
+            while (num<self.nMax) {
+                if (self.bOut) {
+                    return;
+                }
+                TransTaskItem *item=[[TransPortDB shareTransPortDB] Get_Download];
+                if (item.strBucket.length) {
+                    DownloadTask *pTask=[[[DownloadTask alloc] init:item]autorelease];
+                    [[TransPortDB shareTransPortDB] Update_DownloadStartActlast:item.strFullpath];
+                    [self.pLock lock];
+                    [self.pQueue addOperation:pTask];
+                    [self.pArray addObject:pTask];
+                    num=[self.pArray count];
+                    [self.pLock unlock];
+                }
+                else {
+                    [self CheckFinish];
+                    [NSThread sleepForTimeInterval:0.1];
+                    break;
+                }
+            }
+            [NSThread sleepForTimeInterval:0.1];
         }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            [pool release];
+        }
+        
     }
 }
 

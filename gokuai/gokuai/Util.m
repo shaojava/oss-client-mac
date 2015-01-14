@@ -286,15 +286,6 @@
     return originPoint;
 }
 
-+(CGImageRef) convertToCGImageFromNasImage:(NSImage *) image {
-    NSData* cocoaData = [NSBitmapImageRep TIFFRepresentationOfImageRepsInArray: [image representations]];
-    CFDataRef carbonData = (CFDataRef)cocoaData;
-    CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData(carbonData, NULL);
-    CGImageRef myCGImage = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, NULL);
-    CFRelease(imageSourceRef);
-    return myCGImage;
-}
-
 //回调 javascript
 +(void) webScriptObjectCallback:(JSObjectRef)_objRef contextRef:(JSContextRef)_ctx args:(JSValueRef*)_args argCnt:(NSInteger)_argCnt
 {
@@ -495,6 +486,7 @@
             NSString *bundleid = [(NSDictionary *)cfDict objectForKey:(id)kCFBundleIdentifierKey];
             if ( [bundleId isEqualToString:bundleid] ) {
                 result = YES;
+                CFRelease(cfDict);
                 break;
             }
             CFRelease(cfDict);
@@ -578,5 +570,16 @@
     }
 }
 
++(BOOL)islinkfile:(NSString*)path
+{
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL];
+    NSString *filetype=[fileAttributes objectForKey:NSFileType];
+    if ([filetype isEqualToString:NSFileTypeSymbolicLink]) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
 @end
 

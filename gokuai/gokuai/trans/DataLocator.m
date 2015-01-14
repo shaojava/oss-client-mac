@@ -235,7 +235,7 @@
                 break;
             }
             if (ullTempLast>item.ullLastMark) {
-                ullFirst=item.ullLastMark+1;
+                ullTempFirst=item.ullLastMark+1;
                 continue;
             }
         }

@@ -107,14 +107,14 @@
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     [self onUpdateCloseWindow];
-    [[Util getAppDelegate]._downloadtask release];
+ //   [[Util getAppDelegate]._downloadtask release];
     [Util getAppDelegate]._downloadtask=nil;
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     [[Util getAppDelegate].appUpdateWindowController.window orderOut:nil];
-    [[Util getAppDelegate]._downloadtask release];
+ //   [[Util getAppDelegate]._downloadtask release];
     [Util getAppDelegate]._downloadtask=nil;
 }
 
