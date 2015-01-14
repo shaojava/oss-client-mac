@@ -25,5 +25,6 @@
 -(void)ResetUploadId;
 
 -(void)CheckPeer;
+-(void)CheckDeleteFile;
 
 @end

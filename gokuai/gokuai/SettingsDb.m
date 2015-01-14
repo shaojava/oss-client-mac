@@ -75,7 +75,7 @@
     [self.dbQueue inDatabase:^(FMDatabase *db)
     {
          [db executeUpdate:@"CREATE TABLE IF NOT EXISTS userinfo(accessid char[1000],accesskey char[1000],area char[1000],host char[1000],password char[40]);"];
-         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax int,dpmax int,upmax int);"];
+         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS settings(https int,dmax int,umax int,dpmax int,upmax int,uploadpath varchar[2000] COLLATE NOCASE,downloadpath varchar[2000] COLLATE NOCASE);"];
          NSInteger count=0;
          NSString *sql =@"select count(*) as cnt from settings";
          FMResultSet *rs = [db executeQuery:sql];
@@ -105,6 +105,16 @@
          if (res)
          {
              [db executeUpdate:@"update settings set upmax='5';"];
+         }
+         res = [db executeUpdate:@"ALTER TABLE settings add uploadpath varchar[2000] COLLATE NOCASE;"];
+         if (res)
+         {
+             [db executeUpdate:@"update settings set uploadpath='';"];
+         }
+         res = [db executeUpdate:@"ALTER TABLE settings add downloadpath varchar[2000] COLLATE NOCASE;"];
+         if (res)
+         {
+             [db executeUpdate:@"update settings set downloadpath='';"];
          }
      }];
 }
@@ -330,6 +340,60 @@
          while ([rs next]) 
          {
              ret=[rs intForColumn:@"upmax"];
+             break;
+         }
+         [rs close];
+     }];
+    return ret;
+}
+
+-(void)setUploadPath:(NSString*)value
+{
+    NSString* rvalue=[value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql=[NSString stringWithFormat:@"update settings set uploadpath='%@'",rvalue];
+         [db executeUpdate:sql];
+     }];
+}
+
+-(NSString*)getUploadPath
+{
+    __block NSString* ret=@"";
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =@"select uploadpath from settings";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret=[rs stringForColumn:@"uploadpath"];
+             break;
+         }
+         [rs close];
+     }];
+    return ret;
+}
+
+-(void)setDownloadPath:(NSString*)value
+{
+    NSString* rvalue=[value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql=[NSString stringWithFormat:@"update settings set downloadpath='%@'",rvalue];
+         [db executeUpdate:sql];
+     }];
+}
+
+-(NSString*)getDownloadPath
+{
+    __block NSString* ret=@"";
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =@"select downloadpath from settings";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             ret=[rs stringForColumn:@"downloadpath"];
              break;
          }
          [rs close];

@@ -324,8 +324,20 @@
         NSLog(@"%@",exception);
     }
     @finally {
+        [self CheckDeleteFile];
         [pool release];
         self.pItem.nStatus=TRANSTASK_REMOVE;
+    }
+}
+
+-(void)CheckDeleteFile
+{
+    if (self.bDelete) {
+        if (self.pItem.strUploadId.length) {
+            OSSRet * abort;
+            [OSSApi AbortMultipartUpload:self.pItem.strHost bucketname:self.pItem.strBucket objectname:self.pItem.strObject uploadid:self.pItem.strUploadId ret:&abort];
+        }
+        [self DeleteMultipartFile];
     }
 }
 

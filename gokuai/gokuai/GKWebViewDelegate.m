@@ -165,7 +165,7 @@ END:
 -(void) saveFile:(NSString*) json cb:(WebScriptObject*)cb
 {
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
-    NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :nil];
+    NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :[[SettingsDb shareSettingDb] getDownloadPath]];
     [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
         NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
         if (NSOKButton!=result) {
@@ -173,6 +173,7 @@ END:
         }
         NSURL *url=[[panel URLs] objectAtIndex:0];
         NSString* path=url.path;
+        [[SettingsDb shareSettingDb] setDownloadPath:path];
         NSDictionary* dictionary=[json objectFromJSONString];
         if ([dictionary isKindOfClass:[NSDictionary class]]) {
             NSArray* list = [dictionary objectForKey:@"list"];
@@ -218,15 +219,17 @@ END:
 
 -(void) selectFileDlg:(NSString*) json cb:(WebScriptObject*)cb
 {
-    NSOpenPanel* panel=[Util OpenPanelAddFiles:nil :nil];
+    NSOpenPanel* panel=[Util OpenPanelAddFiles:nil :[[SettingsDb shareSettingDb] getUploadPath]];
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
     [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
-        
         NSString* retString=@"{}";
         if (NSOKButton!=result) {
             goto END;
         }
         NSArray *urls=[panel URLs];
+        if (urls.count>0) {
+            [[SettingsDb shareSettingDb] setUploadPath:((NSURL*)[urls objectAtIndex:0]).path];
+        }
         NSMutableArray* arrayGet=[NSMutableArray arrayWithCapacity:urls.count];
         for (int i=0; i<urls.count; i++) {
             [arrayGet addObject:((NSURL*)[urls objectAtIndex:i]).path];
@@ -237,7 +240,6 @@ END:
             [arrayRet addObject:dic];
         }
         retString = [[NSDictionary dictionaryWithObjectsAndKeys:arrayRet,@"list", nil] JSONString];
-        
     END:
         [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:retString];
     }];

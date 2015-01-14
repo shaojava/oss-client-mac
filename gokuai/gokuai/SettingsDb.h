@@ -59,4 +59,12 @@
 -(NSInteger)getDPMax;
 -(void)setUPMax:(NSInteger)value;
 -(NSInteger)getUPMax;
+
+-(void)setUploadPath:(NSString*)value;
+-(NSString*)getUploadPath;
+
+-(void)setDownloadPath:(NSString*)value;
+-(NSString*)getDownloadPath;
+
+
 @end
