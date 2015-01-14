@@ -37,13 +37,13 @@
 
 -(void)dealloc
 {
-    strPathhash=nil;
-    strHost=nil;
-    strBucket=nil;
-    strObject=nil;
-    strFullpath=nil;
-    strUploadId=nil;
-    strMsg=nil;
+    self.strPathhash=nil;
+    self.strHost=nil;
+    self.strBucket=nil;
+    self.strObject=nil;
+    self.strFullpath=nil;
+    self.strUploadId=nil;
+    self.strMsg=nil;
     [super dealloc];
 }
 
@@ -76,11 +76,11 @@
 
 -(void)dealloc
 {
-    strHost=nil;
-    strBucket=nil;
-    strObject=nil;
-    strFullpath=nil;
-    strEtag=nil;
+    self.strHost=nil;
+    self.strBucket=nil;
+    self.strObject=nil;
+    self.strFullpath=nil;
+    self.strEtag=nil;
     [super dealloc];
 }
 
@@ -113,12 +113,12 @@
 
 -(void)dealloc
 {
-    strHost=nil;
-    strBucket=nil;
-    strObject=nil;
-    strDstHost=nil;
-    strDstBucket=nil;
-    strDstObject=nil;
+    self.strHost=nil;
+    self.strBucket=nil;
+    self.strObject=nil;
+    self.strDstHost=nil;
+    self.strDstBucket=nil;
+    self.strDstObject=nil;
     [super dealloc];
 }
 
@@ -143,9 +143,9 @@
 
 -(void)dealloc
 {
-    strHost=nil;
-    strBucket=nil;
-    strObject=nil;
+    self.strHost=nil;
+    self.strBucket=nil;
+    self.strObject=nil;
     [super dealloc];
 }
 

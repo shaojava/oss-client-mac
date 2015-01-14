@@ -24,11 +24,11 @@
 
 -(void) dealloc
 {
-    strCode=nil;
-    strMessage=nil;
-    strRequestId=nil;
-    strHostId=nil;
-    strBucketName=nil;
+    self.strCode=nil;
+    self.strMessage=nil;
+    self.strRequestId=nil;
+    self.strHostId=nil;
+    self.strBucketName=nil;
     [super dealloc];
 }
 
@@ -111,8 +111,8 @@
 
 -(void)dealloc
 {
-    strEtag=nil;
-    strLastModified=nil;
+    self.strEtag=nil;
+    self.strLastModified=nil;
     [super dealloc];
 }
 
@@ -159,10 +159,10 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strEtag=nil;
-    strKey=nil;
-    strLocation=nil;
+    self.strBucket=nil;
+    self.strEtag=nil;
+    self.strKey=nil;
+    self.strLocation=nil;
     [super dealloc];
 }
 
@@ -217,9 +217,9 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strKey=nil;
-    strUploadId=nil;
+    self.strBucket=nil;
+    self.strKey=nil;
+    self.strUploadId=nil;
     [super dealloc];
 }
 
@@ -271,10 +271,10 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strEtag=nil;
-    strKey=nil;
-    strLocation=nil;
+    self.strBucket=nil;
+    self.strEtag=nil;
+    self.strKey=nil;
+    self.strLocation=nil;
     [super dealloc];
 }
 
@@ -345,17 +345,17 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strKeyMarker=nil;
-    strUploadIdMarker=nil;
-    strNextKeyMarker=nil;
-    strNextUploadIdMarker=nil;
-    strDelimiter=nil;
-    strPrefix=nil;
-    strMaxUploads=nil;
-    strIsTruncated=nil;
-    strLocation=nil;
-    arrayUpload=nil;
+    self.strBucket=nil;
+    self.strKeyMarker=nil;
+    self.strUploadIdMarker=nil;
+    self.strNextKeyMarker=nil;
+    self.strNextUploadIdMarker=nil;
+    self.strDelimiter=nil;
+    self.strPrefix=nil;
+    self.strMaxUploads=nil;
+    self.strIsTruncated=nil;
+    self.strLocation=nil;
+    self.arrayUpload=nil;
     [super dealloc];
 }
 
@@ -469,12 +469,12 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strKey=nil;
-    strUploadId=nil;
-    strPartNumberMarker=nil;
-    strMaxParts=nil;
-    strIsTruncated=nil;
+    self.strBucket=nil;
+    self.strKey=nil;
+    self.strUploadId=nil;
+    self.strPartNumberMarker=nil;
+    self.strMaxParts=nil;
+    self.strIsTruncated=nil;
     [super dealloc];
 }
 
@@ -579,11 +579,11 @@
 
 -(void)dealloc
 {
-    strBucket=nil;
-    strPrefix=nil;
-    strMarker=nil;
-    strNextMarker=nil;
-    arrayContent=nil;
+    self.strBucket=nil;
+    self.strPrefix=nil;
+    self.strMarker=nil;
+    self.strNextMarker=nil;
+    self.arrayContent=nil;
     [super dealloc];
 }
 
@@ -687,9 +687,9 @@
 
 -(void)dealloc
 {
-    strKey=nil;
-    strUploadId=nil;
-    strInitiated=nil;
+    self.strKey=nil;
+    self.strUploadId=nil;
+    self.strInitiated=nil;
     [super dealloc];
 }
 
@@ -716,10 +716,10 @@
 
 -(void)dealloc
 {
-    strPartNumber=nil;
-    strLastModified=nil;
-    strEtag=nil;
-    strSize=nil;
+    self.strPartNumber=nil;
+    self.strLastModified=nil;
+    self.strEtag=nil;
+    self.strSize=nil;
     [super dealloc];
 }
 
@@ -750,12 +750,12 @@
 
 -(void)dealloc
 {
-    strKey=nil;
-    strLastModified=nil;
-    strEtag=nil;
-    strType=nil;
-    strPefix=nil;
-    strFilesize=nil;
+    self.strKey=nil;
+    self.strLastModified=nil;
+    self.strEtag=nil;
+    self.strType=nil;
+    self.strPefix=nil;
+    self.strFilesize=nil;
     [super dealloc];
 }
 
@@ -775,7 +775,7 @@
 
 -(void)dealloc
 {
-    strEtag=nil;
+    self.strEtag=nil;
     [super dealloc];
 }
 

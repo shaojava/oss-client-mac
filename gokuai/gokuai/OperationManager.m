@@ -10,7 +10,6 @@
 #import "CopyProgress.h"
 #import "ProgressWindowController.h"
 #import "MoveAndPasteWindowController.h"
-#import "MoveItem.h"
 #import "Network.h"
 #import "NetworkDef.h"
 #import "OSSApi.h"

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1801838A18753267005FCDCD /* MoveItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1801838918753267005FCDCD /* MoveItem.m */; };
 		1812C6741A1C2FE300CFB758 /* FileLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1812C6731A1C2FE300CFB758 /* FileLog.m */; };
 		181BDB79186025110094FBE7 /* NSAlert+SynchronousSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 181BDB78186025110094FBE7 /* NSAlert+SynchronousSheet.m */; };
 		18258B60185BF6660034A43D /* ProgressWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18258B5F185BF6660034A43D /* ProgressWindowController.m */; };
@@ -55,7 +54,6 @@
 		18FC3FF615E5CA05007927F8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF515E5CA05007927F8 /* WebKit.framework */; };
 		18FC3FF815E5CA15007927F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */; };
 		18FC3FFC15E5CA27007927F8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FFB15E5CA27007927F8 /* libz.dylib */; };
-		7916292B18F3EEDA00988DE1 /* SyncTransCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7916292A18F3EEDA00988DE1 /* SyncTransCache.m */; };
 		D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10ED7E21688191F008984B4 /* LoginWebWindowController.m */; };
 		D10ED7E51688191F008984B4 /* LoginWebWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D10ED7E31688191F008984B4 /* LoginWebWindowController.xib */; };
 		D10ED81616882092008984B4 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D10ED81516882092008984B4 /* libz.1.2.5.dylib */; };
@@ -137,8 +135,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1801838818753267005FCDCD /* MoveItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveItem.h; sourceTree = "<group>"; };
-		1801838918753267005FCDCD /* MoveItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveItem.m; sourceTree = "<group>"; };
 		1812C6721A1C2FE300CFB758 /* FileLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLog.h; sourceTree = "<group>"; };
 		1812C6731A1C2FE300CFB758 /* FileLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLog.m; sourceTree = "<group>"; };
 		181BDB77186025110094FBE7 /* NSAlert+SynchronousSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert+SynchronousSheet.h"; sourceTree = "<group>"; };
@@ -228,8 +224,6 @@
 		18FC3FF515E5CA05007927F8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		18FC3FFB15E5CA27007927F8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		7916292918F3EEDA00988DE1 /* SyncTransCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncTransCache.h; sourceTree = "<group>"; };
-		7916292A18F3EEDA00988DE1 /* SyncTransCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncTransCache.m; sourceTree = "<group>"; };
 		D10ED7E11688191F008984B4 /* LoginWebWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWebWindowController.h; sourceTree = "<group>"; };
 		D10ED7E21688191F008984B4 /* LoginWebWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginWebWindowController.m; sourceTree = "<group>"; };
 		D10ED7E31688191F008984B4 /* LoginWebWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginWebWindowController.xib; sourceTree = "<group>"; };
@@ -366,17 +360,6 @@
 				18CF331919FF71F60083C5F1 /* OSSRsa.m */,
 			);
 			path = interface;
-			sourceTree = "<group>";
-		};
-		188C6E0015E5F63C00394CF8 /* sync */ = {
-			isa = PBXGroup;
-			children = (
-				7916292918F3EEDA00988DE1 /* SyncTransCache.h */,
-				7916292A18F3EEDA00988DE1 /* SyncTransCache.m */,
-				1801838818753267005FCDCD /* MoveItem.h */,
-				1801838918753267005FCDCD /* MoveItem.m */,
-			);
-			path = sync;
 			sourceTree = "<group>";
 		};
 		188C6E0115E5F63C00394CF8 /* trans */ = {
@@ -535,7 +518,6 @@
 			isa = PBXGroup;
 			children = (
 				188C6E0115E5F63C00394CF8 /* trans */,
-				188C6E0015E5F63C00394CF8 /* sync */,
 				1892BDC215F8414300488E70 /* SettingsDb.h */,
 				1892BDC315F8414300488E70 /* SettingsDb.m */,
 				18D1039216A64B3B00E92DAF /* MyTimer.h */,
@@ -820,7 +802,6 @@
 				D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */,
 				D114017816966FD800552FEC /* LaunchpadWindowController.m in Sources */,
 				D11E8F831697D00600909E48 /* BrowserWebWindowController.m in Sources */,
-				7916292B18F3EEDA00988DE1 /* SyncTransCache.m in Sources */,
 				F53EE2C8187AA58E00F1186E /* Window+Event.m in Sources */,
 				D115259B16A0010100F516E4 /* AboutWindowController.m in Sources */,
 				18D1039416A64B3B00E92DAF /* MyTimer.m in Sources */,
@@ -855,7 +836,6 @@
 				F5E9A790185AAFEA004A75F7 /* CopyProgress.m in Sources */,
 				18258B60185BF6660034A43D /* ProgressWindowController.m in Sources */,
 				181BDB79186025110094FBE7 /* NSAlert+SynchronousSheet.m in Sources */,
-				1801838A18753267005FCDCD /* MoveItem.m in Sources */,
 				184D460118FE52A8004295ED /* DownloadTask.m in Sources */,
 				184D460418FE52EB004295ED /* UploadTask.m in Sources */,
 				18F1EE7E19ECC7B300D3F252 /* GDataXMLNode.m in Sources */,

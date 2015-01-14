@@ -24,8 +24,8 @@
 {
     [pThread cancel];
     [pThread release];
-    pWebFrame=nil;
-    pWebScriptOjbect=nil;
+    self.pWebFrame=nil;
+    self.pWebScriptOjbect=nil;
     [super dealloc];
 }
 

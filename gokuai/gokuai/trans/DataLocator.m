@@ -16,7 +16,7 @@
 
 -(void)dealloc
 {
-    arrayData=nil;
+    self.arrayData=nil;
     [super dealloc];
 }
 

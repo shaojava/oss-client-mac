@@ -292,7 +292,7 @@
             ULONGLONG size;
             NSInteger index=[self GetUploadIndex:&pos size:&size];
             if (index<0) {
-                [NSThread sleepForTimeInterval:2];
+                [NSThread sleepForTimeInterval:1];
                 continue;
             }
             [self.pLocksc lock];

@@ -10,7 +10,6 @@
 #import "MoveAndPasteWindowController.h"
 
 #import "Util.h"
-#import "MoveItem.h"
 #import "NSStringExpand.h"
 #import "OSSApi.h"
 #import "NetworkDef.h"

@@ -26,11 +26,11 @@
 
 -(void)dealloc
 {
-    strAccessID=nil;
-    strAccessKey=nil;
-    strArea=nil;
-    strHost=nil;
-    strPassword=nil;
+    self.strAccessID=nil;
+    self.strAccessKey=nil;
+    self.strArea=nil;
+    self.strHost=nil;
+    self.strPassword=nil;
     [super dealloc];
 }
 
