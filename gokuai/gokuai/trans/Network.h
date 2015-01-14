@@ -54,7 +54,7 @@
 -(void)StopUploadAll;
 -(void)DeleteUpload:(NSArray*)items;
 -(void)DeleteUploadAll;
--(void)AddFileUpload:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath;
--(void)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array;
+-(NSString*)AddFileUpload:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger*)count;
+-(NSString*)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array;
 
 @end

@@ -45,6 +45,9 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     
     NSMutableArray* browserWindowControllers;//BrowserWebWindowController
     NSMutableDictionary* progressWindowControllers;//ProgressWindowControllers
+    
+    BOOL        bAddDownloadOut;
+    BOOL        bAddDownloadDelete;
 }
 
 @property(nonatomic, retain) NSString* strUIPath;
@@ -78,6 +81,9 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 @property(nonatomic,retain) AppUpdateWindowController *appUpdateWindowController;
 @property(nonatomic,retain) NSMutableArray* browserWindowControllers;
 @property(nonatomic,retain) NSMutableDictionary* progressWindowControllers;
+
+@property(nonatomic)BOOL bAddDownloadOut;
+@property(nonatomic)BOOL bAddDownloadDelete;
 
 -(void)onStart;
 

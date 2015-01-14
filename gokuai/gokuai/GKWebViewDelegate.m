@@ -706,6 +706,18 @@ END:
     return ret;
 }
 
+-(void)stopLoaadDownload:(NSString*)json
+{
+    NSDictionary* dicInfo=[json objectFromJSONString];
+    if (![dicInfo isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    NSInteger all = [[dicInfo objectForKey:@"all"] intValue];
+    if (all) {
+        [Util getAppDelegate].bAddDownloadDelete=YES;
+    }
+    [Util getAppDelegate].bAddDownloadOut=YES;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
@@ -751,6 +763,7 @@ END:
         ||selector == @selector(setTransInfo:)
         ||selector == @selector(getTransInfo)
         ||selector == @selector(getCurrentLocation)
+        ||selector == @selector(stopLoaadDownload:)
         ) {
         return NO;
     }
@@ -880,6 +893,9 @@ END:
     }
     if (sel == @selector(getCurrentLocation)) {
         return @"getCurrentLocation";
+    }
+    if (sel == @selector(stopLoaadDownload:)) {
+        return @"stopLoaadDownload";
     }
     return nil;
 }

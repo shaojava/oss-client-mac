@@ -56,6 +56,9 @@
 @synthesize progressWindowControllers;
 @synthesize appUpdateWindowController;
 
+@synthesize bAddDownloadOut;
+@synthesize bAddDownloadDelete;
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:NSWindowWillCloseNotification object:nil];
@@ -91,6 +94,8 @@
     self.bFinishCallback=NO;
     self._downloadtask=nil;
     self.bIsUpdate=NO;
+    self.bAddDownloadDelete=NO;
+    self.bAddDownloadOut=NO;
     self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {

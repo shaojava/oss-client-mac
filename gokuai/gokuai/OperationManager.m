@@ -184,7 +184,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 +(void) addFile:(OperPackage*)tran {
-    NSString* retString=nil;
+    NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
     NSDictionary *dictionary = [Util dictionaryWithJsonInfo:tran._jsonInfo];
     if (![dictionary isKindOfClass:[NSDictionary class]]) {
         retString=[Util errorInfoWithCode:WEB_JSONERROR];
@@ -206,13 +206,15 @@
             }
         }
     }
-    [[Network shareNetwork] AddFileUpload:host bucket:bucket object:prefix array:paths];
-    retString=[Util errorInfoWithCode:WEB_SUCCESS];
+    NSString * tempret=[[Network shareNetwork] AddFileUpload:host bucket:bucket object:prefix array:paths];
+    if (tempret.length) {
+        retString=tempret;
+    }
 END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(NSString *) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath
++(NSString *) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger*)count
 {
     NSString* strRet=@"";
     NSString* tempobject=@"";
@@ -243,6 +245,17 @@ END:
                 tranitem.nStatus=TRANSTASK_NORMAL;
                 [[TransPortDB shareTransPortDB] Add_Download:tranitem];
                 [tranitem release];
+                (*count)++;
+                if ((*count)>1000000) {
+                    NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                          [NSNumber numberWithInteger:1000000],@"error",
+                                          @"队列已超出客户端下载能力，请使用OSS的API下载。",@"message",nil];
+                    strRet=[dicRet JSONString];
+                    return strRet;
+                }
+                if ([Util getAppDelegate].bAddDownloadOut) {
+                    return strRet;
+                }
             }
             if (ret.strNextMarker.length==0) {
                 break;
@@ -259,8 +272,12 @@ END:
 }
 
 +(void) saveFile:(OperPackage*)tran {
-    NSString* retString=nil;
+    NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
+    [Util getAppDelegate].bAddDownloadOut=NO;
+    [Util getAppDelegate].bAddDownloadDelete=NO;
+    NSInteger count=[[TransPortDB shareTransPortDB] GetDownloadCount];
     [[Network shareNetwork].dManager startAdding];
+    [[TransPortDB shareTransPortDB] begin];
     for (SaveFileItem *item in tran._array) {
         TransTaskItem * tranitem=[[[TransTaskItem alloc] init] autorelease];
         tranitem.strHost=item.strHost;
@@ -273,16 +290,33 @@ END:
         if (tranitem.strObject.length>0) {
             [[TransPortDB shareTransPortDB] Add_Download:tranitem];
         }
+        count++;
+        if (count>1000000) {
+            NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:1000000],@"error",
+                                  @"队列已超出客户端下载能力，请使用OSS的API下载。",@"message",nil];
+            retString=[dicRet JSONString];
+            goto END;
+        }
         if (item.bDir) {
-            NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath];
+            NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath count:&count];
             if (ret.length>0) {
                 retString=ret;
                 goto END;
             }
         }
     }
-    retString=[Util errorInfoWithCode:WEB_SUCCESS];
 END:
+    if ([Util getAppDelegate].bAddDownloadOut) {
+        if ([Util getAppDelegate].bAddDownloadDelete) {
+            for (SaveFileItem *item in tran._array) {
+                [[TransPortDB shareTransPortDB] Delete_download:item.strHost bucket:item.strBucket object:item.strObject];
+            }
+        }
+    }
+    [Util getAppDelegate].bAddDownloadOut=NO;
+    [Util getAppDelegate].bAddDownloadDelete=NO;
+    [[TransPortDB shareTransPortDB] end];
     [[Network shareNetwork].dManager finishAdding];
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }

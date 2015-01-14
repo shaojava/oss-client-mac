@@ -30,6 +30,7 @@
 -(BOOL)Update_DownloadActlast:(NSString *)fullpath time:(ULONGLONG)time;
 -(BOOL)Update_DownloadError:(NSString*)fullpath error:(NSInteger)error msg:(NSString*)msg;
 -(BOOL)Delete_Download:(NSString*)fullpath;
+-(BOOL)Delete_download:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object;
 -(NSMutableArray*)Get_AllDownload:(NSInteger)start count:(NSInteger)count;
 -(TransTaskItem*)Get_Download;
 -(BOOL)Check_DownloadFinish;

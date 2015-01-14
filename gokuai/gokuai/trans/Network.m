@@ -4,6 +4,7 @@
 #import "Util.h"
 #import "NSStringExpand.h"
 #import "SettingsDb.h"
+#import "JSONKit.h"
 
 @implementation Network
 
@@ -70,13 +71,19 @@
 
 -(void)SetDTaskMax:(NSInteger)num
 {
-    num=99;
+    //zhemg
+    if (num>20) {
+        num=20;
+    }
     [self.dManager SetMax:num];
 }
 
 -(void)SetUTaskMax:(NSInteger)num
 {
-    num=99;
+    //zheng
+    if (num>20) {
+        num=20;
+    }
     [self.uManager SetMax:num];
 }
 
@@ -170,8 +177,9 @@
     [self.uManager StopAll];
 }
 
--(void)AddFileUpload:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath
+-(NSString*)AddFileUpload:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger *)count
 {
+    NSString * strRet=@"";
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray *dirArray=[manager contentsOfDirectoryAtPath:fullpath error:NULL];
@@ -191,8 +199,21 @@
             item.nStatus=TRANSTASK_NORMAL;
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];
-            [self AddFileUpload:host bucket:bucket object:item.strObject fullpath:temppath];
+            (*count)++;
+            if ((*count)>=1000000) {
+                NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithInteger:1000000],@"error",
+                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                strRet=[dicRet JSONString];
+                [item release];
+                break;
+            }
+            NSString * strTemp=[self AddFileUpload:host bucket:bucket object:item.strObject fullpath:temppath count:count];
             [item release];
+            if (strTemp.length) {
+                strRet=strTemp;
+                break;
+            }
         }
         else {
             TransTaskItem *item=[[TransTaskItem alloc]init];
@@ -205,13 +226,24 @@
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];
             [item release];
+            (*count)++;
+            if ((*count)>=1000000) {
+                NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithInteger:1000000],@"error",
+                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                strRet=[dicRet JSONString];
+                break;
+            }
         }
     }
     [pool release];
+    return strRet;
 }
 
--(void)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array
+-(NSString*)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array
 {
+    NSString * strRet=@"";
+    NSInteger count=[[TransPortDB shareTransPortDB] GetUploadCount];
     [self.uManager startAdding];
     [[TransPortDB shareTransPortDB] begin];
     for (NSString* path in array) {
@@ -224,8 +256,21 @@
             item.nStatus=TRANSTASK_NORMAL;
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];
-            [self AddFileUpload:host bucket:bucket object:item.strObject fullpath:path];
+            count++;
+            if (count>=1000000) {
+                NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithInteger:1000000],@"error",
+                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                strRet=[dicRet JSONString];
+                [item release];
+                break;
+            }
+            NSString * strTemp=[self AddFileUpload:host bucket:bucket object:item.strObject fullpath:path count:&count];
             [item release];
+            if (strTemp.length) {
+                strRet=strTemp;
+                break;
+            }
         }
         else {
             TransTaskItem *item=[[TransTaskItem alloc]init];
@@ -238,10 +283,19 @@
             item.strPathhash=[[NSString stringWithFormat:@"%@%@",item.strBucket,item.strObject] sha1HexDigest];
             [[TransPortDB shareTransPortDB] Add_Upload:item];
             [item release];
+            count++;
+            if (count>=1000000) {
+                NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithInteger:1000000],@"error",
+                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                strRet=[dicRet JSONString];
+                break;
+            }
         }
     }
     [[TransPortDB shareTransPortDB] end];
     [self.uManager finishAdding];
+    return strRet;
 }
 
 @end
