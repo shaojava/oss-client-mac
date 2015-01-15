@@ -114,6 +114,7 @@
             }
         }
     }
+    self.bDebugMenu=YES;
     debugpath =[NSString stringWithFormat:@"%@/config/config.json",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
         NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
