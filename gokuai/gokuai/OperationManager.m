@@ -310,7 +310,7 @@ END:
     if ([Util getAppDelegate].bAddDownloadOut) {
         if ([Util getAppDelegate].bAddDownloadDelete) {
             for (SaveFileItem *item in tran._array) {
-                [[TransPortDB shareTransPortDB] Delete_download:item.strHost bucket:item.strBucket object:item.strObject];
+                [[TransPortDB shareTransPortDB] Delete_Download:item.strHost bucket:item.strBucket object:item.strObject];
             }
         }
     }

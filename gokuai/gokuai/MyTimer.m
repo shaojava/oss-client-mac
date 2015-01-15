@@ -32,6 +32,7 @@
 -(void)run
 {
     CFAbsoluteTime timerupdate = CFAbsoluteTimeGetCurrent();
+    CFAbsoluteTime timerlink = CFAbsoluteTimeGetCurrent();
     while (TRUE) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         @try {
@@ -41,6 +42,10 @@
                 [[Util getAppDelegate].taskqueue addOperation:task];
                 [task release];
                 timerupdate=now;
+            }
+            if (now-timerlink>3) {
+                [Util getAppDelegate].bLink=[Util islink];
+                timerlink=now;
             }
         }
         @catch (NSException *exception) {

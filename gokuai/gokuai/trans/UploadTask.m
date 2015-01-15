@@ -50,12 +50,13 @@
     if (self.bStop) {
         return;
     }
-    OSSUploadPart* item=[[[OSSUploadPart alloc]init]autorelease];
+    OSSUploadPart* item=[[OSSUploadPart alloc]init];
     item.nIndex=index;
     item.ullPos=pos;
     item.ullSize=size;
     item.strEtag=etag;
     [self.pPartList addObject:item];
+    [item autorelease];
     [self.pLocksc lock];
     [self.pFinish InsertPart:pos last:pos+size-1];
     [self.pLocksc unlock];

@@ -13,6 +13,7 @@
     ULONGLONG           ullSizeTime;
     NSInteger           nMax;
     NSInteger           nAdding;
+    ULONGLONG           ullResetTime;
 }
 
 @property(nonatomic)BOOL bOut;
@@ -25,6 +26,7 @@
 @property(nonatomic,assign)ULONGLONG ullSizeTime;
 @property(nonatomic,assign)NSInteger nMax;
 @property(nonatomic)NSInteger nAdding;
+@property(nonatomic)ULONGLONG ullResetTime;
 
 -(id)init;
 -(void)uninit;

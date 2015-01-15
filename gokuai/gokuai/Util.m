@@ -6,6 +6,12 @@
 #import "AppDelegate.h"
 #import "FileLog.h"
 
+#import <netinet/in.h>
+#if !TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
+#import <netinet6/in6.h>
+#endif
+#include <SystemConfiguration/SystemConfiguration.h>
+
 @implementation Util
 
 +(AppDelegate *)getAppDelegate
@@ -580,6 +586,31 @@
     else {
         return NO;
     }
+}
+
++(BOOL)islink
+{
+    struct sockaddr_in zeroAddress;  
+    bzero(&zeroAddress, sizeof(zeroAddress));  
+    zeroAddress.sin_len = sizeof(zeroAddress);  
+    zeroAddress.sin_family = AF_INET;  
+    // 以下objc相关函数、类型需要添加System Configuration 框架  
+    // 用0.0.0.0来判断本机网络状态  
+    SCNetworkReachabilityRef defaultRouteReachability=SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr*)&zeroAddress);  
+    SCNetworkReachabilityFlags flags;
+    BOOL didRetrieveFlags= SCNetworkReachabilityGetFlags(defaultRouteReachability,&flags); 
+    if (defaultRouteReachability) {
+        CFRelease(defaultRouteReachability);  
+    }
+    if (!didRetrieveFlags)  
+    {  
+        return NO;  
+    }  
+    //kSCNetworkFlagsReachable:    能够连接网络
+    BOOL isReachable = flags & kSCNetworkFlagsReachable;  
+    //kSCNetworkFlagsConnectionRequired:     能够连接网络，但是首先得建立连接过程
+    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;  
+    return (isReachable && !needsConnection) ? YES : NO;
 }
 @end
 

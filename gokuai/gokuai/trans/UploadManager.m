@@ -17,11 +17,14 @@
 
 -(void)Run
 {
-    NSInteger temp=0;
     while (!self.bOut) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         @try {
             if (![Util getAppDelegate].bLogin) {
+                [NSThread sleepForTimeInterval:2];
+                continue;
+            }
+            if (![Util getAppDelegate].bLink) {
                 [NSThread sleepForTimeInterval:2];
                 continue;
             }
@@ -44,8 +47,6 @@
                 }
                 TransTaskItem *item=[[TransPortDB shareTransPortDB] Get_Upload];
                 if (item.strBucket.length) {
-                    temp++;
-                    NSLog(@"%ld",temp);
                     UploadTask *pTask=[[UploadTask alloc] init:item];
                     [[TransPortDB shareTransPortDB] Update_UploadStartActlast:item.strPathhash];
                     [self.pLock lock];
@@ -58,6 +59,11 @@
                 else {
                     [self CheckFinish];
                     [NSThread sleepForTimeInterval:0.1];
+                    ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+                    if (time-self.ullResetTime>600) {
+                        [[TransPortDB shareTransPortDB] ResetUploadError];
+                        self.ullResetTime=time;
+                    }
                     break;
                 }
             }

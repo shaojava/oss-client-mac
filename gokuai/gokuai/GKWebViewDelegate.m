@@ -165,57 +165,69 @@ END:
 -(void) saveFile:(NSString*) json cb:(WebScriptObject*)cb
 {
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
+    NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
+    NSDictionary* dictionary=[json objectFromJSONString];
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
+        NSString* path=[dictionary objectForKey:@"path"];
+        NSArray* list = [dictionary objectForKey:@"list"];
+        if ([list isKindOfClass:[NSArray class]]) {
+            NSMutableArray *array = [NSMutableArray arrayWithCapacity:list.count];
+            for (int i=0; i<list.count; i++) {
+                NSDictionary* dic=[list objectAtIndex:i];
+                SaveFileItem* savItem=[[[SaveFileItem alloc]init] autorelease];
+                savItem.strBucket=[dic objectForKey:@"bucket"];
+                savItem.strObject=[dic objectForKey:@"object"];
+                savItem.strHost=[Util ChangeHost:[dic objectForKey:@"location"]];
+                savItem.ullFilesize=[[dic objectForKey:@"filesize"] longLongValue];
+                savItem.strEtag=[dic objectForKey:@"etag"];
+                if (savItem.strEtag.length==0) {
+                    savItem.strEtag=@"";
+                }
+                NSString * temp=savItem.strObject;
+                if ([savItem.strObject hasSuffix:@"/"]) {
+                    savItem.bDir=YES;
+                    temp=[savItem.strObject substringToIndex:savItem.strObject.length-1];
+                }
+                if (savItem.strObject.length==0) {
+                    savItem.bDir=YES;
+                    temp=savItem.strBucket;
+                }
+                savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp lastPathComponent]];
+                if (savItem.strObject.length&&savItem.strBucket.length) {
+                    [array addObject:savItem];
+                }
+            }
+            MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
+            if (![moveController savefiles:array savepath:path]) {
+                goto END;
+            }
+            [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
+            return ;
+        }
+    }
+END:
+    [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:retString];
+}
+
+-(void) saveFileDlg:(WebScriptObject*)cb
+{
+    BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
     NSOpenPanel *panel=[Util OpenPanelSelectPath:baseController.window :[[SettingsDb shareSettingDb] getDownloadPath]];
     [panel beginSheetModalForWindow:baseController.window completionHandler:^(NSInteger result) {
-        NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
+        NSString* retString=@"{\"path\":\"\"}";
         if (NSOKButton!=result) {
             goto END;
         }
         NSURL *url=[[panel URLs] objectAtIndex:0];
         NSString* path=url.path;
-        [[SettingsDb shareSettingDb] setDownloadPath:path];
-        NSDictionary* dictionary=[json objectFromJSONString];
-        if ([dictionary isKindOfClass:[NSDictionary class]]) {
-            NSArray* list = [dictionary objectForKey:@"list"];
-            if ([list isKindOfClass:[NSArray class]]) {
-                NSMutableArray *array = [NSMutableArray arrayWithCapacity:list.count];
-                for (int i=0; i<list.count; i++) {
-                    NSDictionary* dic=[list objectAtIndex:i];
-                    SaveFileItem* savItem=[[[SaveFileItem alloc]init] autorelease];
-                    savItem.strBucket=[dic objectForKey:@"bucket"];
-                    savItem.strObject=[dic objectForKey:@"object"];
-                    savItem.strHost=[Util ChangeHost:[dic objectForKey:@"location"]];
-                    savItem.ullFilesize=[[dic objectForKey:@"filesize"] longLongValue];
-                    savItem.strEtag=[dic objectForKey:@"etag"];
-                    if (savItem.strEtag.length==0) {
-                        savItem.strEtag=@"";
-                    }
-                    NSString * temp=savItem.strObject;
-                    if ([savItem.strObject hasSuffix:@"/"]) {
-                        savItem.bDir=YES;
-                        temp=[savItem.strObject substringToIndex:savItem.strObject.length-1];
-                    }
-                    if (savItem.strObject.length==0) {
-                        savItem.bDir=YES;
-                        temp=savItem.strBucket;
-                    }
-                    savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp lastPathComponent]];
-                    if (savItem.strObject.length&&savItem.strBucket.length) {
-                        [array addObject:savItem];
-                    }
-                }
-                MoveAndPasteWindowController* moveController=[[Util getAppDelegate] getMoveAndPasteWindowController];
-                if (![moveController savefiles:array savepath:path]) {
-                    goto END;
-                }
-                [[OperationManager sharedInstance] pack:@"saveFile" jsoninfo:json webframe:[baseController mainframe] cb:cb retController:baseController array:array];
-                return ;
-            }
-        }
+        [[SettingsDb shareSettingDb] setDownloadPath:path]; 
+        NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:path,@"path",nil];
+        retString=[dicRet JSONString];
     END:
         [Util webScriptObjectCallback:cb webFrame:[baseController mainframe] jsonString:retString];
     }];
 }
+
 
 -(void) selectFileDlg:(NSString*) json cb:(WebScriptObject*)cb
 {
@@ -708,7 +720,7 @@ END:
     return ret;
 }
 
--(void)stopLoaadDownload:(NSString*)json
+-(void)stopLoadDownload:(NSString*)json
 {
     NSDictionary* dicInfo=[json objectFromJSONString];
     if (![dicInfo isKindOfClass:[NSDictionary class]]) {
@@ -728,6 +740,7 @@ END:
         ||selector == @selector(getSignature:)
         ||selector == @selector(addFile:cb:)
         ||selector == @selector(saveFile:cb:)
+        ||selector == @selector(saveFileDlg:)
         ||selector == @selector(selectFileDlg:cb:)
         ||selector == @selector(getUpload:)
         ||selector == @selector(getDownload:)
@@ -765,7 +778,7 @@ END:
         ||selector == @selector(setTransInfo:)
         ||selector == @selector(getTransInfo)
         ||selector == @selector(getCurrentLocation)
-        ||selector == @selector(stopLoaadDownload:)
+        ||selector == @selector(stopLoadDownload:)
         ) {
         return NO;
     }
@@ -784,6 +797,9 @@ END:
     }
     if (sel == @selector(saveFile:cb:)) {
         return @"saveFile";
+    }
+    if (sel == @selector(saveFileDlg:)) {
+        return @"saveFileDlg";
     }
     if (sel == @selector(selectFileDlg:cb:)) {
 		return @"selectFileDlg";
@@ -896,8 +912,8 @@ END:
     if (sel == @selector(getCurrentLocation)) {
         return @"getCurrentLocation";
     }
-    if (sel == @selector(stopLoaadDownload:)) {
-        return @"stopLoaadDownload";
+    if (sel == @selector(stopLoadDownload:)) {
+        return @"stopLoadDownload";
     }
     return nil;
 }

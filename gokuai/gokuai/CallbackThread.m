@@ -49,13 +49,19 @@
 
 +(void) operateCallback:(WebScriptObject*)_obj webFrame:(WebFrame*)_webFrame jsonString:(NSString*)_jsonString
 {
-    if (![_obj isKindOfClass:[WebScriptObject class]]
-        || !JSObjectIsFunction([_webFrame globalContext],[_obj JSObject])) {
-        return;
+    @try {
+        if (![_obj isKindOfClass:[WebScriptObject class]]
+            || !JSObjectIsFunction([_webFrame globalContext],[_obj JSObject])) {
+            return;
+        }
+        NSDictionary* info=[NSDictionary dictionaryWithObjectsAndKeys:
+                            _webFrame,@"webframe", _obj,@"obj", _jsonString,@"jsonstring", nil];
+        [self performSelectorOnMainThread:@selector(callbackonmain:) withObject:info waitUntilDone:NO];
     }
-    NSDictionary* info=[NSDictionary dictionaryWithObjectsAndKeys:
-                        _webFrame,@"webframe", _obj,@"obj", _jsonString,@"jsonstring", nil];
-    [self performSelectorOnMainThread:@selector(callbackonmain:) withObject:info waitUntilDone:NO];
+    @catch (NSException *exception) {
+    }
+    @finally {
+    }
 }
 
 @end

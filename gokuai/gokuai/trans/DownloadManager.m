@@ -25,6 +25,10 @@
                 [NSThread sleepForTimeInterval:2];
                 continue;
             }
+            if (![Util getAppDelegate].bLink) {
+                [NSThread sleepForTimeInterval:2];
+                continue;
+            }
             [self CheckFinishorError];
             if (self.bFinish) {
                 [NSThread sleepForTimeInterval:2];
@@ -55,6 +59,11 @@
                 else {
                     [self CheckFinish];
                     [NSThread sleepForTimeInterval:0.1];
+                    ULONGLONG time = (ULONGLONG)[[NSDate date] timeIntervalSince1970];
+                    if (time-self.ullResetTime>600) {
+                        [[TransPortDB shareTransPortDB] ResetDownloadError];
+                        self.ullResetTime=time;
+                    }
                     break;
                 }
             }

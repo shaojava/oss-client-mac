@@ -216,7 +216,7 @@
     return ret;
 }
 
--(BOOL)Delete_download:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object
+-(BOOL)Delete_Download:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object
 {
     __block BOOL ret=NO;
     NSString *rhost=[host stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
@@ -224,7 +224,7 @@
     NSString *robject=[object stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"delete from Download where host='%@' and bucket='%@' and (object='%@' or object like '%@/%%');",rhost,rbucket,robject,robject];
+         NSString *sql =[NSString stringWithFormat:@"delete from Download where host='%@' and bucket='%@' and (object='%@' or object like '%@%%');",rhost,rbucket,robject,robject];
          ret=[db executeUpdate:sql];
      }];
     return ret;
@@ -664,6 +664,24 @@
          NSString *sql =[NSString stringWithFormat:@"update Download set errornum='0',actlast='0',status='%d' where status>='%d';",TRANSTASK_NORMAL,TRANSTASK_ERROR];
          [db executeUpdate:sql];
          sql =[NSString stringWithFormat:@"update Upload set errornum='0',actlast='0',status='%d' where status>='%d';",TRANSTASK_NORMAL,TRANSTASK_ERROR];
+         [db executeUpdate:sql];
+     }];
+}
+
+-(void)ResetDownloadError
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"update Download set errornum='0',actlast='0',status='%d' where status>='%d';",TRANSTASK_NORMAL,TRANSTASK_ERROR];
+         [db executeUpdate:sql];
+     }];
+}
+
+-(void)ResetUploadError
+{
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"update Upload set errornum='0',actlast='0',status='%d' where status>='%d';",TRANSTASK_NORMAL,TRANSTASK_ERROR];
          [db executeUpdate:sql];
      }];
 }

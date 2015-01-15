@@ -58,6 +58,7 @@
 
 @synthesize bAddDownloadOut;
 @synthesize bAddDownloadDelete;
+@synthesize bLink;
 
 - (void)dealloc
 {
@@ -96,6 +97,7 @@
     self.bIsUpdate=NO;
     self.bAddDownloadDelete=NO;
     self.bAddDownloadOut=NO;
+    self.bLink=[Util islink];
     self.strUIPath=[NSString stringWithFormat:@"%@/UI",[[NSBundle mainBundle] bundlePath]];
     NSString* debugpath =[NSString stringWithFormat:@"%@/debug.txt",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {

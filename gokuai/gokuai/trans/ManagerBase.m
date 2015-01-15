@@ -13,6 +13,7 @@
 @synthesize ullSizeTime;
 @synthesize nMax;
 @synthesize nAdding;
+@synthesize ullResetTime;
 
 -(id)init
 {
@@ -27,6 +28,7 @@
         self.ullSizeTime=0;
         self.nMax=5;
         self.nAdding=0;
+        self.ullResetTime=0;
         [self.pQueue setMaxConcurrentOperationCount:nMax];
     }
     return self;
