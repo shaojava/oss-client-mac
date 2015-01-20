@@ -288,6 +288,37 @@
     return item;
 }
 
+-(NSMutableArray*)Get_Downloads
+{
+    NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"select * from Download where status!='%d' and actlast!='0';",TRANSTASK_FINISH];
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             TransTaskItem *item=[[TransTaskItem alloc]init];
+             item.strPathhash=[rs stringForColumn:@"hash"];
+             item.strFullpath=[rs stringForColumn:@"fullpath"];
+             item.strHost=[rs stringForColumn:@"host"];
+             item.strBucket=[rs stringForColumn:@"bucket"];
+             item.strObject=[rs stringForColumn:@"object"];
+             item.ullFilesize=[rs longLongIntForColumn:@"filesize"];
+             item.ullOffset=[rs longLongIntForColumn:@"offset"];
+             item.nStatus=[rs intForColumn:@"status"];
+             item.nErrorNum=[rs intForColumn:@"errornum"];
+             item.strMsg=[rs stringForColumn:@"errormsg"];
+             if (item.ullOffset>item.ullFilesize) {
+                 item.ullOffset=item.ullFilesize;
+             }
+             [all addObject:item];
+             [item release];
+         }
+         [rs close];
+     }];
+    return all;
+}
+
 -(BOOL)Check_DownloadFinish
 {
     __block BOOL ret=YES;
@@ -320,7 +351,7 @@
     __block BOOL ret=NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"update Download set status='%d',errornum='0',errormsg='',actlast='0' where status!='%d' and status!='%d';",TRANSTASK_STOP,TRANSTASK_STOP,TRANSTASK_FINISH];
+         NSString *sql =[NSString stringWithFormat:@"update Download set status='%d',errornum='0',errormsg='' where status!='%d' and status!='%d';",TRANSTASK_STOP,TRANSTASK_STOP,TRANSTASK_FINISH];
          ret=[db executeUpdate:sql];
      }];
     return ret;
@@ -538,6 +569,69 @@
      }];
     return item;
 }
+
+-(TransTaskItem*)Get_Upload:(NSString*)bucket object:(NSString*)object
+{
+    TransTaskItem *item=[[[TransTaskItem alloc]init] autorelease];
+    NSString *robject=[object stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"select * from Upload where bucket='%@' and object='%@' and uploadid!=''",bucket,robject];
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             item.strPathhash=[rs stringForColumn:@"pathhash"];
+             item.strFullpath=[rs stringForColumn:@"fullpath"];
+             item.strHost=[rs stringForColumn:@"host"];
+             item.strBucket=[rs stringForColumn:@"bucket"];
+             item.strObject=[rs stringForColumn:@"object"];
+             item.ullFilesize=[rs longLongIntForColumn:@"filesize"];
+             item.ullOffset=[rs longLongIntForColumn:@"offset"];
+             item.nStatus=[rs intForColumn:@"status"];
+             item.strUploadId=[rs stringForColumn:@"uploadid"];
+             item.nErrorNum=[rs intForColumn:@"errornum"];
+             item.strMsg=[rs stringForColumn:@"errormsg"];
+             if (item.ullOffset>item.ullFilesize) {
+                 item.ullOffset=item.ullFilesize;
+             }
+         }
+         [rs close];
+     }];
+    return item;
+}
+
+-(NSMutableArray*)Get_Uploads
+{
+    NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];
+    [self.dbQueue inDatabase:^(FMDatabase *db) 
+     {
+         NSString *sql =[NSString stringWithFormat:@"select * from Upload where status!='%d' and uploadid!='';",TRANSTASK_FINISH];
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next]) 
+         {
+             TransTaskItem *item=[[TransTaskItem alloc]init];
+             item.strPathhash=[rs stringForColumn:@"pathhash"];
+             item.strFullpath=[rs stringForColumn:@"fullpath"];
+             item.strHost=[rs stringForColumn:@"host"];
+             item.strBucket=[rs stringForColumn:@"bucket"];
+             item.strObject=[rs stringForColumn:@"object"];
+             item.ullFilesize=[rs longLongIntForColumn:@"filesize"];
+             item.ullOffset=[rs longLongIntForColumn:@"offset"];
+             item.nStatus=[rs intForColumn:@"status"];
+             item.strUploadId=[rs stringForColumn:@"uploadid"];
+             item.nErrorNum=[rs intForColumn:@"errornum"];
+             item.strMsg=[rs stringForColumn:@"errormsg"];
+             if (item.ullOffset>item.ullFilesize) {
+                 item.ullOffset=item.ullFilesize;
+             }
+             [all addObject:item];
+             [item release];
+         }
+         [rs close];
+     }];
+    return all;
+}
+
 -(BOOL)Check_UploadFinish
 {
     __block BOOL ret=YES;

@@ -5,6 +5,7 @@
 #import "NSStringExpand.h"
 #import "SettingsDb.h"
 #import "JSONKit.h"
+#import "OSSApi.h"
 
 @implementation Network
 
@@ -127,12 +128,17 @@
 {
     for (NSString* item in items) {
         [self.dManager Delete:item];
+        [self DeleteTmpFile:item];
         [[TransPortDB shareTransPortDB] Delete_Download:item];
     }
 }
 
 -(void)DeleteDownloadAll
 {
+    NSMutableArray * all=[[TransPortDB shareTransPortDB] Get_Downloads];
+    for (TransTaskItem* item in all) {
+        [self DeleteTmpFile:item.strFullpath];
+    }
     [[TransPortDB shareTransPortDB] DeleteDownloadAll];
     [self.dManager StopAll];
 }
@@ -167,12 +173,24 @@
 {
     for (SaveFileItem* item in items) {
         [self.uManager Delete:item.strBucket object:item.strObject];
+        TransTaskItem * itemret=[[TransPortDB shareTransPortDB] Get_Upload:item.strBucket object:item.strObject];
+        if (itemret&&itemret.strUploadId.length) {
+            OSSRet * abort;
+            [OSSApi AbortMultipartUpload:itemret.strHost bucketname:itemret.strBucket objectname:itemret.strObject uploadid:itemret.strUploadId ret:&abort];
+        }
         [[TransPortDB shareTransPortDB] Delete_Upload:item.strBucket object:item.strObject];
     }
 }
 
 -(void)DeleteUploadAll
 {
+    NSMutableArray * all=[[TransPortDB shareTransPortDB] Get_Uploads];
+    for (TransTaskItem * item in all) {
+        if (item.strUploadId.length) {
+            OSSRet * abort;
+            [OSSApi AbortMultipartUpload:item.strHost bucketname:item.strBucket objectname:item.strObject uploadid:item.strUploadId ret:&abort];
+        }
+    }
     [[TransPortDB shareTransPortDB] DeleteUploadAll];
     [self.uManager StopAll];
 }
@@ -296,6 +314,18 @@
     [[TransPortDB shareTransPortDB] end];
     [self.uManager finishAdding];
     return strRet;
+}
+
+-(void)DeleteTmpFile:(NSString*)fullpath
+{
+    NSString * temppath=[NSString stringWithFormat:@"%@%@",fullpath,OSSEXT];
+    if ([Util existfile:temppath]) {
+        [Util deletefile:temppath];
+    }
+    temppath=[NSString stringWithFormat:@"%@%@%@",fullpath,OSSEXT,OSSTMP];
+    if ([Util existfile:temppath]) {
+        [Util deletefile:temppath];
+    }
 }
 
 @end

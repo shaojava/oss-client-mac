@@ -326,6 +326,16 @@
     }
     @finally {
         [self CheckDeleteFile];
+        if (self.bStop) {
+            [self.pLocksc lock];
+            for (int i=0;i<self.listPeer.count;i++) {
+                UploadPeer*item = [self.listPeer objectAtIndex:i];
+                if (![item IsIdle]) {
+                    [item Stop];
+                }
+            }
+            [self.pLocksc unlock];
+        }
         [pool release];
         self.pItem.nStatus=TRANSTASK_REMOVE;
     }
@@ -351,7 +361,7 @@
 -(void)CheckPeer
 {
     [self.pLocksc lock];
-    for (int i=0;i<self.listPeer.count;i++) {
+    for (int i=0;i<self.listPeer.count;) {
         UploadPeer*item = [self.listPeer objectAtIndex:i];
         if ([item IsIdle]) {
             [self.listPeer removeObjectAtIndex:i];

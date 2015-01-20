@@ -33,6 +33,7 @@
 -(BOOL)Delete_Download:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object;
 -(NSMutableArray*)Get_AllDownload:(NSInteger)start count:(NSInteger)count;
 -(TransTaskItem*)Get_Download;
+-(NSMutableArray*)Get_Downloads;
 -(BOOL)Check_DownloadFinish;
 -(BOOL)StartDownloadAll;
 -(BOOL)StopDownloadAll;
@@ -52,6 +53,8 @@
 -(BOOL)Delete_Upload:(NSString*)bucket object:(NSString*)object;
 -(NSMutableArray*)Get_AllUpload:(NSInteger)start count:(NSInteger)count;
 -(TransTaskItem*)Get_Upload;
+-(TransTaskItem*)Get_Upload:(NSString*)bucket object:(NSString*)object;
+-(NSMutableArray*)Get_Uploads;
 -(BOOL)Check_UploadFinish;
 -(BOOL)StartUploadAll;
 -(BOOL)StopUploadAll;

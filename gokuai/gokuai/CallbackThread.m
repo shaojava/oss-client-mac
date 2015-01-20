@@ -37,23 +37,29 @@
 
 +(void) callbackonmain:(id)info
 {
-    NSDictionary* dicInfo=(NSDictionary*)info;
-    JSContextRef ctx =[(WebFrame*)[dicInfo valueForKey:@"webframe"] globalContext];
-    JSObjectRef func = [(WebScriptObject*)[dicInfo valueForKey:@"obj"] JSObject];
-    NSString* jsonstring= [dicInfo valueForKey:@"jsonstring"];
-    JSStringRef jsstr = JSStringCreateWithCFString((CFStringRef)jsonstring);
-    JSValueRef jsvalue = JSValueMakeFromJSONString(ctx, jsstr);
-    JSStringRelease(jsstr);
-    JSObjectCallAsFunction(ctx, func, NULL, 1, &jsvalue, NULL);
+    @try {
+        NSDictionary* dicInfo=(NSDictionary*)info;
+        JSContextRef ctx =[(WebFrame*)[dicInfo valueForKey:@"webframe"] globalContext];
+        JSObjectRef func = [(WebScriptObject*)[dicInfo valueForKey:@"obj"] JSObject];
+        NSString* jsonstring= [dicInfo valueForKey:@"jsonstring"];
+        JSStringRef jsstr = JSStringCreateWithCFString((CFStringRef)jsonstring);
+        JSValueRef jsvalue = JSValueMakeFromJSONString(ctx, jsstr);
+        JSStringRelease(jsstr);
+        JSObjectCallAsFunction(ctx, func, NULL, 1, &jsvalue, NULL);
+    }
+    @catch (NSException *exception) {
+    }
+    @finally {
+    }
 }
 
 +(void) operateCallback:(WebScriptObject*)_obj webFrame:(WebFrame*)_webFrame jsonString:(NSString*)_jsonString
 {
     @try {
-        if (![_obj isKindOfClass:[WebScriptObject class]]
+     /*   if (![_obj isKindOfClass:[WebScriptObject class]]
             || !JSObjectIsFunction([_webFrame globalContext],[_obj JSObject])) {
             return;
-        }
+        }*/
         NSDictionary* info=[NSDictionary dictionaryWithObjectsAndKeys:
                             _webFrame,@"webframe", _obj,@"obj", _jsonString,@"jsonstring", nil];
         [self performSelectorOnMainThread:@selector(callbackonmain:) withObject:info waitUntilDone:NO];

@@ -394,7 +394,7 @@
 
 +(NSString*)errorInfoWithCode:(NSString*)action message:(NSString*)message ret:(OSSRet*)ret
 {
-    if (ret.nHttpCode!=0) {
+    if (ret.nHttpCode!=0&&ret.nHttpCode!=200) {
         NSString* msg=[NSString stringWithFormat:@"[%@][%@][%d,%@]",action,message,ret.nHttpCode,[Util GetHttpErrorMessage:ret.nHttpCode]];
         [[FileLog shareFileLog] log:msg add:NO];
         NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:

@@ -238,14 +238,7 @@
 
 -(NSString*)GetTmpPath
 {
-    NSString* strDir=[self.pItem.strFullpath stringByDeletingLastPathComponent];
-    NSString* strFilename=[self.pItem.strFullpath lastPathComponent];
-    if (self.pItem.strPathhash.length) {
-        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,self.pItem.strPathhash];//zheng 删除的问题
-    }
-    else {
-        return [NSString stringWithFormat:@"%@/.%@.%@",strDir,strFilename,OSSTMP];
-    }
+    return [NSString stringWithFormat:@"%@%@%@",self.pItem.strFullpath,OSSEXT,OSSTMP];
 }
 
 -(void)main

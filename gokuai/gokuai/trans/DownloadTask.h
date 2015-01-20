@@ -1,8 +1,7 @@
 
 #import "TaskBask.h"
 
-#define OSSEXT      @".ossdownload"
-#define OSSTMP      @"osstmp"
+
 
 @interface DownloadTask : TaskBask
 {

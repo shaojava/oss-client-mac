@@ -28,6 +28,11 @@
 -(void)Stop
 {
     self.bStop=YES;
+    if (![self.pRequest isCancelled]) {
+        [self.pRequest setDelegate:nil];
+        [self.pRequest cancel];
+        self.pRequest = nil;
+    }
 }
 
 -(BOOL)IsIdle

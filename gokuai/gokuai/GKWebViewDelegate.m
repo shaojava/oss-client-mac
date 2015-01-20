@@ -193,7 +193,7 @@ END:
                     temp=savItem.strBucket;
                 }
                 savItem.strFullpath=[NSString stringWithFormat:@"%@/%@",path,[temp lastPathComponent]];
-                if (savItem.strObject.length&&savItem.strBucket.length) {
+                if (savItem.strBucket.length) {
                     [array addObject:savItem];
                 }
             }

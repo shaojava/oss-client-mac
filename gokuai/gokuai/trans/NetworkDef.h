@@ -3,6 +3,8 @@
 
 #define UPLOADPARTSIZE      54
 #define MAXFILESIZEUPLOAD   10485760
+#define OSSEXT      @".ossdownload"
+#define OSSTMP      @".osstmp"
 
 enum{
     TRANSTASK_NULL  =0x0,

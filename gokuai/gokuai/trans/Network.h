@@ -57,4 +57,6 @@
 -(NSString*)AddFileUpload:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger*)count;
 -(NSString*)AddFileUpload:(NSString *)host bucket:(NSString *)bucket object:(NSString *)object array:(NSArray *)array;
 
+-(void)DeleteTmpFile:(NSString*)fullpath;
+
 @end
