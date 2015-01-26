@@ -136,11 +136,11 @@
 -(void)DeleteDownloadAll
 {
     NSMutableArray * all=[[TransPortDB shareTransPortDB] Get_Downloads];
+    [[TransPortDB shareTransPortDB] DeleteDownloadAll];
+    [self.dManager StopAll];
     for (TransTaskItem* item in all) {
         [self DeleteTmpFile:item.strFullpath];
     }
-    [[TransPortDB shareTransPortDB] DeleteDownloadAll];
-    [self.dManager StopAll];
 }
 
 -(void)StartUpload:(NSArray*)items

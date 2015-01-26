@@ -58,6 +58,7 @@
 
 -(BOOL)Stop:(BOOL)bdelete
 {
+    self.ullTranssize=0;
     if (self.pItem.nStatus==TRANSTASK_START) {
         self.pItem.nStatus=TRANSTASK_STOP;
     }
@@ -81,8 +82,6 @@
     }
     else {
         self.ullSpeed=self.ullTranssize/(now-self.ullStarttime);
-        self.ullTranssize=0;
-        self.ullStarttime=now;
         return self.ullSpeed;
     }
 }

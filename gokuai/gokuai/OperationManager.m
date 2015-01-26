@@ -214,7 +214,7 @@ END:
     [self operateCallback:tran._cb webFrame:tran._webframe jsonString:retString];
 }
 
-+(NSString *) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger*)count
++(NSString *) GetFileList:(NSString*)host bucket:(NSString*)bucket object:(NSString*)object fullpath:(NSString*)fullpath count:(NSInteger*)count dcount:(NSInteger)dcount
 {
     NSString* strRet=@"";
     NSString* tempobject=@"";
@@ -246,17 +246,18 @@ END:
                 [[TransPortDB shareTransPortDB] Add_Download:tranitem];
                 [tranitem release];
                 (*count)++;
-                if ((*count)>1000000) {
+          /*      if ((*count)>1000000) {
                     NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                           [NSNumber numberWithInteger:1000000],@"error",
                                           @"队列已超出客户端下载能力，请使用OSS的API下载。",@"message",nil];
                     strRet=[dicRet JSONString];
                     return strRet;
-                }
+                }*/
                 if ([Util getAppDelegate].bAddDownloadOut) {
                     return strRet;
                 }
             }
+            [[Util getAppDelegate] UpdateLoadingCount:(*count) downloadcount:dcount+(*count)];
             if (ret.strNextMarker.length==0) {
                 break;
             }
@@ -275,7 +276,8 @@ END:
     NSString* retString=[Util errorInfoWithCode:WEB_SUCCESS];
     [Util getAppDelegate].bAddDownloadOut=NO;
     [Util getAppDelegate].bAddDownloadDelete=NO;
-    NSInteger count=[[TransPortDB shareTransPortDB] GetDownloadCount];
+    NSInteger dcount=[[TransPortDB shareTransPortDB] GetDownloadCount];
+    NSInteger count=0;
     [[Network shareNetwork].dManager startAdding];
     [[TransPortDB shareTransPortDB] begin];
     for (SaveFileItem *item in tran._array) {
@@ -289,17 +291,18 @@ END:
         tranitem.nStatus=TRANSTASK_NORMAL;
         if (tranitem.strObject.length>0) {
             [[TransPortDB shareTransPortDB] Add_Download:tranitem];
+            count++;
+            [[Util getAppDelegate] UpdateLoadingCount:count downloadcount:dcount+count];
         }
-        count++;
-        if (count>1000000) {
+   /*     if (count>1000000) {
             NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithInteger:1000000],@"error",
                                   @"队列已超出客户端下载能力，请使用OSS的API下载。",@"message",nil];
             retString=[dicRet JSONString];
             goto END;
-        }
+        }*/
         if (item.bDir) {
-            NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath count:&count];
+            NSString * ret=[self GetFileList:tranitem.strHost bucket:tranitem.strBucket object:tranitem.strObject fullpath:tranitem.strFullpath count:&count dcount:dcount];
             if (ret.length>0) {
                 retString=ret;
                 goto END;

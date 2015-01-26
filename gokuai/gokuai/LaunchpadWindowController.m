@@ -180,4 +180,11 @@
         return NO;
     }
 }
+
+-(void)UpdateLoadingCount:(NSString*)json
+{
+    NSArray* args = [NSArray arrayWithObjects:@"UpdateLoadingCount",json,nil];
+    [[self windowscriptobj] callWebScriptMethod:@"ossClientCallback" withArguments:args];
+}
+
 @end

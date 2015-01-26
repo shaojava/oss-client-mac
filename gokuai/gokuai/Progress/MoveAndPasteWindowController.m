@@ -297,7 +297,13 @@
     BOOL bKeepBoth = NO;
     for (SaveFileItem* saveitem in srcfiles) {
         if ([Util existfile:saveitem.strFullpath]) {
-            NSString* filename=[saveitem.strObject lastPathComponent];
+            NSString* filename;
+            if (saveitem.strObject.length) {
+                filename=[saveitem.strObject lastPathComponent];
+            }
+            else {
+                filename=saveitem.strBucket;
+            }
             if (!bAll) {
                 NSString* prompt=[NSString stringWithFormat:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？",filename];
                 [_copyinfo setStringValue:prompt];

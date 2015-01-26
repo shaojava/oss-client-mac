@@ -105,4 +105,6 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 -(void)showupdate;
 -(void)openUpdateDmg;
 
+-(void)UpdateLoadingCount:(NSInteger)count downloadcount:(NSInteger)downloadcount;
+
 @end

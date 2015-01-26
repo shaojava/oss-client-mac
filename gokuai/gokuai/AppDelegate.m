@@ -114,7 +114,6 @@
             }
         }
     }
-    self.bDebugMenu=YES;
     debugpath =[NSString stringWithFormat:@"%@/config/config.json",[[NSBundle mainBundle] bundlePath]];
     if ([Util existfile:debugpath]) {
         NSFileHandle* filehandle=[NSFileHandle fileHandleForUpdatingAtPath:debugpath];
@@ -408,6 +407,14 @@
         [theProcess setArguments:[NSArray arrayWithObject:path]];
         [theProcess launch];
         [NSApp terminate:nil];
+    }
+}
+
+-(void)UpdateLoadingCount:(NSInteger)count downloadcount:(NSInteger)downloadcount
+{
+    NSString* json=[NSString stringWithFormat:@"{\"count\":%ld,\"downloadcount\":%ld}",count,downloadcount];
+    if (launchpadWindowController) {
+        [launchpadWindowController performSelectorOnMainThread:@selector(UpdateLoadingCount:) withObject:json waitUntilDone:NO];
     }
 }
 

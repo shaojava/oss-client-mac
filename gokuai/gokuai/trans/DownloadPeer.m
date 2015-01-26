@@ -64,6 +64,9 @@
                 }
             }
         }
+        if (self.bStop) {
+            [request cancel];
+        }
     }
     @catch (NSException *exception) {
     }

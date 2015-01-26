@@ -310,6 +310,16 @@
         NSLog(@"%@",exception);
     }
     @finally {
+        if (self.bStop) {
+            [self.pLocksc lock];
+            for (int i=0;i<self.listPeer.count;i++) {
+                DownloadPeer*item = [self.listPeer objectAtIndex:i];
+                if (![item IsIdle]) {
+                    [item Stop];
+                }
+            }
+            [self.pLocksc unlock];
+        }
         [self CloseFile];
         [self CheckDeleteFile];
         [pool release];
