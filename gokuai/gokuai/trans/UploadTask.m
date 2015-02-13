@@ -152,7 +152,7 @@
         for (int i=0; i<[self.pPartList count]; i++) {
             char * temp=pPartBuffer+i*UPLOADPARTSIZE;
             OSSUploadPart* item=[self.pPartList objectAtIndex:i];
-            int index=item.nIndex;
+            int index=(int)item.nIndex;
             memcpy(temp, &index, 4);
             ULONGLONG temppos=item.ullPos;
             memcpy(temp+4, &temppos, 8);

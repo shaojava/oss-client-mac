@@ -214,7 +214,7 @@
 		18F1EE9119ED26AB00D3F252 /* OSSRet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSRet.m; sourceTree = "<group>"; };
 		18F6A02E18487825005B419C /* TransPortDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransPortDB.h; path = ../TransPortDB.h; sourceTree = "<group>"; };
 		18F6A02F18487825005B419C /* TransPortDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransPortDB.m; path = ../TransPortDB.m; sourceTree = "<group>"; };
-		18FC3FCA15E5C950007927F8 /* YunKu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YunKu.app; path = OSS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18FC3FCA15E5C950007927F8 /* OSS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OSS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FC3FCE15E5C950007927F8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		18FC3FD115E5C950007927F8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		18FC3FD215E5C950007927F8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -432,7 +432,7 @@
 		18FC3FCB15E5C950007927F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				18FC3FCA15E5C950007927F8 /* YunKu.app */,
+				18FC3FCA15E5C950007927F8 /* OSS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -729,7 +729,7 @@
 			);
 			name = gokuai;
 			productName = gokuai;
-			productReference = 18FC3FCA15E5C950007927F8 /* YunKu.app */;
+			productReference = 18FC3FCA15E5C950007927F8 /* OSS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

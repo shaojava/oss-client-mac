@@ -98,7 +98,7 @@
          NSString *sql =[NSString stringWithFormat:@"insert into Download(hash,fullpath,host,bucket,object,filesize,status,offset,actlast,errornum,errormsg) values('%@','%@','%@','%@','%@','%llu','%ld','%llu','0','0','');",item.strPathhash,rfullpath,item.strHost,item.strBucket,robject,item.ullFilesize,item.nStatus,item.ullOffset];
          ret=[db executeUpdate:sql];
          if (!ret) {
-             sql =[NSString stringWithFormat:@"update Download set hash='%@',host='%@',bucket='%@',object='%@',filesize='%llu',status='%d',offset='0',actlast='0',errornum='0',errormsg='' where fullpath='%@';",item.strPathhash,item.strHost,item.strBucket,robject,item.ullFilesize,item.nStatus,rfullpath];
+             sql =[NSString stringWithFormat:@"update Download set hash='%@',host='%@',bucket='%@',object='%@',filesize='%llu',status='%ld',offset='0',actlast='0',errornum='0',errormsg='' where fullpath='%@';",item.strPathhash,item.strHost,item.strBucket,robject,item.ullFilesize,item.nStatus,rfullpath];
              ret=[db executeUpdate:sql];
          }
      }];
@@ -136,7 +136,7 @@
     NSString *rfullpath=[fullpath stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"update Download set status='%d',actlast='0',errornum='0',errormsg='' where fullpath='%@';",status,rfullpath];
+         NSString *sql =[NSString stringWithFormat:@"update Download set status='%ld',actlast='0',errornum='0',errormsg='' where fullpath='%@';",status,rfullpath];
          ret=[db executeUpdate:sql];
      }];
     return ret;
@@ -387,7 +387,7 @@
          NSString *sql =[NSString stringWithFormat:@"insert into Upload(pathhash,host,bucket,object,fullpath,filesize,status,offset,actlast,uploadid,errornum,errormsg) values('%@','%@','%@','%@','%@','%llu','%ld','%llu','0','%@','0','');",item.strPathhash,item.strHost,item.strBucket,robject,rfullpath,item.ullFilesize,item.nStatus,item.ullOffset,item.strUploadId];
          ret=[db executeUpdate:sql];
          if (!ret) {
-             sql =[NSString stringWithFormat:@"update Upload set host='%@',bucket='%@',object='%@',fullpath='%@',filesize='%llu',status='%d',offset='0',actlast='0',uploadid='%@',errornum='0',errormsg='' where pathhash='%@';",item.strHost,item.strBucket,robject,rfullpath,item.ullFilesize,item.nStatus,item.strUploadId,item.strPathhash];
+             sql =[NSString stringWithFormat:@"update Upload set host='%@',bucket='%@',object='%@',fullpath='%@',filesize='%llu',status='%ld',offset='0',actlast='0',uploadid='%@',errornum='0',errormsg='' where pathhash='%@';",item.strHost,item.strBucket,robject,rfullpath,item.ullFilesize,item.nStatus,item.strUploadId,item.strPathhash];
              ret=[db executeUpdate:sql];
          }
      }];
@@ -423,7 +423,7 @@
     __block BOOL ret=NO;
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"update Upload set status='%d' where pathhash='%@';",status,pathhash];
+         NSString *sql =[NSString stringWithFormat:@"update Upload set status='%ld' where pathhash='%@';",status,pathhash];
          ret=[db executeUpdate:sql];
      }];
     return ret;
@@ -435,7 +435,7 @@
     NSString *robject=[object stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql =[NSString stringWithFormat:@"update Upload set status='%d' where bucket='%@' and object='%@';",status,bucket,robject];
+         NSString *sql =[NSString stringWithFormat:@"update Upload set status='%ld' where bucket='%@' and object='%@';",status,bucket,robject];
          ret=[db executeUpdate:sql];
      }];
     return ret;

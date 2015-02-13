@@ -325,7 +325,7 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql=[NSString stringWithFormat:@"update settings set upmax='%d'",value];
+         NSString *sql=[NSString stringWithFormat:@"update settings set upmax='%ld'",value];
          [db executeUpdate:sql];
      }]; 
 }

@@ -114,7 +114,7 @@
         if (num!=0) {
             [ret appendFormat:@","];
         }
-        [ret appendFormat:[NSString stringWithFormat:@"%llu-%llu",item.ullFirstMark,item.ullLastMark]];
+        [ret appendFormat:@"%llu-%llu",item.ullFirstMark,item.ullLastMark];
         num++;
     }
     return ret;
