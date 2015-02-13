@@ -381,7 +381,7 @@
 
 +(NSString*)GetHttpErrorMessage:(NSInteger)error
 {
-    return [NSString stringWithFormat:@"curl error:%d",error];
+    return [NSString stringWithFormat:@"curl error:%ld",error];
 }
 
 +(NSString*)errorInfoWithCode:(NSInteger)err
@@ -395,7 +395,7 @@
 +(NSString*)errorInfoWithCode:(NSString*)action message:(NSString*)message ret:(OSSRet*)ret
 {
     if (ret.nHttpCode!=0&&ret.nHttpCode!=200) {
-        NSString* msg=[NSString stringWithFormat:@"[%@][%@][%d,%@]",action,message,ret.nHttpCode,[Util GetHttpErrorMessage:ret.nHttpCode]];
+        NSString* msg=[NSString stringWithFormat:@"[%@][%@][%ld,%@]",action,message,ret.nHttpCode,[Util GetHttpErrorMessage:ret.nHttpCode]];
         [[FileLog shareFileLog] log:msg add:NO];
         NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithInteger:WEB_CURLERROR],@"error",

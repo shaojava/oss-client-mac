@@ -247,7 +247,7 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql=[NSString stringWithFormat:@"update settings set dmax='%d'",value];
+         NSString *sql=[NSString stringWithFormat:@"update settings set dmax='%ld'",value];
          [db executeUpdate:sql];
      }];
 }
@@ -273,7 +273,7 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql=[NSString stringWithFormat:@"update settings set umax='%d'",value];
+         NSString *sql=[NSString stringWithFormat:@"update settings set umax='%ld'",value];
          [db executeUpdate:sql];
      }]; 
 }
@@ -299,7 +299,7 @@
 {
     [self.dbQueue inDatabase:^(FMDatabase *db) 
      {
-         NSString *sql=[NSString stringWithFormat:@"update settings set dpmax='%d'",value];
+         NSString *sql=[NSString stringWithFormat:@"update settings set dpmax='%ld'",value];
          [db executeUpdate:sql];
      }]; 
 }
