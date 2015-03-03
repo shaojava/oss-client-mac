@@ -1209,7 +1209,7 @@
     NSString * retsign=[self Authorization:array];
     item=[[OssSignKey alloc]init];
     item.key=@"sign";
-    item.value=retsign;
+    item.value=[retsign stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
     [array addObject:item];
     [item release];
     
@@ -1261,7 +1261,7 @@
     NSString * retsign=[self Authorization:array];
     item=[[OssSignKey alloc]init];
     item.key=@"sign";
-    item.value=retsign;
+    item.value=[retsign stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
     [array addObject:item];
     [item release];
     

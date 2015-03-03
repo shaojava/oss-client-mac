@@ -358,28 +358,13 @@
     NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:@"是" alternateButton:@"否"otherButton:nil informativeTextWithFormat:@""];
     if ([alert runModal]==NSAlertDefaultReturn) {
         if (!self._downloadtask) {
-            NSString* strUrl;
-            if ([Util getAppDelegate].bHttps)
-            {
-                strUrl =[NSString stringWithFormat:
-                         @"https://client.gokuai.com/interface/check_version?n=mac&v=%@",
-                         [Util getAppDelegate].appversion];
-            }
-            else
-            {
-                strUrl =[NSString stringWithFormat:
-                         @"http://client.gokuai.com/interface/check_version?n=mac&v=%@",
-                         [Util getAppDelegate].appversion];;
-            }
-            GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl method:@"GET" header:nil bodyData:nil] autorelease];
-            NSHTTPURLResponse* response;
-            NSData* jsonData = [request connectNetSyncWithResponse:&response error:nil];
+            NSData* jsonData = [OSSApi CheckServer:[Util getAppDelegate].strSource version:[Util getAppDelegate].appversion app:@"mac"];
             if (jsonData!=nil) {
                 NSString *jsonInfo = [[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] autorelease];
                 NSDictionary* dictionary=[jsonInfo objectFromJSONString];
                 if ([dictionary isKindOfClass:[NSDictionary class]]) {
-                    NSString * downloadurl=[dictionary objectForKey:@"path"];
-                    NSInteger filesize=[[dictionary objectForKey:@"size"] intValue];
+                    NSString * downloadurl=[dictionary objectForKey:@"downloadurl"];
+                    NSInteger filesize=[[dictionary objectForKey:@"filesize"] intValue];
                     NSString * path=[NSString stringWithFormat:@"%@/ossupdate.dmg",NSTemporaryDirectory()];
                     self._downloadtask=[[[DownloadDmgTask alloc]init:downloadurl savepath:path size:filesize]autorelease];
                     [taskqueue addOperation:self._downloadtask];
