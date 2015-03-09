@@ -720,6 +720,15 @@ END:
     return ret;
 }
 
+-(NSString*)getCurrentHost
+{
+    NSString * ret=@"";
+    if ([Util getAppDelegate].strHost.length) {
+        ret=[NSString stringWithFormat:@"\"%@\"",[Util getAppDelegate].strHost];
+    }
+    return ret;
+}
+
 -(void)stopLoadDownload:(NSString*)json
 {
     NSDictionary* dicInfo=[json objectFromJSONString];
@@ -778,6 +787,7 @@ END:
         ||selector == @selector(setTransInfo:)
         ||selector == @selector(getTransInfo)
         ||selector == @selector(getCurrentLocation)
+        ||selector == @selector(getCurrentHost)
         ||selector == @selector(stopLoadDownload:)
         ) {
         return NO;
@@ -911,6 +921,9 @@ END:
     }
     if (sel == @selector(getCurrentLocation)) {
         return @"getCurrentLocation";
+    }
+    if (sel == @selector(getCurrentHost)) {
+        return @"getCurrentHost";
     }
     if (sel == @selector(stopLoadDownload:)) {
         return @"stopLoadDownload";

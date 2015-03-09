@@ -564,7 +564,7 @@
     else {
         if ([Util getAppDelegate].strArea.length) {
             if ([host hasPrefix:[Util getAppDelegate].strArea]) {
-                return [NSString stringWithFormat:@"%@-internal.aliyuncs.com",host];
+                return [NSString stringWithFormat:@"%@.aliyuncs.com",host];
             }
             else {
                 return [NSString stringWithFormat:@"%@.aliyuncs.com",host];
@@ -576,6 +576,20 @@
     }
 }
 
++(NSString*)GetServer:(NSString*)host
+{
+    if ([Util getAppDelegate].strHost.length>0) {
+        return [Util getAppDelegate].strHost;
+    }
+    else {
+        if (host.length) {
+            return [NSString stringWithFormat:@"%@.aliyuncs.com",host];
+        }
+        else {
+            return @"oss.aliyuncs.com";
+        }
+    }
+}
 +(BOOL)islinkfile:(NSString*)path
 {
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL];

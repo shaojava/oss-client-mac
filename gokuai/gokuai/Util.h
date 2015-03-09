@@ -51,6 +51,7 @@
 +(BOOL) zip:(NSString*)srcpath
         dst:(NSString*)dstpath;
 +(NSString*)ChangeHost:(NSString*)host;
++(NSString*)GetServer:(NSString*)host;
 
 +(BOOL)islinkfile:(NSString*)path;
 +(BOOL)islink;

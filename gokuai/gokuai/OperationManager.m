@@ -544,12 +544,8 @@ END:
     NSString* strKeyId=[dictionary objectForKey:@"keyid"];
     NSString* strKeySecret=[dictionary objectForKey:@"keysecret"];
     NSString* strLocation=[dictionary objectForKey:@"location"];
-    NSString* host=strLocation;
-    if (strLocation.length) {
-        host=[Util ChangeHost:strLocation];
-    }
     OSSRet* ret;
-    if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:host ret:&ret]) {
+    if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:[Util GetServer:strLocation] ret:&ret]) {
         [Util getAppDelegate].strAccessID=strKeyId;
         [Util getAppDelegate].strAccessKey=strKeySecret;
         [Util getAppDelegate].strArea=strLocation;
@@ -634,11 +630,7 @@ END:
                         NSString *strKeyId=[[[NSString alloc] initWithData:ret.key encoding:NSUTF8StringEncoding] autorelease];
                         NSString *strKeySecret=[[[NSString alloc] initWithData:ret.secret encoding:NSUTF8StringEncoding] autorelease];
                         OSSRet* keyret;
-                        NSString* host=strLocation;
-                        if (strLocation.length) {
-                            host=[Util ChangeHost:strLocation];
-                        }
-                        if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:host ret:&keyret]) {
+                        if ([OSSApi CheckIDandKey:strKeyId key:strKeySecret host:[Util GetServer:strLocation] ret:&keyret]) {
                             [Util getAppDelegate].strAccessID=strKeyId;
                             [Util getAppDelegate].strAccessKey=strKeySecret;
                             [Util getAppDelegate].strArea=strLocation;

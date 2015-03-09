@@ -43,12 +43,7 @@
     [array addObject:item];
     [item release];
     NSString* strUrl;
-    if (host.length==0) {
-        strUrl=[self AddHttpOrHttps:@"oss.aliyuncs.com/"];
-    }
-    else {
-        strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@/",host]];
-    }
+    strUrl=[self AddHttpOrHttps:[NSString stringWithFormat:@"%@/",host]];
     GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
                                                           method:method
                                                           header:[self GetHeader:array]
