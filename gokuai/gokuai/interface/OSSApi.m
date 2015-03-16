@@ -1700,6 +1700,7 @@
         if ([ext isEqualToString:@"wmx"])		return @"video/x-ms-wmx";
         if ([ext isEqualToString:@"wmz"])		return @"application/x-ms-wmz";
         if ([ext isEqualToString:@"woff"])		return @"application/x-font-woff";
+        if ([ext isEqualToString:@"woff2"])		return @"application/x-font-woff";
         if ([ext isEqualToString:@"wpd"])		return @"application/vnd.wordperfect";
         if ([ext isEqualToString:@"wpl"])		return @"application/vnd.ms-wpl";
         if ([ext isEqualToString:@"wps"])		return @"application/vnd.ms-works";
