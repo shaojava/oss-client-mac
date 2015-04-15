@@ -163,6 +163,9 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+    [((UploadTask*)self.pTask).pFilesc lock];
+    ((UploadTask*)self.pTask).pItem.ullOffset=((UploadTask*)self.pTask).pItem.ullOffset-self.ullRead;
+    [((UploadTask*)self.pTask).pFilesc unlock];
     OSSAddObject *ret =[[[OSSAddObject alloc]init]autorelease];
     ret.nHttpCode=request.responseStatusCode;
     [ret SetValueWithData:self.retData];
