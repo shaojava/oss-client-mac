@@ -279,6 +279,10 @@ END:
         NSMutableDictionary* dicRet=[NSMutableDictionary dictionary];
         if (item.nStatus==TRANSTASK_START) {
             item.ullSpeed=[[Network shareNetwork].uManager GetSpeed:item.strBucket object:item.strObject];
+            ULONGLONG offset=[[Network shareNetwork].uManager GetOffset:item.strBucket object:item.strObject];
+            if (offset!=0) {
+                item.ullOffset=offset;
+            }
         }
         [dicRet setValue:item.strPathhash forKey:@"pathhash"];
         [dicRet setValue:item.strBucket forKey:@"bucket"];
@@ -317,6 +321,10 @@ END:
         NSMutableDictionary* dicRet=[NSMutableDictionary dictionary];
         if (item.nStatus==TRANSTASK_START) {
             item.ullSpeed=[[Network shareNetwork].dManager GetSpeed:item.strBucket object:item.strObject];
+            ULONGLONG offset=[[Network shareNetwork].dManager GetOffset:item.strBucket object:item.strObject];
+            if (offset!=0) {
+                item.ullOffset=offset;
+            }
         }
         [dicRet setValue:item.strBucket forKey:@"bucket"];
         [dicRet setValue:item.strObject forKey:@"object"];
@@ -741,6 +749,53 @@ END:
     }
     [Util getAppDelegate].bAddDownloadOut=YES;
 }
+
+-(void) openUrl:(NSString*) jsonInfo
+{
+    NSDictionary* dictionary=[jsonInfo objectFromJSONString];
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
+        NSString* url = [dictionary objectForKey:@"url"];
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+    }
+}
+
+-(void)setCallFunctionInfo:(NSString*)json
+{
+    NSDictionary* dicInfo=[json objectFromJSONString];
+    if (![dicInfo isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    RegularItem * item =[[RegularItem alloc]init];
+    item.strBucket=[dicInfo objectForKey:@"bucket"];
+    item.strRegular=[dicInfo objectForKey:@"regular"];
+    item.strHost=[dicInfo objectForKey:@"url"];
+    item.nStatus=[[dicInfo objectForKey:@"status"] intValue];
+    item.nNum=[[dicInfo objectForKey:@"num"] intValue];
+    
+    [[TransPortDB shareTransPortDB] Add_Regular:item];
+    [[Network shareNetwork].regular addNode:item];
+    [item release];
+}
+
+-(NSString*)getCallFunctionInfo:(NSString*)json
+{
+    NSDictionary* dicInfo=[json objectFromJSONString];
+    if (![dicInfo isKindOfClass:[NSDictionary class]]) {
+        return @"{}";
+    }
+    NSString* bucket=[dicInfo objectForKey:@"bucket"];
+    RegularItem * item =[[TransPortDB shareTransPortDB] Get_Regular:bucket];
+    if (item.strBucket.length==0) {
+        return @"{}";
+    }
+    NSMutableDictionary* dicRetlist=[NSMutableDictionary dictionary];
+    [dicRetlist setValue:item.strBucket forKey:@"bucket"];
+    [dicRetlist setValue:item.strRegular forKey:@"regular"];
+    [dicRetlist setValue:item.strHost forKey:@"url"];
+    [dicRetlist setValue:[NSNumber numberWithInteger:item.nStatus] forKey:@"status"];
+    [dicRetlist setValue:[NSNumber numberWithInteger:item.nNum] forKey:@"num"];
+    return [dicRetlist JSONString];
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
@@ -789,6 +844,9 @@ END:
         ||selector == @selector(getCurrentLocation)
         ||selector == @selector(getCurrentHost)
         ||selector == @selector(stopLoadDownload:)
+        ||selector == @selector(openUrl:)
+        ||selector == @selector(setCallFunctionInfo:)
+        ||selector == @selector(getCallFunctionInfo:)
         ) {
         return NO;
     }
@@ -927,6 +985,15 @@ END:
     }
     if (sel == @selector(stopLoadDownload:)) {
         return @"stopLoadDownload";
+    }
+    if (sel == @selector(openUrl:)) {
+        return @"openUrl";
+    }
+    if (sel == @selector(setCallFunctionInfo:)) {
+        return @"setCallFunctionInfo";
+    }
+    if (sel == @selector(getCallFunctionInfo:)) {
+        return @"getCallFunctionInfo";
     }
     return nil;
 }

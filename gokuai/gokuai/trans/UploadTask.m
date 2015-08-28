@@ -41,6 +41,11 @@
     self.bStop=YES;
     [[TransPortDB shareTransPortDB] Update_UploadStatus:self.pItem.strPathhash status:TRANSTASK_FINISH];
     [self DeleteMultipartFile];
+    BOOL ret;
+    RegularItem* item=[[Network shareNetwork].regular checkNode:self.pItem.strBucket object:self.pItem.strObject ret:&ret];
+    if (ret) {
+        [self callbackUrlInfo:item];
+    }
     self.pItem.nStatus=TRANSTASK_FINISH;
     [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
 }
@@ -371,6 +376,24 @@
         }
     }
     [self.pLocksc unlock];
+}
+
+
+-(void)callbackUrlInfo:(RegularItem*)item
+{
+    NSInteger num=0;
+    OSSRet * ret;
+    while (num<item.nNum) {
+        if ([OSSApi CallbackInfo:item.strHost bucket:self.pItem.strBucket object:self.pItem.strObject ret:&ret]) {
+            
+            NSString * errormsg=[NSString stringWithFormat:@"[Callback Ok:%@|%@|%@]",item.strHost,self.pItem.strBucket,self.pItem.strObject];
+            [[FileLog shareFileLog] log:errormsg add:YES];
+            return;
+        }
+        num++;
+    }
+    NSString * errormsg=[NSString stringWithFormat:@"[Callback Error:%@|%@|%@][error:%@]",item.strHost,self.pItem.strBucket,self.pItem.strObject,ret.strMessage];
+    [[FileLog shareFileLog] log:errormsg add:YES];
 }
 
 @end

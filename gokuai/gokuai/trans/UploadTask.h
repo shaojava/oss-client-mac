@@ -27,4 +27,6 @@
 -(void)CheckPeer;
 -(void)CheckDeleteFile;
 
+-(void)callbackUrlInfo:(RegularItem*)item;
+
 @end

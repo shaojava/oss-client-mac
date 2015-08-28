@@ -54,6 +54,9 @@
 		18FC3FF615E5CA05007927F8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF515E5CA05007927F8 /* WebKit.framework */; };
 		18FC3FF815E5CA15007927F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */; };
 		18FC3FFC15E5CA27007927F8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FC3FFB15E5CA27007927F8 /* libz.dylib */; };
+		3C62A7481B8C83F700A219EC /* Regular.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C62A7471B8C83F700A219EC /* Regular.m */; };
+		3C65D40D1B8305C7006A8AC2 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C65D40C1B8305C7006A8AC2 /* RegexKitLite.m */; };
+		3C65D40F1B830605006A8AC2 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C65D40E1B830605006A8AC2 /* libicucore.dylib */; };
 		D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10ED7E21688191F008984B4 /* LoginWebWindowController.m */; };
 		D10ED7E51688191F008984B4 /* LoginWebWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D10ED7E31688191F008984B4 /* LoginWebWindowController.xib */; };
 		D10ED81616882092008984B4 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D10ED81516882092008984B4 /* libz.1.2.5.dylib */; };
@@ -224,6 +227,11 @@
 		18FC3FF515E5CA05007927F8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		18FC3FFB15E5CA27007927F8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3C62A7461B8C83F700A219EC /* Regular.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regular.h; sourceTree = "<group>"; };
+		3C62A7471B8C83F700A219EC /* Regular.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regular.m; sourceTree = "<group>"; };
+		3C65D40B1B8305C7006A8AC2 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		3C65D40C1B8305C7006A8AC2 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		3C65D40E1B830605006A8AC2 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		D10ED7E11688191F008984B4 /* LoginWebWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWebWindowController.h; sourceTree = "<group>"; };
 		D10ED7E21688191F008984B4 /* LoginWebWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginWebWindowController.m; sourceTree = "<group>"; };
 		D10ED7E31688191F008984B4 /* LoginWebWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginWebWindowController.xib; sourceTree = "<group>"; };
@@ -327,6 +335,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C65D40F1B830605006A8AC2 /* libicucore.dylib in Frameworks */,
 				F5FD052818B1DA2600FF5204 /* AVFoundation.framework in Frameworks */,
 				D17C950516A82CDC0044C89F /* libxml2.dylib in Frameworks */,
 				D10ED81616882092008984B4 /* libz.1.2.5.dylib in Frameworks */,
@@ -395,6 +404,8 @@
 				1836C3CB19FA1973004DC7B6 /* UploadPeer.m */,
 				1836C3CE19FA1989004DC7B6 /* DownloadPeer.h */,
 				1836C3CF19FA1989004DC7B6 /* DownloadPeer.m */,
+				3C62A7461B8C83F700A219EC /* Regular.h */,
+				3C62A7471B8C83F700A219EC /* Regular.m */,
 			);
 			path = trans;
 			sourceTree = "<group>";
@@ -440,6 +451,7 @@
 		18FC3FCD15E5C950007927F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C65D40E1B830605006A8AC2 /* libicucore.dylib */,
 				18FC3FFB15E5CA27007927F8 /* libz.dylib */,
 				D10ED81516882092008984B4 /* libz.1.2.5.dylib */,
 				D17C950416A82CDC0044C89F /* libxml2.dylib */,
@@ -621,6 +633,8 @@
 		D17C94B216A82AC20044C89F /* Staticclass */ = {
 			isa = PBXGroup;
 			children = (
+				3C65D40B1B8305C7006A8AC2 /* RegexKitLite.h */,
+				3C65D40C1B8305C7006A8AC2 /* RegexKitLite.m */,
 				187966E61A009B1C00BB44FE /* AESCrypt.h */,
 				187966E71A009B1C00BB44FE /* AESCrypt.m */,
 				187966E81A009B1C00BB44FE /* NSData+Base64.h */,
@@ -798,6 +812,7 @@
 				18FC3FDB15E5C950007927F8 /* main.m in Sources */,
 				188C6E1D15E5F63C00394CF8 /* GKHTTPRequest.m in Sources */,
 				18F13B2C15E89C99003E321B /* Util.m in Sources */,
+				3C65D40D1B8305C7006A8AC2 /* RegexKitLite.m in Sources */,
 				1892BDC415F8414300488E70 /* SettingsDb.m in Sources */,
 				D10ED7E41688191F008984B4 /* LoginWebWindowController.m in Sources */,
 				D114017816966FD800552FEC /* LaunchpadWindowController.m in Sources */,
@@ -856,6 +871,7 @@
 				1836C3D319FA2011004DC7B6 /* Md5Sum.m in Sources */,
 				18CF331A19FF71F60083C5F1 /* OSSRsa.m in Sources */,
 				187966EE1A009B1C00BB44FE /* AESCrypt.m in Sources */,
+				3C62A7481B8C83F700A219EC /* Regular.m in Sources */,
 				187966EF1A009B1C00BB44FE /* NSData+Base64.m in Sources */,
 				187966F01A009B1C00BB44FE /* NSData+CommonCrypto.m in Sources */,
 				187966F11A009B1C00BB44FE /* NSString+Base64.m in Sources */,

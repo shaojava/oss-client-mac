@@ -151,3 +151,34 @@
 
 @end
 
+@implementation RegularItem
+
+@synthesize strBucket;
+@synthesize strRegular;
+@synthesize strHost;
+@synthesize nStatus;
+@synthesize nNum;
+
+-(id)init
+{
+    if (self = [super init])
+    {
+        self.strBucket=@"";
+        self.strRegular=@"";
+        self.strHost=@"";
+        self.nStatus=0;
+        self.nNum=0;
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    self.strBucket=nil;
+    self.strRegular=nil;
+    self.strHost=nil;
+    [super dealloc];
+}
+
+@end
+

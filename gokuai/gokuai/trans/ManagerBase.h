@@ -35,6 +35,7 @@
 -(void)CheckFinishorError;
 -(ULONGLONG)GetSpeed;
 -(ULONGLONG)GetSpeed:(NSString*)bucket object:(NSString*)object;
+-(ULONGLONG)GetOffset:(NSString*)bucket object:(NSString*)object;
 -(NSMutableArray*)GetAll;
 -(void)startAdding;
 -(void)finishAdding;

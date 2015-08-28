@@ -97,6 +97,19 @@
     return speed;
 }
 
+-(ULONGLONG)GetOffset:(NSString*)bucket object:(NSString*)object
+{
+    ULONGLONG offset=0;
+    [self.pLock lock];
+    for (TaskBask* item in self.pArray) {
+        if ([item.pItem.strObject isEqualToString:object]&&[item.pItem.strBucket isEqualToString:bucket]) {
+            offset=item.pItem.ullOffset;
+            break;
+        }
+    }
+    [self.pLock unlock];
+    return offset;
+}
 -(NSMutableArray*)GetAll
 {
     NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];

@@ -5,6 +5,7 @@
 #import "FMDatabase.h"
 #import "Util.h"
 #import "NSStringExpand.h"
+#import "Network.h"
 
 #define SQLVERSION  @"1.0.0.0"
 
@@ -43,6 +44,9 @@
          res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS Upload(id INTEGER PRIMARY KEY AUTOINCREMENT,pathhash char[40],host varchar[1024] COLLATE NOCASE,bucket varchar[64] COLLATE NOCASE,object varchar[1024] COLLATE NOCASE,fullpath varchar[1024] COLLATE NOCASE,filesize bigint,status int,offset bigint,actlast bigint,uploadid varchar[40],errornum int,errormsg varchar[1024]);"];
          if (!res)
              NSLog(@"error to create Upload");
+         res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS Regular(bucket varchar[64] COLLATE NOCASE,regular varchar[1024] COLLATE NOCASE,host varchar[1024] COLLATE NOCASE,status int,num int,PRIMARY KEY (bucket));"];
+         if (!res)
+             NSLog(@"error to create Regular");
          res = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS transsqlversion(version char[20]);"];
          if (res){
              NSInteger count=0;
@@ -810,4 +814,78 @@
          [db executeUpdate:@"commit transaction;end transaction;"];
      }];
 }
+
+-(BOOL)Add_Regular:(RegularItem*)item
+{
+    __block BOOL ret=NO;
+    NSString *rbucket=[item.strBucket stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *rRegular=[item.strRegular stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *rHost=[item.strHost stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    [self.dbQueue inDatabase:^(FMDatabase *db)
+     {
+         NSString *sql =[NSString stringWithFormat:@"select * from Regular where bucket='%@';",rbucket];
+         FMResultSet *rs = [db executeQuery:sql];
+         BOOL bHave=NO;
+         while ([rs next])
+         {
+             bHave=YES;
+             break;
+         }
+         [rs close];
+         if (!bHave) {
+             sql =[NSString stringWithFormat:@"insert into Regular(bucket,regular,host,status,num) values('%@','%@','%@','%ld','%ld');",rbucket,rRegular,rHost,item.nStatus,item.nNum];
+         }
+         else {
+             sql =[NSString stringWithFormat:@"update Regular set regular='%@',host='%@',status='%ld',num='%ld' where bucket='%@';",rRegular,rHost,item.nStatus,item.nNum,rbucket];
+         }
+         ret=[db executeUpdate:sql];
+     }];
+    return ret;
+}
+
+-(RegularItem*)Get_Regular:(NSString*)bucket
+{
+    NSString *rbucket=[bucket stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    RegularItem *item=[[[RegularItem alloc]init] autorelease];
+    [self.dbQueue inDatabase:^(FMDatabase *db)
+     {
+         NSString *sql =[NSString stringWithFormat:@"select * from Regular where bucket='%@';",rbucket];
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next])
+         {
+             item.strBucket=[rs stringForColumn:@"bucket"];
+             item.strRegular=[rs stringForColumn:@"regular"];
+             item.strHost=[rs stringForColumn:@"host"];
+             item.nStatus=[rs intForColumn:@"status"];
+             item.nNum=[rs intForColumn:@"num"];
+             break;
+         }
+         [rs close];
+     }];
+    return item;
+}
+
+-(NSMutableArray*)Get_Regulars
+{
+    NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];
+    [self.dbQueue inDatabase:^(FMDatabase *db)
+     {
+         NSString *sql=@"select * from Regular;";
+         FMResultSet *rs = [db executeQuery:sql];
+         while ([rs next])
+         {
+             RegularItem *item=[[RegularItem alloc]init];
+             item.strBucket=[rs stringForColumn:@"bucket"];
+             item.strRegular=[rs stringForColumn:@"regular"];
+             item.strHost=[rs stringForColumn:@"host"];
+             item.nStatus=[rs intForColumn:@"status"];
+             item.nNum=[rs intForColumn:@"num"];
+             [all addObject:item];
+             [item release];
+         }
+         [rs close];
+     }];
+    return all;
+}
+
 @end

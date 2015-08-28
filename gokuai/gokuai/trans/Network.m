@@ -21,6 +21,7 @@
 @synthesize nUploadSpeed;
 @synthesize nUPeerMax;
 @synthesize nDPeerMax;
+@synthesize regular;
 
 +(Network*)shareNetwork
 {
@@ -42,6 +43,7 @@
         self.uManager=[[[UploadManager alloc]init]autorelease];
         self.dCallback=[[[DownloadCallbackThread alloc]init]autorelease];
         self.uCallback=[[[UploadCallbackThread alloc]init]autorelease];
+        self.regular=[[[Regular alloc]init]autorelease];
         self.nDonwloadFinish=0;
         self.nDownloadCount=0;
         self.nDownloadSpeed=0;
@@ -52,16 +54,19 @@
         [self SetUTaskMax:[[SettingsDb shareSettingDb] getUMax]];
         [self SetDPeerMax:[[SettingsDb shareSettingDb] getDPMax]];
         [self SetUPeerMax:[[SettingsDb shareSettingDb] getUPMax]];
+        NSMutableArray * array=[[TransPortDB shareTransPortDB] Get_Regulars];
+        [self.regular addNodes:array];
     }
     return self;
 }
 
 -(void)dealloc
 {
-    dManager=nil;
-    uManager=nil;
-    dCallback=nil;
-    uCallback=nil;
+    self.dManager=nil;
+    self.uManager=nil;
+    self.dCallback=nil;
+    self.uCallback=nil;
+    self.regular=nil;
     [super dealloc];
 }
 

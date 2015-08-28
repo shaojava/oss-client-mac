@@ -73,4 +73,8 @@
 -(void)begin;
 -(void)end;
 
+-(BOOL)Add_Regular:(RegularItem*)item;
+-(RegularItem*)Get_Regular:(NSString*)bucket;
+-(NSMutableArray*)Get_Regulars;
+
 @end

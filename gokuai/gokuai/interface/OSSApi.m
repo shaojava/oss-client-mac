@@ -1806,6 +1806,9 @@
 
 +(NSString*)AddHttpOrHttps:(NSString*)url
 {
+    if ([url hasPrefix:@"http"]) {
+        return url;
+    }
     return [NSString stringWithFormat:@"http://%@",url];
 }
 
@@ -1918,6 +1921,39 @@
     }
 }
 
++(BOOL)CallbackInfo:(NSString*)url bucket:(NSString*)bucket object:(NSString*)object ret:(OSSRet**)ret
+{
+    NSString* method=@"PUT";
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    OssSignKey *item=[[OssSignKey alloc]init];
+    item.key=@"bucket";
+    item.value=bucket;
+    [array addObject:item];
+    [item release];
+    item=[[OssSignKey alloc]init];
+    item.key=@"object";
+    item.value=object;
+    [array addObject:item];
+    [item release];
+    NSString* strUrl=[self AddHttpOrHttps:url];
+    GKHTTPRequest* request = [[[GKHTTPRequest alloc] initWithUrl:strUrl
+                                                          method:method
+                                                          header:nil
+                                                        bodyData:[self getpostdata:array]] autorelease];
+    NSHTTPURLResponse* response;
+    NSData* data = [request connectNetSyncWithResponse:&response error:nil];
+    *ret =[[[OSSAddObject alloc]init]autorelease];
+    (*ret).nHttpCode=[response statusCode];
+    if ((*ret).nHttpCode>=200&&(*ret).nHttpCode<400) {
+        return YES;
+    }
+    else {
+        (*ret).strMessage=[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+        return NO;
+    }
+    return NO;
+}
+
 +(NSString*)get_postdata:(NSArray*)keys
 {
     NSMutableString *signString = [[[NSMutableString alloc] init] autorelease];
@@ -1927,4 +1963,20 @@
     }
     return [NSString stringWithFormat:@"%@",signString];
 }
+
++(NSData*)getpostdata:(NSMutableArray*)array
+{
+    NSMutableString *ret = [[[NSMutableString alloc] init] autorelease];
+    for (int i=0;i<[array count];i++) {
+        if (i!=0) {
+            [ret appendString:@"&"];
+        }
+        OssSignKey* sk=[array objectAtIndex:i];
+        [ret appendString:sk.key];
+        [ret appendString:@"="];
+        [ret appendString:[sk.value urlEncoded]];
+    }
+    return [ret dataUsingEncoding:NSUTF8StringEncoding];
+}
+
 @end

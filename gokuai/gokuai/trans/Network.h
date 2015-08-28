@@ -3,6 +3,7 @@
 #import "UploadManager.h"
 #import "DownloadCallbackThread.h"
 #import "UploadCallbackThread.h"
+#import "Regular.h"
 
 @interface Network : NSObject{
     DownloadManager*    dManager;
@@ -17,6 +18,8 @@
     ULONGLONG           nUploadSpeed;
     NSInteger           nDPeerMax;
     NSInteger           nUPeerMax;
+    
+    Regular*            regular;
 }
 
 @property(nonatomic,retain)DownloadManager* dManager;
@@ -31,6 +34,7 @@
 @property(nonatomic)ULONGLONG nUploadSpeed;
 @property(nonatomic)NSInteger nDPeerMax;
 @property(nonatomic)NSInteger nUPeerMax;
+@property(nonatomic,retain)Regular* regular;
 
 +(Network*)shareNetwork;
 

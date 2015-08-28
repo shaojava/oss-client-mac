@@ -45,6 +45,10 @@
 
 +(BOOL)ReportServer:(NSString*)hash resouce:(NSString*)resouce version:(NSString*)version app:(NSString*)app;
 +(NSData*)CheckServer:(NSString*)resouce version:(NSString*)version app:(NSString*)app;
+
++(BOOL)CallbackInfo:(NSString*)url bucket:(NSString*)bucket object:(NSString*)object ret:(OSSRet**)ret;
+
 +(NSString*)get_postdata:(NSArray*)keys;
++(NSData*)getpostdata:(NSMutableArray*)array;
 
 @end

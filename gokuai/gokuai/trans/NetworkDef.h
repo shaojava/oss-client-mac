@@ -108,11 +108,29 @@ enum
 {
     NSString* strHost;
     NSString* strBucket;
-    NSString* strObject;}
+    NSString* strObject;
+}
 
 @property(nonatomic,retain)NSString* strHost;
 @property(nonatomic,retain)NSString* strBucket;
 @property(nonatomic,retain)NSString* strObject;
+
+@end
+
+@interface RegularItem : NSObject
+{
+    NSString* strBucket;
+    NSString* strRegular;
+    NSString* strHost;
+    NSInteger nStatus;
+    NSInteger nNum;
+}
+
+@property(nonatomic,copy)NSString* strBucket;
+@property(nonatomic,copy)NSString* strRegular;
+@property(nonatomic,copy)NSString* strHost;
+@property(nonatomic)NSInteger nStatus;
+@property(nonatomic)NSInteger nNum;
 
 @end
 
