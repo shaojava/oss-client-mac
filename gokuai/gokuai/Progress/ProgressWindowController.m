@@ -66,16 +66,16 @@
     [self.window setHasShadow:YES];
     switch (_oper) {
         case pc_copy:
-            self.window.title=@"复制中";
-            _actionTarget.stringValue=@"准备复制";
+            self.window.title=[Util localizedStringForKey:@"Copy" alternate:nil];
+            _actionTarget.stringValue=[Util localizedStringForKey:@"ReadyCopy" alternate:nil];
             break;
         case pc_delete:
-            self.window.title=@"删除中";
-            _actionTarget.stringValue=@"准备删除";
+            self.window.title=[Util localizedStringForKey:@"Delete" alternate:nil];
+            _actionTarget.stringValue=[Util localizedStringForKey:@"ReadyDelete" alternate:nil];
             break;
         case pc_bucket:
-            self.window.title=@"删除中";
-            _actionTarget.stringValue=@"准备删除";
+            self.window.title=[Util localizedStringForKey:@"Delete" alternate:nil];
+            _actionTarget.stringValue=[Util localizedStringForKey:@"ReadyDelete" alternate:nil];
             break;
         default:
             break;
@@ -97,26 +97,26 @@
             switch (_oper) {
                 case pc_copy:
                     if (1==[ProgressManager sharedInstance].nCount) {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在复制［%@］",[ProgressManager sharedInstance].strFilename];
+                        _actionTarget.stringValue=[NSString stringWithFormat:@"%@［%@］",[Util localizedStringForKey:@"Copying1" alternate:nil],[ProgressManager sharedInstance].strFilename];
                     }
                     else {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在复制%ld/%ld个项目",v,[ProgressManager sharedInstance].nCount];
+                        _actionTarget.stringValue=[NSString stringWithFormat:[Util localizedStringForKey:@"Copying" alternate:nil],v,[ProgressManager sharedInstance].nCount];
                     }
                     break;
                 case pc_delete:
                     if (1==[ProgressManager sharedInstance].nCount) {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除［%@］",[ProgressManager sharedInstance].strFilename];
+                        _actionTarget.stringValue=[NSString stringWithFormat:@"%@［%@］",[Util localizedStringForKey:@"Deleting1" alternate:nil],[ProgressManager sharedInstance].strFilename];
                     }
                     else {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除%ld/%ld个项目",v,[ProgressManager sharedInstance].nCount];
+                        _actionTarget.stringValue=[NSString stringWithFormat:[Util localizedStringForKey:@"Deleting" alternate:nil],v,[ProgressManager sharedInstance].nCount];
                     }
                     break;
                 case pc_bucket:
                     if (1==[ProgressManager sharedInstance].nCount) {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除［%@］",[ProgressManager sharedInstance].strFilename];
+                        _actionTarget.stringValue=[NSString stringWithFormat:@"%@［%@］",[Util localizedStringForKey:@"Deleting1" alternate:nil],[ProgressManager sharedInstance].strFilename];
                     }
                     else {
-                        _actionTarget.stringValue=[NSString stringWithFormat:@"正在删除%ld/%ld个项目",v,[ProgressManager sharedInstance].nCount];
+                        _actionTarget.stringValue=[NSString stringWithFormat:[Util localizedStringForKey:@"Deleting" alternate:nil],v,[ProgressManager sharedInstance].nCount];
                     }
                     break;
                 default:

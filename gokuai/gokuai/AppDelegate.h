@@ -49,6 +49,10 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
     
     BOOL        bAddDownloadOut;
     BOOL        bAddDownloadDelete;
+    //当前的语言
+    NSBundle* languageBundle;
+    
+    NSInteger   nContentDisposition;
 }
 
 @property(nonatomic, retain) NSString* strUIPath;
@@ -86,6 +90,9 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 
 @property(nonatomic)BOOL bAddDownloadOut;
 @property(nonatomic)BOOL bAddDownloadDelete;
+@property(nonatomic,retain)NSBundle* languageBundle;
+
+@property(nonatomic)NSInteger nContentDisposition;
 
 -(void)onStart;
 
@@ -106,5 +113,10 @@ LaunchpadWindowController,BrowserWebWindowController,ASIHTTPRequest,AboutWindowC
 -(void)openUpdateDmg;
 
 -(void)UpdateLoadingCount:(NSInteger)count downloadcount:(NSInteger)downloadcount;
+
+/**
+ *  得到语言设置
+ */
+-(void)getAppLanguage;
 
 @end

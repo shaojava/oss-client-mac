@@ -1,0 +1,99 @@
+
+"够快科技" = "够快科技";
+
+"够快云库" = "够快云库";
+"编辑" = "编辑";
+"窗口" = "窗口";
+"帮助" = "帮助";
+
+"关于" = "关于";
+"网络设置" = "网络设置";
+"在线管理" = "在线管理";
+"退出用户" = "退出用户";
+"隐藏 OSS" = "隐藏 窗口";
+"隐藏 其他" = "隐藏 其他";
+"退出OSS" = "退出";
+
+"剪切" = "剪切";
+"复制" = "复制";
+"粘贴" = "粘贴";
+"全选" = "全选";
+
+"关闭" = "关闭";
+"最小化" = "最小化";
+
+"温馨提示" = "温馨提示";
+"确定" = "確定";
+"取消" = "取消";
+"保留" = "保留";
+"删除" = "删除";
+"是" = "是";
+"否" = "否";
+"我知道了" = "我知道了";
+"选择文件"="選擇文件";
+"选择路径"="選擇路徑";
+"打开"="打開";
+"选择"="選擇";
+"全部应用"="全部應用";
+"替换"="替換";
+"不替换"="不替換";
+"保留两者"="保留兩者";
+"停止"="停止";
+"选择授权文件"="選擇授權文件";
+"保存授权文件"="保存授權文件";
+"保存"="保存";
+"获取列表失败"="获取列表失败";
+"创建文件失败"="創建文件失敗";
+"该位置已经存在名称为［%@］的项目，是否替换当前项目？"="該位置已經存在名稱為［%@］的項目，是否替換當前項目？";
+"登录"="登錄";
+
+"ok"="確定";
+"cancel"="取消";
+"prompt"="提示";
+"logout"="是否確定退出";
+"selectpath"="選擇路徑";
+"DownloadDir"="下載文件夾";
+"Update"="OSS更新提示";
+"UpdateMessage"="軟體最新版本已經更新到[%@]版，是否立即更新？";
+"UpdateMessage1"="軟體最新版本已經更新到[%@]版，是否立即安裝？";
+"OssFile"="OSS授權文件|*.key||";
+"Copy"="複製";
+"Delete"="删除";
+"ReadyCopy"="準備複製";
+"ReadyDelete"="準備刪除";
+"Copying"="正在複製%d/%d項";
+"Deleting"="正在刪除%d/%d項";
+"Copying1"="正在複製";
+"Deleting1"="正在刪除";
+"PasswordError"="安全密碼不正確";
+"FileError"="該文件不是授權文件";
+"DecryptError"="匯入授權文件失敗";
+"AccessKeyError"="AccessKey驗證失敗";
+"EncryptError"="匯出授權文件失敗";
+"FileSaveError"="授權文件保存失敗";
+"FileOpenError"="授權文件打開失敗";
+"FileCreateError"="建立授權文件失敗";
+"JsonError"="json不正確";
+"CopyFileError"="複製Object失敗";
+"CopyBigFileError"="複製大於1G的Object失敗";
+"DeleteFileError"="刪除Object失敗";
+"DeleteBucketError"="刪除bucket失敗";
+"FileInfoError"="獲取碎片訊息失敗";
+"DeleteFileInfoError"="删除碎片訊息失败";
+"MaxDownloadError"="佇列已超出客戶端下載能力，請使用OSS的API下載。";
+"MaxUploadError"="佇列已超出客戶端下載能力，請使用OSS的API上傳。";
+"ChangeError"="修改Object檔頭訊息失數";
+"CreateFileInfoError"="建立文件分塊訊息失败";
+"CreateEmptyError"="建立0字元文件失敗";
+"CreateDirError"="建立文件夾失敗";
+"MergerFileSizeError"="組成文件時，文件大小不正確";
+"MergerTempFileError"="組成文件時，打開臨時文件失敗";
+"MergerCreateFileError"="組成文件時，建立文件失敗";
+"MergerMemError"="組成文件時，記憶體不足";
+"DownloadFileError"="下載文件失败";
+"OssKeyFileError"="該文件不為授權文件";
+"OpenFileError"="文件打開失敗";
+
+
+
+

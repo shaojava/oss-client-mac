@@ -78,12 +78,8 @@
 
 -(NSString*)urlEncoded
 {
-    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,
-                            @"@" , @"&" , @"=" , @"+" ,    @"$" , @"," ,
-                            @"!", @"'", @"(", @")", @"*",@".", nil];
-    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F", @"%3F" , @"%3A" ,
-                             @"%40" , @"%26" , @"%3D" , @"%2B" , @"%24" , @"%2C" ,
-                             @"%21", @"%27", @"%28", @"%29", @"%2A",@"%2E", nil];
+    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,@"@" , @"&" , @"=" , nil];
+    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F", @"%3F" , @"%3A" ,@"%40" , @"%26" , @"%3D" , nil];
     NSInteger len = [escapeChars count];
     NSMutableString *temp = [[[self stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]mutableCopy] autorelease];
     int i;
@@ -117,6 +113,10 @@
 -(NSString*)replacetojson
 {
     return [self stringByReplacingOccurrencesOfString:@"/" withString:@"\\/"];
+}
+-(NSString*)replacetosql
+{
+    return [self stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
 }
 
 @end

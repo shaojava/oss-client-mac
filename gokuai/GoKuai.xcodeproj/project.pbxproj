@@ -227,6 +227,8 @@
 		18FC3FF515E5CA05007927F8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FC3FF715E5CA15007927F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		18FC3FFB15E5CA27007927F8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3C1C0DE11BEA0A470008CAB2 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		3C1C0DE21BEA0A580008CAB2 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		3C62A7461B8C83F700A219EC /* Regular.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regular.h; sourceTree = "<group>"; };
 		3C62A7471B8C83F700A219EC /* Regular.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regular.m; sourceTree = "<group>"; };
 		3C65D40B1B8305C7006A8AC2 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
@@ -763,6 +765,7 @@
 				ch,
 				"zh-Hans",
 				zh,
+				"zh-Hant-TW",
 			);
 			mainGroup = 18FC3FBF15E5C950007927F8;
 			productRefGroup = 18FC3FCB15E5C950007927F8 /* Products */;
@@ -892,6 +895,7 @@
 			children = (
 				F5E8FECD18502AA900D95136 /* en */,
 				F5E8FECF18502AB800D95136 /* zh-Hans */,
+				3C1C0DE21BEA0A580008CAB2 /* zh-Hant-TW */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -901,6 +905,7 @@
 			children = (
 				F5E8FED118502C8700D95136 /* en */,
 				F5E8FED318502C9400D95136 /* zh-Hans */,
+				3C1C0DE11BEA0A470008CAB2 /* zh-Hant-TW */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

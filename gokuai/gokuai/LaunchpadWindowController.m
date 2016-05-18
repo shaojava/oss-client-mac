@@ -170,7 +170,7 @@
 {
     NSAlert* alert=[NSAlert alertWithMessageText:[Util localizedStringForKey:@"温馨提示" alternate:nil]
                                    defaultButton:[Util localizedStringForKey:@"确定" alternate:nil] alternateButton:[Util localizedStringForKey:@"取消" alternate:nil]
-                                     otherButton:nil informativeTextWithFormat:@"%@",[Util localizedStringForKey:@"是否确定退出?" alternate:nil]];
+                                     otherButton:nil informativeTextWithFormat:@"%@",[Util localizedStringForKey:@"logout" alternate:nil]];
     
     NSInteger ret=[alert runModalSheetForWindow:self.window];
     if (NSAlertFirstButtonReturn == ret) {

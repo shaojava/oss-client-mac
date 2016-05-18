@@ -5,6 +5,7 @@
 #import "Common.h"
 #import "AppDelegate.h"
 #import "FileLog.h"
+#import "SettingsDb.h"
 
 #import <netinet/in.h>
 #if !TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
@@ -21,7 +22,7 @@
 
 +(NSString*) localizedStringForKey:(NSString*) key alternate:(NSString*) alternate
 {
-    return key;
+    return [[self getAppDelegate].languageBundle localizedStringForKey:key value:alternate table:nil];
 }
 
 +(BOOL)createfolder:(NSString*)path
@@ -315,28 +316,28 @@
     NSString *ret=@"";
     switch (error) {
         case WEB_JSONERROR:
-            ret=@"json不正确";
+            ret=[Util localizedStringForKey:@"JsonError" alternate:nil];
             break;
         case WEB_FILEOPENERROR:
-            ret=@"授权文件打开失败";
+            ret=[Util localizedStringForKey:@"FileOpenError" alternate:nil];
             break;
         case WEB_FILESAVEERROR:
-            ret=@"授权文件保存失败";
+            ret=[Util localizedStringForKey:@"FileSaveError" alternate:nil];
             break;
         case WEB_ENCRYPTERROR:
-            ret=@"导出授权文件失败";
+            ret=[Util localizedStringForKey:@"EncryptError" alternate:nil];
             break;
         case WEB_ACCESSKEYERROR:
-            ret=@"AccessKey不正确";
+            ret=[Util localizedStringForKey:@"AccessKeyError" alternate:nil];
             break;
         case WEB_DECRYPTERROR:
-            ret=@"导入授权文件失败";
+            ret=[Util localizedStringForKey:@"DecryptError" alternate:nil];
             break;
         case WEB_FILEERROR:
-            ret=@"该文件不为授权文件";
+            ret=[Util localizedStringForKey:@"OssKeyFileError" alternate:nil];
             break;
         case WEB_PASSWORDERROR:
-            ret=@"安全密码不正确";
+            ret=[Util localizedStringForKey:@"PasswordError" alternate:nil];
             break;
         default:
             break;
@@ -346,6 +347,9 @@
 
 +(NSString*)GetOssErrorMessage:(NSString*)error
 {
+    if ([[SettingsDb shareSettingDb] getlanguage]!=1) {
+        return error;
+    }
     if ([error isEqualToString:@"AccessDenied"])                    return @"拒绝访问";
 	if ([error isEqualToString:@"BucketAlreadyExists"])             return @"Bucket已经存在";
 	if ([error isEqualToString:@"BucketNotEmpty"])                  return @"Bucket不为空";

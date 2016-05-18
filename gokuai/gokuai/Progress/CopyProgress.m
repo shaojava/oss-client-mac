@@ -69,7 +69,7 @@
         }
         else {
             NSString *msg=[NSString stringWithFormat:@"%@,%@,%@",bucket,object,nextmarker];
-            strRet=[Util errorInfoWithCode:@"删除文件夹获取列表失败" message:msg ret:ret];
+            strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"获取列表失败" alternate:nil] message:msg ret:ret];
             break;
         }
     }
@@ -126,7 +126,7 @@
             OSSCopyRet *ret;
             if (![OSSApi CopyObject:cpyfile.strDstHost dstbucketname:cpyfile.strDstBucket dstobjectname:cpyfile.strDstObject srcbucketname:cpyfile.strBucket srcobjectname:cpyfile.strObject ret:&ret]) {
                 NSString * message=[NSString stringWithFormat:@"%@,%@",cpyfile.strDstBucket,cpyfile.strObject];
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"复制object失败" message:message ret:ret];
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"CopyFileError" alternate:nil] message:message ret:ret];
                 if (![self isCancelled]) {
                     progressCallBack(0);
                 }
@@ -144,7 +144,7 @@
                     OSSRet *partret;
                     if (![OSSApi UploadPartCopy:cpyfile.strDstHost dstbucketname:cpyfile.strDstBucket dstobjectname:cpyfile.strDstObject srcbucketname:cpyfile.strBucket srcobjectname:cpyfile.strObject uploadid:ret.strUploadId partnumber:i+1 pos:i*COPY_MAX size:size ret:&partret]) {
                         NSString * message=[NSString stringWithFormat:@"%@,%@",cpyfile.strDstBucket,cpyfile.strObject];
-                        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"复制object块失败" message:message ret:partret];
+                        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"CopyFileError" alternate:nil] message:message ret:partret];
                         if (![self isCancelled]) {
                             progressCallBack(0);
                         }
@@ -157,7 +157,7 @@
             }
             else {
                 NSString * message=[NSString stringWithFormat:@"%@,%@",cpyfile.strDstBucket,cpyfile.strObject];
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"复制大于1G的object失败" message:message ret:ret];
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"CopyBigFileError" alternate:nil] message:message ret:ret];
                 if (![self isCancelled]) {
                     progressCallBack(0);
                 }
@@ -221,7 +221,7 @@
         OSSRet *ret;
         if (![OSSApi DeleteObject:host bucketname:bucket objectname:item.strObject ret:&ret]) {
             NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
-            [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
+            [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteFileError" alternate:nil] message:message ret:ret];
         }
         if (![self isCancelled]) {
             progressCallBack(1);
@@ -240,7 +240,7 @@
             }
             OSSRet *ret;
             if (![OSSApi DeleteObject:host bucketname:bucket objectnames:array quiet:YES ret:&ret]) {
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:@"" ret:ret];
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteFileError" alternate:nil] message:@"" ret:ret];
                 self.bTimer=NO;
                 if (![self isCancelled]) {
                     progressCallBack(0);
@@ -299,7 +299,7 @@
         OSSRet *ret;
         if (![OSSApi DeleteObject:host bucketname:bucket objectname:item.strObject ret:&ret]) {
             NSString * message=[NSString stringWithFormat:@"%@,%@",item.strBucket,item.strObject];
-            [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:message ret:ret];
+            [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteFileError" alternate:nil] message:message ret:ret];
         }
         if (![self isCancelled]) {
             progressCallBack(1);
@@ -318,7 +318,7 @@
             }
             OSSRet *ret;
             if (![OSSApi DeleteObject:host bucketname:bucket objectnames:array quiet:YES ret:&ret]) {
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除object失败" message:@"" ret:ret];
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteFileError" alternate:nil] message:@"" ret:ret];
                 self.bTimer=NO;
                 if (![self isCancelled]) {
                     progressCallBack(0);
@@ -342,7 +342,7 @@
             OSSRet * abort;
             if (![OSSApi AbortMultipartUpload:host bucketname:bucket objectname:item.strKey uploadid:item.strUploadId ret:&abort]) {
                 NSString * message=[NSString stringWithFormat:@"%@,%@",bucket,item.strKey];
-                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除碎片信息失败" message:message ret:ret];
+                [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteFileInfoError" alternate:nil] message:message ret:ret];
                 if (![self isCancelled]) {
                     progressCallBack(0);
                 }
@@ -351,7 +351,7 @@
         }
     }
     else {
-        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"获取碎片信息失败" message:bucket ret:ret];
+        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"FileInfoError" alternate:nil] message:bucket ret:ret];
         if (![self isCancelled]) {
             progressCallBack(0);
         }
@@ -359,7 +359,7 @@
     }
     OSSRet * ossret;
     if (![OSSApi DeleteBucket:host bucketname:bucket ret:&ossret]) {
-        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:@"删除bucket失败" message:bucket ret:ret];
+        [ProgressManager sharedInstance].strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"DeleteBucketError" alternate:nil] message:bucket ret:ret];
         
     }
     else {

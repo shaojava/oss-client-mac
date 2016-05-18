@@ -359,6 +359,13 @@
     item.value=contenttype;
     [array addObject:item];
     [item release];
+    if ([Util getAppDelegate].nContentDisposition) {
+        item=[[OssSignKey alloc]init];
+        item.key=@"Content-Disposition";
+        item.value=[self GetContentType:objectname];
+        [array addObject:item];
+        [item release];
+    }
     item=[[OssSignKey alloc]init];
     item.key=@"Date";
     item.value=date;
@@ -446,6 +453,13 @@
     item.value=contenttype;
     [array addObject:item];
     [item release];
+    if ([Util getAppDelegate].nContentDisposition) {
+        item=[[OssSignKey alloc]init];
+        item.key=@"Content-Disposition";
+        item.value=[self GetContentType:objectname];
+        [array addObject:item];
+        [item release];
+    }
     item=[[OssSignKey alloc]init];
     item.key=@"Date";
     item.value=date;
@@ -508,6 +522,13 @@
     item.value=contenttype;
     [array addObject:item];
     [item release];
+    if ([Util getAppDelegate].nContentDisposition) {
+        item=[[OssSignKey alloc]init];
+        item.key=@"Content-Disposition";
+        item.value=[self GetContentType:dstobjectname];
+        [array addObject:item];
+        [item release];
+    }
     item=[[OssSignKey alloc]init];
     item.key=@"Date";
     item.value=date;
@@ -760,6 +781,49 @@
     CCHmac(kCCHmacAlgSHA1, secretStr, [[Util getAppDelegate].strAccessKey lengthOfBytesUsingEncoding:NSUTF8StringEncoding], signStr, [signString lengthOfBytesUsingEncoding:NSUTF8StringEncoding], cHMAC);
     NSData *HMAC = [[[NSData alloc] initWithBytes:cHMAC length:CC_SHA1_DIGEST_LENGTH] autorelease];
     return [NSString stringWithFormat:@"%@",[HMAC base64Encoded]];
+}
+
++(NSString*)Signature:(NSString*)method keys:(NSArray*)keys
+{
+    
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"key" ascending:YES];
+    NSArray *sortedArray = [keys sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSMutableString *signString = [[[NSMutableString alloc] init] autorelease];
+    [signString appendString:method];
+    [signString appendString:@"&"];
+    [signString appendString:[self percentEncode:@"/"]];
+    [signString appendString:@"&"];
+    NSMutableString *signString1 = [[[NSMutableString alloc] init] autorelease];
+    for (int i=0;i<[sortedArray count];i++) {
+        if (i!=0) {
+            [signString1 appendString:@"&"];
+        }
+        OssSignKey* sk=[sortedArray objectAtIndex:i];
+        [signString1 appendFormat:@"%@=%@",[self percentEncode:sk.key],[self percentEncode:sk.value]];
+    }
+    [signString appendString:[self percentEncode:signString1]];
+    NSString* temp=[NSString stringWithFormat:@"%@&",[Util getAppDelegate].strAccessKey];
+    const char * secretStr = [temp UTF8String];
+    const char * signStr = [signString UTF8String];
+    unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, secretStr, [temp lengthOfBytesUsingEncoding:NSUTF8StringEncoding], signStr, [signString lengthOfBytesUsingEncoding:NSUTF8StringEncoding], cHMAC);
+    NSData *HMAC = [[[NSData alloc] initWithBytes:cHMAC length:CC_SHA1_DIGEST_LENGTH] autorelease];
+    return [NSString stringWithFormat:@"%@",[HMAC base64Encoded]];
+}
+
++(NSString*)percentEncode:(NSString*)key
+{
+    NSString*ret=[key urlEncoded];
+    key=[ret stringByReplacingOccurrencesOfString:@"+" withString:@"%%20"];
+    ret=[key stringByReplacingOccurrencesOfString:@"*" withString:@"%%2A"];
+    key=[ret stringByReplacingOccurrencesOfString:@"%%7E" withString:@"~"];
+    return ret;
+}
++(NSString*)getcontentdisposition:(NSString*)objectname
+{
+    NSString* filename=[objectname lastPathComponent];
+    
+    return [NSString stringWithFormat:@"attachment;filename=\"%@\"",[filename urlEncoded]];
 }
 
 +(NSString*)GetContentType:(NSString*)objectname

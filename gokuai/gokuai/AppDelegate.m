@@ -23,6 +23,10 @@
 #import "ASIHTTPRequest.h"
 #import "GKHTTPRequest.h"
 
+#define LANGUAGE_PACK_EN    @"en"
+#define LANGUAGE_PACK_CH    @"zh-Hans"
+#define LANGUAGE_PACK_TW    @"zh-Hant-TW"
+
 @implementation AppDelegate
 
 @synthesize strUIPath;
@@ -59,6 +63,8 @@
 @synthesize bAddDownloadOut;
 @synthesize bAddDownloadDelete;
 @synthesize bLink;
+@synthesize languageBundle;
+@synthesize nContentDisposition;
 
 - (void)dealloc
 {
@@ -68,6 +74,7 @@
     [mytimer release];
     
     
+    self.languageBundle=nil;
     [taskqueue release];
     [appversion release];
     
@@ -90,6 +97,13 @@
     self.strArea=@"";
     self.strHost=@"";
     self.serversion=@"0.0.0.0";
+    self.strTransCachePath=[NSString stringWithFormat:@"%@/.oss/transcache",NSHomeDirectory()];
+    [Util createfolder:self.strTransCachePath];
+    self.strUserDB=[NSString stringWithFormat:@"%@/.oss/user/ossuser.db",NSHomeDirectory()];
+    [Util createfolder:[self.strUserDB stringByDeletingLastPathComponent]];
+    self.strLogPath=[NSString stringWithFormat:@"%@/.oss/log",NSHomeDirectory()];
+    [Util createfolder:self.strLogPath];
+    [self getAppLanguage];
     [self setMainMenu];
     self.bDebugMenu=NO;
     self.bFinishCallback=NO;
@@ -126,12 +140,6 @@
             }
         }
     }
-    self.strTransCachePath=[NSString stringWithFormat:@"%@/.oss/transcache",NSHomeDirectory()];
-    [Util createfolder:self.strTransCachePath];
-    self.strUserDB=[NSString stringWithFormat:@"%@/.oss/user/ossuser.db",NSHomeDirectory()];
-    [Util createfolder:[self.strUserDB stringByDeletingLastPathComponent]];
-    self.strLogPath=[NSString stringWithFormat:@"%@/.oss/log",NSHomeDirectory()];
-    [Util createfolder:self.strLogPath];
     self.browserWindowControllers=[NSMutableArray array];
     self.progressWindowControllers=[NSMutableDictionary dictionary];
     self.appversion=[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -150,6 +158,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowClosed:) name:NSWindowWillCloseNotification object:nil];
     self.bHttps = [[SettingsDb shareSettingDb] gethttps];
     UserInfo * userinfo=[[SettingsDb shareSettingDb] getuserinfo];
+    
+    self.nContentDisposition=[[SettingsDb shareSettingDb] getContentDisposition];
     if (userinfo.strAccessID.length) {
         self.bShowPassword=YES;
     }
@@ -279,13 +289,13 @@
 
 -(IBAction)onMenuQuitAppClicked:(id)sender
 {
-    NSString *msg=[Util localizedStringForKey:@"是否确定退出?" alternate:nil];
+    NSString *msg=[Util localizedStringForKey:@"logout" alternate:nil];
     NSInteger ret=[NSAlert showGKSheetModalForWindow:nil
                                              message:msg
                                                 text:@""
                                         buttonTitles:[NSArray arrayWithObjects:
-                                                      [Util localizedStringForKey:@"确定" alternate:nil],
-                                                      [Util localizedStringForKey:@"取消" alternate:nil],nil]];
+                                                      [Util localizedStringForKey:@"ok" alternate:nil],
+                                                      [Util localizedStringForKey:@"cancel" alternate:nil],nil]];
     if (NSAlertFirstButtonReturn == ret) {
         [NSApp terminate:sender];
     }
@@ -297,7 +307,7 @@
     
     NSMenuItem* itemGK = [mainMenu addItemWithTitle:@"" action:nil keyEquivalent:@""];
     
-    NSMenu *subMenu =[[NSMenu alloc]initWithTitle:[Util localizedStringForKey:@"" alternate:nil]];
+    NSMenu *subMenu =[[NSMenu alloc]initWithTitle:@""];
     
     [subMenu addItemWithTitle:[Util localizedStringForKey:@"隐藏 OSS" alternate:nil] action:@selector(hide:) keyEquivalent:@"h"];
     [[subMenu addItemWithTitle:[Util localizedStringForKey:@"隐藏 其他" alternate:nil] action:@selector(hideOtherApplications:) keyEquivalent:@"h"] setKeyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask];
@@ -354,8 +364,8 @@
         return;
     }
     self.bIsUpdate=YES;
-    NSString* message=[NSString stringWithFormat:@"软件最新版本已经更新到[%@]版本，是否立即更新?",[Util getAppDelegate].serversion];
-    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:@"是" alternateButton:@"否"otherButton:nil informativeTextWithFormat:@""];
+    NSString* message=[NSString stringWithFormat:[Util localizedStringForKey:@"UpdateMessage" alternate:nil],[Util getAppDelegate].serversion];
+    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:[Util localizedStringForKey:@"ok" alternate:nil] alternateButton:[Util localizedStringForKey:@"cancel" alternate:nil] otherButton:nil informativeTextWithFormat:@""];
     if ([alert runModal]==NSAlertDefaultReturn) {
         if (!self._downloadtask) {
             NSData* jsonData = [OSSApi CheckServer:[Util getAppDelegate].strSource version:[Util getAppDelegate].appversion app:@"mac"];
@@ -383,8 +393,8 @@
 
 -(void)openUpdateDmg
 {
-    NSString* message=[NSString stringWithFormat:@"软件已经升级到最新的[%@]版本，立即安装？",[Util getAppDelegate].serversion];
-    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:@"确定" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+    NSString* message=[NSString stringWithFormat:[Util localizedStringForKey:@"UpdateMessage1" alternate:nil],[Util getAppDelegate].serversion];
+    NSAlert* alert=[NSAlert alertWithMessageText:message defaultButton:[Util localizedStringForKey:@"ok" alternate:nil] alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
     if ([alert runModal]==NSAlertDefaultReturn) {
         NSString * path=[NSString stringWithFormat:@"%@/ossupdate.dmg",NSTemporaryDirectory()];
         NSTask *  theProcess = [[[NSTask alloc] init] autorelease];
@@ -402,5 +412,25 @@
         [launchpadWindowController performSelectorOnMainThread:@selector(UpdateLoadingCount:) withObject:json waitUntilDone:NO];
     }
 }
+
+
+/**
+ *  得到语言设置
+ */
+-(void) getAppLanguage
+{
+    NSString* lprojPath=nil;
+    if ([[SettingsDb shareSettingDb] getlanguage]==2) {
+        lprojPath=[[NSBundle mainBundle] pathForResource:LANGUAGE_PACK_EN ofType:@"lproj"];
+    }
+    else if ([[SettingsDb shareSettingDb] getlanguage]==3) {
+        lprojPath=[[NSBundle mainBundle] pathForResource:LANGUAGE_PACK_TW ofType:@"lproj"];
+    }
+    else {
+        lprojPath=[[NSBundle mainBundle] pathForResource:LANGUAGE_PACK_CH ofType:@"lproj"];
+    }
+    self.languageBundle=[NSBundle bundleWithPath:lprojPath];
+}
+
 
 @end

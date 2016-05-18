@@ -253,7 +253,7 @@
                     return;
                 }
                 else {
-                    [self TaskError:TRANSERROR_CREATEDIF msg:@"创建文件夹失败"];
+                    [self TaskError:TRANSERROR_CREATEDIF msg:[Util localizedStringForKey:@"CreateDirError" alternate:nil]];
                     return;
                 }
             }
@@ -263,13 +263,13 @@
                     return;
                 }
                 else {
-                    [self TaskError:TRANSERROR_CREATEDIF msg:@"创建0字节文件失败"];
+                    [self TaskError:TRANSERROR_CREATEDIF msg:[Util localizedStringForKey:@"CreateEmptyError" alternate:nil]];
                     return;
                 }
             }
         }
         if (![self CreateFile]) {
-            [self TaskError:TRANSERROR_CREATEDIF msg:@"创建文件失败"];
+            [self TaskError:TRANSERROR_CREATEDIF msg:[Util localizedStringForKey:@"创建文件失败" alternate:nil]];
             return;
         }
         self.ullStarttime=CFAbsoluteTimeGetCurrent();

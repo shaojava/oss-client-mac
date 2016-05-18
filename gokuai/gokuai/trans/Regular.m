@@ -45,14 +45,8 @@
     for( RegularItem* temp in self.nodeArray) {
         if ([temp.strBucket isEqualToString:item.strBucket]) {
             temp.nStatus=item.nStatus;
-            if (item.strRegular.length==0) {
-                temp.nStatus=0;
-            }
-            else {
-                if (![temp.strRegular isEqualToString:item.strRegular]) {
-                    temp.strRegular=item.strRegular;
-                }
-            }
+            temp.strHost=item.strHost;
+            temp.strRegular=item.strRegular;
             bHave=YES;
             break;
         }

@@ -91,7 +91,6 @@
         _replace.title=[Util localizedStringForKey:@"替换" alternate:nil];
         _keepboth.title=[Util localizedStringForKey:@"保留两者" alternate:nil];
         _stop.title=[Util localizedStringForKey:@"停止" alternate:nil];
-        
      }
     return self;
 }
@@ -206,7 +205,7 @@
         if ([OSSApi HeadObject:copyitem.strDstHost bucketname:copyitem.strDstBucket objectname:copyitem.strDstObject]) {
             NSString* filename=[copyitem.strObject lastPathComponent];
             if (!bAll) {
-                NSString* prompt=[NSString stringWithFormat:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？",filename];
+                NSString* prompt=[NSString stringWithFormat:[Util localizedStringForKey:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？" alternate:nil],filename];
                 [_copyinfo setStringValue:prompt];
                 [_icon setImage:[Util iconFromFileType:bDir?NSFileTypeForHFSTypeCode(kGenericFolderIcon):filename]];
                 BOOL onlyone=(1==srcfiles.count);
@@ -305,7 +304,7 @@
                 filename=saveitem.strBucket;
             }
             if (!bAll) {
-                NSString* prompt=[NSString stringWithFormat:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？",filename];
+                NSString* prompt=[NSString stringWithFormat:[Util localizedStringForKey:@"该位置已经存在名称为［%@］的项目，是否替换当前项目？" alternate:nil],filename];
                 [_copyinfo setStringValue:prompt];
                 [_icon setImage:[Util iconFromFileType:saveitem.bDir?NSFileTypeForHFSTypeCode(kGenericFolderIcon):filename]];
                 BOOL onlyone=(1==srcfiles.count);

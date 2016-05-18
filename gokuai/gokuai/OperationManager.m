@@ -265,7 +265,7 @@ END:
         }
         else {
             NSString *msg=[NSString stringWithFormat:@"%@,%@,%@",bucket,object,nextmarker];
-            strRet=[Util errorInfoWithCode:@"保存文件夹获取列表失败" message:msg ret:ret];
+            strRet=[Util errorInfoWithCode:[Util localizedStringForKey:@"获取列表失败" alternate:nil] message:msg ret:ret];
             break;
         }
     }

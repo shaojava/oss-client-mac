@@ -77,7 +77,6 @@
 
 -(void)SetDTaskMax:(NSInteger)num
 {
-    //zhemg
     if (num>20) {
         num=20;
     }
@@ -86,7 +85,6 @@
 
 -(void)SetUTaskMax:(NSInteger)num
 {
-    //zheng
     if (num>20) {
         num=20;
     }
@@ -226,7 +224,7 @@
             if ((*count)>=1000000) {
                 NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                       [NSNumber numberWithInteger:1000000],@"error",
-                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                                      [Util localizedStringForKey:@"MaxUploadError" alternate:nil],@"message",nil];
                 strRet=[dicRet JSONString];
                 [item release];
                 break;
@@ -253,7 +251,7 @@
             if ((*count)>=1000000) {
                 NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                       [NSNumber numberWithInteger:1000000],@"error",
-                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                                      [Util localizedStringForKey:@"MaxUploadError" alternate:nil],@"message",nil];
                 strRet=[dicRet JSONString];
                 break;
             }
@@ -283,7 +281,7 @@
             if (count>=1000000) {
                 NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                       [NSNumber numberWithInteger:1000000],@"error",
-                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                                      [Util localizedStringForKey:@"MaxUploadError" alternate:nil],@"message",nil];
                 strRet=[dicRet JSONString];
                 [item release];
                 break;
@@ -310,7 +308,7 @@
             if (count>=1000000) {
                 NSDictionary* dicRet=[NSDictionary dictionaryWithObjectsAndKeys:
                                       [NSNumber numberWithInteger:1000000],@"error",
-                                      @"队列已超出客户端上传能力，请使用OSS的API上传。",@"message",nil];
+                                      [Util localizedStringForKey:@"MaxUploadError" alternate:nil],@"message",nil];
                 strRet=[dicRet JSONString];
                 break;
             }

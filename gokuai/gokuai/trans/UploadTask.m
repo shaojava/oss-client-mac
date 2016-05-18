@@ -265,7 +265,7 @@
                 }
             }
             if (![self CreateMultipartFile]) {
-                [self TaskError:TRANSERROR_CREATEMULTIPARTERROR msg:@"创建文件分块信息失败"];
+                [self TaskError:TRANSERROR_CREATEMULTIPARTERROR msg:[Util localizedStringForKey:@"CreateFileInfoError" alternate:nil]];
                 return;
             }
         }
@@ -317,7 +317,7 @@
                 }
                 else {
                     if (self.pItem.strUploadId.length==0) {
-                        [self TaskError:TRANSERROR_OPENFILE msg:@"文件打开失败"];
+                        [self TaskError:TRANSERROR_OPENFILE msg:[Util localizedStringForKey:@"OpenFileError" alternate:nil]];
                         return;
                     }
                 }

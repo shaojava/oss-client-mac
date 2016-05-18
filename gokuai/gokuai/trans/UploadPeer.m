@@ -83,6 +83,9 @@
     self.pRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [self.pRequest setRequestMethod:method];
     [self.pRequest addRequestHeader:@"Content-Type" value:contenttype];
+    if ([Util getAppDelegate].nContentDisposition) {
+        [self.pRequest addRequestHeader:@"Content-Disposition" value:[OSSApi GetContentType:self.strObject]];
+    }
     [self.pRequest addRequestHeader:@"Date" value:date];
     [self.pRequest addRequestHeader:@"Authorization" value:retsign];
     [self.pRequest setDelegate:self];

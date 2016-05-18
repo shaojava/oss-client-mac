@@ -154,6 +154,27 @@ END:
     return [NSString stringWithFormat:@"\"%@\"",ret];
 }
 
+-(NSString*) getRamSignature:method json:(NSString*)json
+{
+    NSDictionary* dicInfo=[json objectFromJSONString];
+    if (![dicInfo isKindOfClass:[NSDictionary class]]) {
+        return @"{}";
+    }
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSArray* arraykey=[dicInfo allKeys];
+    for (NSString* itemkey in arraykey) {
+        OssSignKey *item=[[OssSignKey alloc]init];
+        item.key=itemkey;
+        item.value=[dicInfo objectForKey:itemkey];
+        if (item.key.length) {
+            [array addObject:item];
+        }
+        [item release];
+    }
+    NSString * ret=[OSSApi Signature:method keys:array];
+    return [NSString stringWithFormat:@"\"%@\"",ret];
+}
+
 -(void) addFile:(NSString*) json cb:(WebScriptObject*)cb
 {
     if ([delegateController isKindOfClass:[BaseWebWindowController class]]) {
@@ -462,8 +483,8 @@ END:
     [panel setCanCreateDirectories:NO];
     [panel setCanChooseFiles:YES];
     [panel setAllowsMultipleSelection:NO];
-    [panel setTitle:@"选择授权文件"];
-    [panel setPrompt:@"选择"];
+    [panel setTitle:[Util localizedStringForKey:@"选择授权文件" alternate:nil]];
+    [panel setPrompt:[Util localizedStringForKey:@"选择" alternate:nil]];
     [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"key",nil]];
     [panel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
     BaseWebWindowController* baseController=(BaseWebWindowController*)delegateController;
@@ -520,8 +541,8 @@ END:
         NSSavePanel* panel=[NSSavePanel savePanel];
         [panel setCanCreateDirectories:NO];
         [panel setNameFieldStringValue:@"oss.key"];
-        [panel setTitle:@"保存授权文件"];
-        [panel setPrompt:@"保存"];
+        [panel setTitle:[Util localizedStringForKey:@"保存授权文件" alternate:nil]];
+        [panel setPrompt:[Util localizedStringForKey:@"保存" alternate:nil]];
         [panel setExtensionHidden:NO];
         [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"key",nil]];
         [panel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
@@ -564,7 +585,7 @@ END:
                 }
                 else {
                     strRet=[Util errorInfoWithCode:WEB_FILESAVEERROR];
-                    NSString * msg=[NSString stringWithFormat:@"[创建授权文件失败][%@]",strPath];
+                    NSString * msg=[NSString stringWithFormat:@"[%@][%@]",[Util localizedStringForKey:@"FileCreateError" alternate:nil],strPath];
                     [[FileLog shareFileLog] log:msg add:NO];
                 }
             }
@@ -639,7 +660,7 @@ END:
 
 -(void) showAuthorizationDlg
 {
-    //zheng
+    
 }
 
 -(NSString*) getUIPath
@@ -796,12 +817,52 @@ END:
     [dicRetlist setValue:[NSNumber numberWithInteger:item.nNum] forKey:@"num"];
     return [dicRetlist JSONString];
 }
+-(void) gChangeLanguage:(NSString*) jsonInfo
+{
+    NSDictionary* dictionary=[jsonInfo objectFromJSONString];
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
+        [[SettingsDb shareSettingDb] setlanguage:[[dictionary objectForKey:@"type"] intValue]];
+        [[Util getAppDelegate] getAppLanguage];
+        //0为默认(中文) 1为中文 2为英文
+    }
+}
+
+-(NSString*) gGetLanguage
+{
+    NSDictionary* dic=[NSDictionary dictionaryWithObjectsAndKeys:
+                       [NSNumber numberWithInteger:[[SettingsDb shareSettingDb] getlanguage]],@"type", nil];
+    NSLog(@"%@",dic);
+    return [dic JSONString];
+}
+
+-(NSString*)gAccountAction:(NSString*)cmd json:(NSString*)json;
+{
+    return [SettingsDb action:cmd json:json];
+}
+
+-(void)setDefaultContentDisposition:(NSString*)json
+{
+    NSDictionary* dictionary=[json objectFromJSONString];
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
+        [Util getAppDelegate].nContentDisposition=[[dictionary objectForKey:@"default"] intValue];
+        [[SettingsDb shareSettingDb] setContentDisposition:[Util getAppDelegate].nContentDisposition];
+    }
+}
+
+-(NSString*)getDefaultContentDisposition
+{
+    NSDictionary* dic=[NSDictionary dictionaryWithObjectsAndKeys:
+                       [NSNumber numberWithInteger:[[SettingsDb shareSettingDb] getContentDisposition]],@"default", nil];
+    return [dic JSONString];
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
 {
     if (selector == @selector(getAccessID)
         ||selector == @selector(getSignature:)
+        ||selector == @selector(getRamSignature:json:)
         ||selector == @selector(addFile:cb:)
         ||selector == @selector(saveFile:cb:)
         ||selector == @selector(saveFileDlg:)
@@ -847,6 +908,11 @@ END:
         ||selector == @selector(openUrl:)
         ||selector == @selector(setCallFunctionInfo:)
         ||selector == @selector(getCallFunctionInfo:)
+        ||selector == @selector(gGetLanguage)
+        ||selector == @selector(gChangeLanguage:)
+        ||selector == @selector(gAccountAction:json:)
+        ||selector == @selector(setDefaultContentDisposition:)
+        ||selector == @selector(getDefaultContentDisposition)
         ) {
         return NO;
     }
@@ -859,6 +925,9 @@ END:
     }
     if (sel == @selector(getSignature:)) {
         return @"getSignature";
+    }
+    if (sel == @selector(getRamSignature:json:)) {
+        return @"getRamSignature";
     }
     if (sel == @selector(addFile:cb:)) {
         return @"addFile";
@@ -995,6 +1064,21 @@ END:
     if (sel == @selector(getCallFunctionInfo:)) {
         return @"getCallFunctionInfo";
     }
+    if (sel == @selector(gChangeLanguage:)) {
+        return @"gChangeLanguage";
+    }
+    if (sel == @selector(gGetLanguage)) {
+        return @"gGetLanguage";
+    }
+    if (sel == @selector(gAccountAction:json:)) {
+        return @"gAccountAction";
+    }
+    if (sel == @selector(setDefaultContentDisposition:)) {
+        return @"setDefaultContentDisposition";
+    }
+    if (sel == @selector(getDefaultContentDisposition)) {
+        return @"getDefaultContentDisposition";
+    }
     return nil;
 }
 
@@ -1020,8 +1104,7 @@ END:
         return;
     }
     @try {
-        if ([NSStringFromClass([delegateController class]) isEqualToString:@"LoginWebWindowController"]) {
-//            [(LoginWebWindowController*)delegateController onJudgeDealArray];
+        if ([NSStringFromClass([delegateController class]) isEqualToString:@"LoginWebWindowController"]) {[[(NSWindowController*)delegateController window] setTitle:[sender stringByEvaluatingJavaScriptFromString:@"document.title"]];
         }
         if ([NSStringFromClass([delegateController class]) isEqualToString:@"LaunchpadWindowController"]) {
             [Util getAppDelegate].bFinishCallback=YES;

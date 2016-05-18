@@ -14,4 +14,5 @@
 -(NSString*)lastaddslash;
 -(NSString*)lastremoveslash;
 -(NSString*)replacetojson;
+-(NSString*)replacetosql;
 @end
