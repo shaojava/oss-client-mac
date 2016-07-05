@@ -27,6 +27,8 @@
 
 +(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey host:(NSString*)host ret:(OSSRet**)ret;
 {
+    return YES;
+    
     NSString* date=[Util getGMTDate];
     NSString* method=@"GET";
     NSString* resource=@"/";
@@ -814,9 +816,9 @@
 +(NSString*)percentEncode:(NSString*)key
 {
     NSString*ret=[key urlEncoded];
-    key=[ret stringByReplacingOccurrencesOfString:@"+" withString:@"%%20"];
-    ret=[key stringByReplacingOccurrencesOfString:@"*" withString:@"%%2A"];
-    key=[ret stringByReplacingOccurrencesOfString:@"%%7E" withString:@"~"];
+    key=[ret stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+    ret=[key stringByReplacingOccurrencesOfString:@"*" withString:@"%2A"];
+    key=[ret stringByReplacingOccurrencesOfString:@"%7E" withString:@"~"];
     return ret;
 }
 +(NSString*)getcontentdisposition:(NSString*)objectname

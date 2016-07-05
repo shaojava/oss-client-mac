@@ -78,8 +78,8 @@
 
 -(NSString*)urlEncoded
 {
-    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,@"@" , @"&" , @"=" , nil];
-    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F", @"%3F" , @"%3A" ,@"%40" , @"%26" , @"%3D" , nil];
+    NSArray *escapeChars = [NSArray arrayWithObjects:@";" , @"/" , @"?" , @":" ,@"@" , @"&" , @"=",@"," , nil];
+    NSArray *replaceChars = [NSArray arrayWithObjects:@"%3B" , @"%2F", @"%3F" , @"%3A" ,@"%40" , @"%26" , @"%3D",@"%2C" , nil];
     NSInteger len = [escapeChars count];
     NSMutableString *temp = [[[self stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]mutableCopy] autorelease];
     int i;
