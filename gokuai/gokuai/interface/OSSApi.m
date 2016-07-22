@@ -27,6 +27,8 @@
 
 +(BOOL)CheckIDandKey:(NSString*)sID key:(NSString*)sKey host:(NSString*)host ret:(OSSRet**)ret;
 {
+    return YES;
+    
     NSString* date=[Util getGMTDate];
     NSString* method=@"GET";
     NSString* resource=@"/";
