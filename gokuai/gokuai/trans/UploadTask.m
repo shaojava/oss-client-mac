@@ -234,6 +234,8 @@
     [[FileLog shareFileLog] log:errormsg add:YES];
     [[TransPortDB shareTransPortDB] Update_UploadError:self.pItem.strPathhash error:error msg:[Util GetOssErrorMessage:msg]];
     self.pItem.nStatus=TRANSTASK_ERROR;
+    self.pItem.strMsg = [Util GetOssErrorMessage:msg];
+    
     [[Network shareNetwork].uCallback SendCallbackInfo:self.pItem];
 }
 
