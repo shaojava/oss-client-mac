@@ -17,7 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
+<<<<<<< HEAD
 	<string>1.1.9</string>
+=======
+	<string>1.1.7</string>
+>>>>>>> 444d98776b9f5d871ebcf15e9c4b0809efc552e0
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -36,7 +40,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>16.4.22</string>
+	<string>16.7.01</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSHasLocalizedDisplayName</key>

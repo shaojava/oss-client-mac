@@ -816,9 +816,9 @@
 +(NSString*)percentEncode:(NSString*)key
 {
     NSString*ret=[key urlEncoded];
-    key=[ret stringByReplacingOccurrencesOfString:@"+" withString:@"%%20"];
-    ret=[key stringByReplacingOccurrencesOfString:@"*" withString:@"%%2A"];
-    key=[ret stringByReplacingOccurrencesOfString:@"%%7E" withString:@"~"];
+    key=[ret stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+    ret=[key stringByReplacingOccurrencesOfString:@"*" withString:@"%2A"];
+    key=[ret stringByReplacingOccurrencesOfString:@"%7E" withString:@"~"];
     return ret;
 }
 +(NSString*)getcontentdisposition:(NSString*)objectname
