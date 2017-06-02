@@ -17,11 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-<<<<<<< HEAD
-	<string>1.1.9</string>
-=======
-	<string>1.1.7</string>
->>>>>>> 444d98776b9f5d871ebcf15e9c4b0809efc552e0
+	<string>1.2.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -40,7 +36,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>16.7.01</string>
+	<string>17.06.02</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSHasLocalizedDisplayName</key>
@@ -55,7 +51,7 @@
 		<true/>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2012年 __MyCompanyName__. All rights reserved.</string>
+	<string>Copyright © 2012 Shanghai ZhuYun Information Technology Co., Ltd. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

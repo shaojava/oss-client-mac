@@ -420,6 +420,7 @@
 -(void) getAppLanguage
 {
     NSString* lprojPath=nil;
+    
     if ([[SettingsDb shareSettingDb] getlanguage]==2) {
         lprojPath=[[NSBundle mainBundle] pathForResource:LANGUAGE_PACK_EN ofType:@"lproj"];
     }

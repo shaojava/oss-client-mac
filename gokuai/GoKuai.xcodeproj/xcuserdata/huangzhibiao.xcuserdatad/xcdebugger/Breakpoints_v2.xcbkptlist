@@ -58,7 +58,7 @@
                   moduleName = "OSS"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangzhibiao/soft/worksoft/oss/oss-client-mac/gokuai/gokuai/trans/Network.m"
-                  timestampString = "502862033.583447"
+                  timestampString = "518086475.129785"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "151"
@@ -73,7 +73,7 @@
                   moduleName = "OSS"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/huangzhibiao/soft/worksoft/oss/oss-client-mac/gokuai/gokuai/trans/Network.m"
-                  timestampString = "502862033.58387"
+                  timestampString = "518086475.130118"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "151"
@@ -96,6 +96,70 @@
             startingLineNumber = "229"
             endingLineNumber = "229"
             landmarkName = "-TaskError:msg:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gokuai/AppDelegate.m"
+            timestampString = "504693339.274354"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
+            landmarkName = "-getAppLanguage"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gokuai/AppDelegate.m"
+            timestampString = "505120227.99386"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "424"
+            endingLineNumber = "424"
+            landmarkName = "-getAppLanguage"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gokuai/AppDelegate.m"
+            timestampString = "505120476.060035"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "422"
+            endingLineNumber = "422"
+            landmarkName = "-getAppLanguage"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gokuai/OperationManager.m"
+            timestampString = "511066334.140296"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "+startUpload:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -675,6 +675,9 @@
          }
          [rs close];
      }];
+    if(ret == 0){
+        ret = 1;
+    }
     return ret;
 }
 
